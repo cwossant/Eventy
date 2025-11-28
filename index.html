@@ -50,7 +50,8 @@
         
         .hero {
             position: relative;
-            min-height: 85vh;
+            min-height: 100vh;
+            /* changed from 85vh so hero always reaches bottom of the viewport */
             display: flex;
             align-items: flex-start;
             /* allow the wave to overlap outside the hero cleanly */
@@ -296,6 +297,7 @@
         }
         
         input[type="text"],
+        input[type="email"],
         input[type="password"] {
             padding: 14px 16px;
             /* larger text holder (bigger input) */
@@ -321,13 +323,192 @@
             gap: 12px;
             margin-top: 4px;
         }
+        /* styled toggle for "Show password" (keeps native checkbox but restyles it) */
         
         .show-pw {
-            display: flex;
+            --cb-size: 20px;
+            display: inline-flex;
             align-items: center;
-            gap: 8px;
+            gap: 10px;
             font-size: 14px;
             color: var(--muted);
+            cursor: pointer;
+            user-select: none;
+            position: relative;
+            padding-left: calc(var(--cb-size) + 6px);
+        }
+        /* keep native checkbox accessible but visually hidden (still receives focus) */
+        
+        .show-pw input[type="checkbox"] {
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: var(--cb-size);
+            height: var(--cb-size);
+            margin: 0;
+            opacity: 0;
+            cursor: pointer;
+        }
+        /* visible custom checkbox */
+        
+        .show-pw .checkbox {
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: var(--cb-size);
+            height: var(--cb-size);
+            border-radius: 6px;
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.10);
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.12);
+            transition: background .16s ease, border-color .12s ease, transform .12s ease;
+            display: inline-block;
+            overflow: visible;
+            /* allow the checkmark pseudo-element to be visible */
+            z-index: 0;
+        }
+        /* check mark (SVG) — hidden by default (centered) */
+        
+        .show-pw .checkbox::after {
+            content: "";
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            width: 12px;
+            height: 12px;
+            transform: translate(-50%, -50%) scale(.8);
+            background-repeat: no-repeat;
+            background-position: center center;
+            background-size: 12px 12px;
+            background-image: none;
+            opacity: 0;
+            transition: opacity .14s ease, transform .18s ease;
+            pointer-events: none;
+            z-index: 1;
+        }
+        /* checked state: make the visible box turn white and show a centered purple check */
+        
+        .show-pw input[type="checkbox"]:checked+.checkbox {
+            background: #ffffff;
+            border-color: rgba(0, 0, 0, 0.06);
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+            transform: translateY(-50%) scale(1.02);
+        }
+        /* Use a fully URL-encoded data URI for the SVG to avoid parser issues */
+        
+        .show-pw input[type="checkbox"]:checked+.checkbox::after {
+            background-image: url("data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%237f4fdc' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20 6L9 17l-5-5'/%3E%3C/svg%3E");
+            opacity: 1;
+            transform: translate(-50%, -50%) scale(1);
+        }
+        /* focus ring for keyboard users */
+        
+        .show-pw input[type="checkbox"]:focus+.checkbox {
+            box-shadow: 0 0 0 4px rgba(127, 79, 220, 0.12), inset 0 2px 4px rgba(0, 0, 0, 0.06);
+            outline: none;
+        }
+        /* label text */
+        
+        .show-pw .label-text {
+            margin-left: 6px;
+            color: var(--muted);
+            transition: color .12s ease;
+        }
+        /* change text color when checked */
+        
+        .show-pw input[type="checkbox"]:checked~.label-text,
+        .show-pw input[type="checkbox"]:checked+.checkbox+.label-text {
+            color: var(--muted) !important;
+            font-weight: 400 !important;
+        }
+        /* reduce motion preference */
+        
+        @media (prefers-reduced-motion: reduce) {
+            .show-pw .checkbox,
+            .show-pw .checkbox::after {
+                transition: none;
+            }
+        }
+        /* ===== Coming Soon modal styles ===== */
+        
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            background: rgba(0, 0, 0, 0.45);
+            z-index: 9999;
+            padding: 24px;
+        }
+        
+        .modal-overlay[open] {
+            display: flex;
+        }
+        
+        .modal {
+            width: min(460px, 96%);
+            background: linear-gradient(180deg, #ffffff, #f7f8fb);
+            color: #111;
+            border-radius: 12px;
+            padding: 18px 18px 16px;
+            box-shadow: 0 18px 60px rgba(0, 0, 0, 0.28);
+            position: relative;
+            text-align: center;
+        }
+        
+        .modal h3 {
+            margin: 0 0 8px;
+            font-size: 18px;
+            color: var(--purple-2);
+            font-weight: 700;
+        }
+        
+        .modal p {
+            margin: 0 0 14px;
+            color: #444;
+            font-size: 14px;
+        }
+        
+        .modal .modal-actions {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-top: 6px;
+        }
+        
+        .modal .btn {
+            padding: 8px 14px;
+            border-radius: 8px;
+            font-weight: 700;
+            box-shadow: none;
+        }
+        
+        .modal .btn.secondary {
+            background: transparent;
+            color: var(--purple-2);
+            border: 1px solid rgba(127, 79, 220, 0.12);
+        }
+        
+        .modal .btn.primary {
+            background: var(--purple-2);
+            color: #fff;
+            border: none;
+        }
+        
+        .close-modal {
+            position: absolute;
+            right: 10px;
+            top: 8px;
+            background: transparent;
+            border: none;
+            font-size: 20px;
+            color: #666;
+            cursor: pointer;
+            line-height: 1;
+            padding: 6px;
         }
         
         .forgot {
@@ -359,6 +540,58 @@
             overflow: hidden;
             clip: rect(1px, 1px, 1px, 1px);
             white-space: nowrap;
+        }
+        /* CSS: add to your main stylesheet */
+        
+        .password-row {
+            /* make the password row match the main input styles */
+            display: block;
+            margin-bottom: 12px;
+        }
+        
+        .password-row input[type="password"],
+        .password-row input[type="text"] {
+            width: 100%;
+            padding: 14px 16px;
+            /* same as global inputs */
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            background: rgba(255, 255, 255, 0.03);
+            color: var(--accent);
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+        /* Toggle button styling */
+        
+        .pwd-toggle {
+            display: inline-grid;
+            place-items: center;
+            width: 38px;
+            height: 38px;
+            padding: 6px;
+            border-radius: 6px;
+            border: 1px solid transparent;
+            background: #fff;
+            color: #444;
+            cursor: pointer;
+            transition: background .12s, color .12s, border-color .12s;
+        }
+        
+        .pwd-toggle:focus {
+            outline: 2px solid rgba(0, 123, 255, .25);
+            border-color: #8ab4ff;
+        }
+        
+        .pwd-toggle[aria-pressed="true"] {
+            background: #f0f6ff;
+            color: #0b61d6;
+            border-color: #d5e6ff;
+        }
+        /* Optional: smaller eye stroke */
+        
+        .pwd-toggle .eye {
+            width: 18px;
+            height: 18px;
         }
         
         @media (max-width:980px) {
@@ -394,35 +627,53 @@
                 <div class="hero-grid">
                     <div class="left">
                         <div class="eyebrow">Community • Events</div>
-                        <h1>Connect Effortlessly</h1>
+                        <h1><strong>Connect Effortlessly</strong></h1>
                         <p class="lead">Bringing people together has never been easier. Host events, join activities, and meet like‑minded people — all in one place.</p>
 
                         <div class="cta-row">
-                            <a class="btn" href="#">Dont Have an Account? →</a>
+                            <a class="btn" href="#">Already Have an Account? →</a>
                         </div>
                     </div>
 
                     <div class="illustration" aria-hidden="false">
                         <div class="auth-card" role="region" aria-label="Login form">
-                            <h2>Log In</h2>
+                            <h2>Registration</h2>
                             <form id="loginForm" autocomplete="on" novalidate>
+                                <div class="form-group">
+                                    <label class="sr-only" for="firstname">First name</label>
+                                    <input id="firstname" name="firstname" type="text" placeholder="First name" required>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="sr-only" for="lastname">Last name</label>
+                                    <input id="lastname" name="lastname" type="text" placeholder="Last name" required>
+                                </div>
+
                                 <div class="form-group">
                                     <label class="sr-only" for="username">Username</label>
                                     <input id="username" name="username" type="text" placeholder="Username" required>
                                 </div>
 
                                 <div class="form-group">
+                                    <label class="sr-only" for="email">Email</label>
+                                    <input id="email" name="email" type="email" placeholder="Email" required>
+                                </div>
+
+                                <div class="form-group password-row">
                                     <label class="sr-only" for="password">Password</label>
                                     <input id="password" name="password" type="password" placeholder="Password" required>
                                 </div>
 
                                 <div class="actions">
-                                    <label class="show-pw"><input id="showPw" type="checkbox" aria-controls="password"> Show password</label>
-                                    <a class="forgot" href="#" tabindex="0">Forgot password?</a>
+                                    <label class="show-pw">
+                                        <input id="showPw" type="checkbox" aria-controls="password" />
+                                        <span class="checkbox" aria-hidden="true"></span>
+                                        <span class="label-text">Show password</span>
+                                    </label>
                                 </div>
 
                                 <div style="margin-top:14px; display:flex; justify-content:flex-end;">
-                                    <button type="submit" class="btn-primary">Sign in</button>
+                                    <button type="submit" class="btn-primary">Create Account</button>
                                 </div>
                             </form>
                         </div>
@@ -433,13 +684,25 @@
 
     </section>
 
+    <!-- Coming Soon modal -->
+    <div id="comingSoonModal" class="modal-overlay" role="dialog" aria-modal="true" aria-hidden="true">
+        <div class="modal" role="document" aria-labelledby="comingTitle">
+            <button class="close-modal" aria-label="Close">&times;</button>
+            <h3 id="comingTitle">Feature Coming Soon</h3>
+            <p id="comingMsg">This feature is being prepared. Stay tuned!</p>
+            <div class="modal-actions">
+                <button class="btn primary" type="button">Okay</button>
+            </div>
+        </div>
+    </div>
+
 </body>
 
 </html>
 
 <script>
     // filepath: c:\xampp\htdocs\Eventy\index.html
-    // Toggle show password
+    // Toggle show password + Coming Soon modal
     (function() {
         const show = document.getElementById('showPw');
         const pwd = document.getElementById('password');
@@ -463,6 +726,46 @@
                 // simulate submit
                 alert('Signing in as ' + u);
                 // TODO: replace with real POST to server
+            });
+        }
+
+        /* Coming Soon modal logic */
+        const modal = document.getElementById('comingSoonModal');
+        if (modal) {
+            const showTargets = document.querySelectorAll('nav .nav-links a, nav .btn');
+
+            function openModal(title, msg) {
+                const h = modal.querySelector('#comingTitle');
+                const p = modal.querySelector('#comingMsg');
+                if (h) h.textContent = title || 'Feature Coming Soon';
+                if (p) p.textContent = msg || 'This feature is being prepared. Stay tuned!';
+                modal.setAttribute('open', '');
+                modal.setAttribute('aria-hidden', 'false');
+                document.body.style.overflow = 'hidden';
+            }
+
+            function closeModal() {
+                modal.removeAttribute('open');
+                modal.setAttribute('aria-hidden', 'true');
+                document.body.style.overflow = '';
+            }
+            showTargets.forEach(el => {
+                el.addEventListener('click', function(e) {
+                    // only intercept navigation from nav area
+                    e.preventDefault();
+                    openModal('Feature Coming Soon', 'This feature is being prepared. Stay tuned!');
+                });
+            });
+            // close when clicking overlay or close buttons
+            modal.addEventListener('click', function(e) {
+                if (e.target === modal) closeModal();
+            });
+            // keep the top-right close button functional
+            modal.querySelectorAll('.close-modal').forEach(b => b.addEventListener('click', closeModal));
+            // make the modal action buttons close the modal as well
+            modal.querySelectorAll('.modal-actions .btn').forEach(b => b.addEventListener('click', closeModal));
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape' && modal.hasAttribute('open')) closeModal();
             });
         }
     })();
