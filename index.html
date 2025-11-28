@@ -24,7 +24,8 @@
             --purple-1: #6b3be6;
             --purple-2: #7f4fdc;
             --accent: #ffffff;
-            --muted: rgba(255, 255, 255, 0.85);
+            /* slightly less bright muted text for better contrast on purple */
+            --muted: rgba(255, 255, 255, 0.88);
             --logo-size: clamp(36px, 6vw, 120px);
         }
         
@@ -439,7 +440,8 @@
             display: none;
             align-items: center;
             justify-content: center;
-            background: rgba(0, 0, 0, 0.45);
+            background: rgba(0, 0, 0, 0.65);
+            /* darkened from 0.45 */
             z-index: 9999;
             padding: 24px;
         }
@@ -600,6 +602,125 @@
                 padding: 16px;
             }
         }
+        /* Login modal: use a near-white card with a subtle purple border/shadow so it
+           reads well while keeping the purple theme — avoids an "awkward" saturated panel */
+        
+        #loginModal .modal {
+            width: min(460px, 42vw);
+            /* copy auth-card sizing */
+            max-width: 96%;
+            background: linear-gradient(180deg, rgba(127, 79, 220, 0.22), rgba(127, 79, 220, 0.14));
+            color: var(--accent);
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: 0 24px 60px rgba(0, 0, 0, 0.48);
+            /* stronger shadow for contrast */
+            backdrop-filter: blur(8px);
+            position: relative;
+            text-align: left;
+            /* keep form left-aligned like auth-card */
+        }
+        /* heading + text inside login modal follow auth-card */
+        
+        #loginModal .modal h3 {
+            margin: 0 0 8px;
+            font-size: 20px;
+            color: var(--accent);
+            font-weight: 700;
+            text-align: center;
+        }
+        
+        #loginModal .modal .auth-form {
+            margin-top: 10px;
+        }
+        /* inputs - copy registration look but keep them white for readability */
+        
+        #loginModal .modal input[type="text"],
+        #loginModal .modal input[type="password"] {
+            padding: 14px 16px;
+            border-radius: 12px;
+            border: 1px solid rgba(0, 0, 0, 0.08);
+            background: #ffffff;
+            color: #111;
+            width: 100%;
+            box-sizing: border-box;
+            font-size: 16px;
+        }
+        
+        #loginModal .modal input::placeholder {
+            color: #777;
+        }
+        /* modal actions centered and buttons sized like auth-card */
+        
+        #loginModal .modal .modal-actions {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+            margin-top: 14px;
+        }
+        /* ensure buttons contrast on purple modal */
+        
+        #loginModal .modal .btn.secondary {
+            background: transparent;
+            color: var(--accent);
+            border: 1px solid rgba(255, 255, 255, 0.16);
+            padding: 8px 12px;
+            border-radius: 10px;
+            font-weight: 700;
+        }
+        
+        #loginModal .modal .btn.primary {
+            background: var(--accent);
+            color: var(--purple-2);
+            padding: 8px 12px;
+            border-radius: 10px;
+            font-weight: 700;
+        }
+        /* Fix: modal-specific spacing + color for show-password */
+        
+        #loginModal .show-pw {
+            --cb-size: 20px;
+            padding-left: calc(var(--cb-size) + 8px) !important;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: #ffffff !important;
+        }
+        /* checked box (modal) */
+        
+        #loginModal .show-pw input[type="checkbox"]:checked+.checkbox {
+            background: #ffffff !important;
+            border-color: rgba(0, 0, 0, 0.06) !important;
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12) !important;
+            transform: translateY(-50%) scale(1.02);
+        }
+        /* centered purple checkmark for modal checkbox */
+        
+        #loginModal .show-pw input[type="checkbox"]:checked+.checkbox::after {
+            background-image: url("data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%237f4fdc' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20 6L9 17l-5-5'/%3E%3C/svg%3E");
+            opacity: 1;
+            transform: translate(-50%, -50%) scale(1);
+        }
+        /* ensure the check pseudo-element is visible and centered */
+        
+        #loginModal .show-pw .checkbox {
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            overflow: visible;
+        }
+        
+        #loginModal .show-pw .checkbox::after {
+            left: 50%;
+            top: 50%;
+            width: 12px;
+            height: 12px;
+            background-size: 12px 12px;
+            background-position: center center;
+            background-repeat: no-repeat;
+            transform: translate(-50%, -50%) scale(.8);
+        }
     </style>
 </head>
 
@@ -631,7 +752,7 @@
                         <p class="lead">Bringing people together has never been easier. Host events, join activities, and meet like‑minded people — all in one place.</p>
 
                         <div class="cta-row">
-                            <a class="btn" href="#">Already Have an Account? →</a>
+                            <a id="openLoginModal" class="btn" href="#" aria-haspopup="dialog">Already Have an Account? →</a>
                         </div>
                     </div>
 
@@ -693,6 +814,38 @@
             <div class="modal-actions">
                 <button class="btn primary" type="button">Okay</button>
             </div>
+        </div>
+    </div>
+
+    <!-- Login modal (for "Already Have an Account?") -->
+    <div id="loginModal" class="modal-overlay" role="dialog" aria-modal="true" aria-hidden="true">
+        <div class="modal" role="document" aria-labelledby="loginTitle">
+            <button class="close-modal" aria-label="Close">&times;</button>
+            <h3 id="loginTitle">Sign in</h3>
+            <form id="loginModalForm" class="auth-form" autocomplete="on" novalidate>
+                <div class="form-group">
+                    <label class="sr-only" for="modal-username">Username</label>
+                    <input id="modal-username" name="username" type="text" placeholder="Username" required>
+                </div>
+
+                <div class="form-group password-row">
+                    <label class="sr-only" for="modal-password">Password</label>
+                    <input id="modal-password" name="password" type="password" placeholder="Password" required>
+                </div>
+
+                <div class="actions" style="justify-content:flex-start;">
+                    <label class="show-pw">
+                        <input id="modal-showPw" type="checkbox" aria-controls="modal-password" />
+                        <span class="checkbox" aria-hidden="true"></span>
+                        <span class="label-text">Show password</span>
+                    </label>
+                </div>
+
+                <div class="modal-actions" style="margin-top:16px;">
+                    <button type="button" class="btn secondary" data-action="cancel">Cancel</button>
+                    <button type="submit" class="btn primary">Sign in</button>
+                </div>
+            </form>
         </div>
     </div>
 
@@ -767,6 +920,65 @@
             document.addEventListener('keydown', function(e) {
                 if (e.key === 'Escape' && modal.hasAttribute('open')) closeModal();
             });
+        }
+
+        /* Login modal logic (for "Already Have an Account?") */
+        const loginModal = document.getElementById('loginModal');
+        if (loginModal) {
+            const openLoginModal = document.getElementById('openLoginModal');
+            const closeLoginButtons = loginModal.querySelectorAll('.close-modal, .btn[data-action="cancel"]');
+
+            function openLogin() {
+                loginModal.setAttribute('open', '');
+                loginModal.setAttribute('aria-hidden', 'false');
+                document.body.style.overflow = 'hidden';
+            }
+
+            function closeLogin() {
+                loginModal.removeAttribute('open');
+                loginModal.setAttribute('aria-hidden', 'true');
+                document.body.style.overflow = '';
+            }
+
+            if (openLoginModal) {
+                openLoginModal.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    openLogin();
+                });
+            }
+
+            closeLoginButtons.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    closeLogin();
+                });
+            });
+
+            // Toggle show password in login modal
+            const modalShow = document.getElementById('modal-showPw');
+            const modalPwd = document.getElementById('modal-password');
+            if (modalShow && modalPwd) {
+                modalShow.addEventListener('change', function() {
+                    modalPwd.type = this.checked ? 'text' : 'password';
+                });
+            }
+
+            // Simple login submit handler (replace with real auth)
+            const loginForm = document.getElementById('loginModalForm');
+            if (loginForm) {
+                loginForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    const u = document.getElementById('modal-username').value.trim();
+                    const p = modalPwd.value;
+                    // Basic validation
+                    if (!u || !p) {
+                        alert('Please enter username and password.');
+                        return;
+                    }
+                    // simulate login
+                    alert('Logging in as ' + u);
+                    // TODO: replace with real POST to server
+                });
+            }
         }
     })();
 </script>
