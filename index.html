@@ -1,0 +1,469 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Eventy - Connect Effortlessly</title>
+
+    <!-- Google Fonts: added Simonetta -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Playfair+Display:wght@700&family=Simonetta:wght@400;700&display=swap" rel="stylesheet">
+
+    <style>
+        /* load local Handyman font (place font files in /fonts/) */
+        
+        @font-face {
+            font-family: "Handyman";
+            src: url("fonts/Handyman.woff2") format("woff2"), url("fonts/Handyman.woff") format("woff"), url("fonts/Handyman.ttf") format("truetype");
+            font-weight: 400;
+            font-style: normal;
+            font-display: swap;
+        }
+        
+         :root {
+            --purple-1: #6b3be6;
+            --purple-2: #7f4fdc;
+            --accent: #ffffff;
+            --muted: rgba(255, 255, 255, 0.85);
+            --logo-size: clamp(36px, 6vw, 120px);
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0
+        }
+        
+        html,
+        body {
+            height: 100%
+        }
+        
+        body {
+            font-family: "Poppins", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+            background: #f7f7fb;
+            color: #111;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+        /* HERO */
+        
+        .hero {
+            position: relative;
+            min-height: 85vh;
+            display: flex;
+            align-items: flex-start;
+            /* allow the wave to overlap outside the hero cleanly */
+            overflow: visible;
+            /* use image/bg.png only as the hero background (no overlays) */
+            background: url('images/bg.png') center/cover no-repeat;
+            color: var(--accent);
+            padding: 28px 64px;
+        }
+        /* dotted pattern on the right - smaller, softly faded, responsive */
+        
+        .hero::before {
+            content: "";
+            position: absolute;
+            right: clamp(28px, 6vw, 6%);
+            top: clamp(24px, 5vh, 6%);
+            width: clamp(160px, 20vw, 320px);
+            height: clamp(160px, 20vw, 320px);
+            /* small repeating dots */
+            background-image: radial-gradient(rgba(255, 255, 255, 0.12) 1px, transparent 1px);
+            background-size: 10px 10px;
+            background-repeat: repeat;
+            border-radius: 50%;
+            opacity: 0.85;
+            pointer-events: none;
+            transform: translateZ(0);
+            /* soft fade at the edges so it blends with the gradient */
+            -webkit-mask-image: radial-gradient(circle at 60% 40%, black 55%, transparent 100%);
+            mask-image: radial-gradient(circle at 60% 40%, black 55%, transparent 100%);
+        }
+        /* thin vertical guide - keep subtle and hide on small screens */
+        
+        .hero::after {
+            content: "";
+            position: absolute;
+            left: 50%;
+            top: 0;
+            bottom: 0;
+            width: 1px;
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.06) 0%, rgba(255, 255, 255, 0.02) 50%, transparent 100%);
+            transform: translateX(-50%);
+            pointer-events: none;
+            opacity: 0.9;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            gap: 32px;
+            align-items: center;
+            position: relative;
+            z-index: 2;
+        }
+        /* NAV */
+        
+        nav {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+            width: 100%;
+            padding: 8px 0 24px 0;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-right: auto;
+            /* allow per-container override of logo size - falls back to :root --logo-size */
+            --logo-size: var(--logo-size);
+        }
+        /* removed the fixed .logo img size so brand image can scale via the CSS variable */
+        
+        .logo img {
+            display: block;
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+        }
+        
+        .brand {
+            font-weight: 900;
+            letter-spacing: 0.4px;
+            /* optional: set a different size for this logo instance:
+               uncomment and tweak the line below to override :root for this .logo container
+            */
+            /* --logo-size: clamp(48px, 8vw, 140px); */
+        }
+        
+        .brand img {
+            /* use the adjustable variable so the logo scales with viewport */
+            height: var(--logo-size);
+            max-height: 140px;
+            /* absolute upper bound */
+            width: auto;
+            display: block;
+            object-fit: contain;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            font-weight: 600;
+            font-size: 15px;
+        }
+        
+        .nav-links a {
+            color: rgba(255, 255, 255, 0.95);
+            text-decoration: none;
+            padding: 8px 12px;
+            border-radius: 6px;
+        }
+        
+        .nav-links a:hover {
+            background: rgba(255, 255, 255, 0.06);
+        }
+        
+        .cta-nav {
+            margin-left: 16px;
+            background: var(--accent);
+            color: var(--purple-2);
+            padding: 8px 16px;
+            border-radius: 10px;
+            font-weight: 700;
+            text-decoration: none;
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+        }
+        /* Hero content layout */
+        
+        .hero-grid {
+            display: grid;
+            grid-template-columns: 1fr 540px;
+            gap: 32px;
+            align-items: center;
+            width: 100%;
+        }
+        
+        .left {
+            padding: 32px 0;
+        }
+        
+        .eyebrow {
+            display: inline-block;
+            background: rgba(0, 0, 0, 0.08);
+            color: var(--accent);
+            padding: 6px 12px;
+            border-radius: 999px;
+            font-weight: 600;
+            font-size: 14px;
+            margin-bottom: 18px;
+            opacity: 0.95;
+        }
+        /* Heading uses Simonetta */
+        
+        h1 {
+            font-family: "Simonetta", "Playfair Display", serif;
+            font-size: 64px;
+            line-height: 0.95;
+            margin-bottom: 18px;
+            color: var(--accent);
+            text-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+        }
+        /* Lead paragraph uses Handyman (fallback to a handwriting font) */
+        
+        p.lead {
+            font-family: "Handyman", "Handlee", "Poppins", cursive;
+            font-size: 18px;
+            color: var(--muted);
+            max-width: 540px;
+            margin-bottom: 22px;
+        }
+        
+        .cta-row {
+            display: flex;
+            gap: 16px;
+            align-items: center;
+        }
+        
+        .btn {
+            background: var(--accent);
+            color: var(--purple-2);
+            padding: 12px 18px;
+            border-radius: 12px;
+            font-weight: 700;
+            text-decoration: none;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+            display: inline-flex;
+            gap: 10px;
+            align-items: center;
+        }
+        
+        .btn.secondary {
+            background: transparent;
+            color: var(--accent);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            padding: 11px 16px;
+            font-weight: 600;
+        }
+        /* Right illustration area */
+        
+        .illustration {
+            position: relative;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            /* allow interaction for the form */
+            pointer-events: auto;
+        }
+        /* Login form / auth card styles (replaces the decorative scene) */
+        
+        .auth-card {
+            width: min(460px, 42vw);
+            max-width: 100%;
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0.02));
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: 0 18px 50px rgba(0, 0, 0, 0.30);
+            backdrop-filter: blur(6px);
+            color: var(--accent);
+        }
+        
+        .auth-card h2 {
+            margin: 0 0 14px 0;
+            font-size: 28px;
+            /* made larger */
+            font-weight: 700;
+            color: var(--accent);
+            text-align: center;
+            /* centered heading */
+            letter-spacing: 0.2px;
+        }
+        
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-bottom: 12px;
+            width: 100%;
+        }
+        
+        input[type="text"],
+        input[type="password"] {
+            padding: 14px 16px;
+            /* larger text holder (bigger input) */
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            background: rgba(255, 255, 255, 0.03);
+            color: var(--accent);
+            outline: none;
+            font-size: 16px;
+            /* larger font for placeholder/entry */
+            width: 100%;
+            box-sizing: border-box;
+        }
+        
+        input::placeholder {
+            color: rgba(255, 255, 255, 0.6);
+        }
+        
+        .actions {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            margin-top: 4px;
+        }
+        
+        .show-pw {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            color: var(--muted);
+        }
+        
+        .forgot {
+            color: var(--accent);
+            opacity: 0.9;
+            text-decoration: underline;
+            font-size: 14px;
+        }
+        
+        .btn-primary {
+            background: var(--accent);
+            color: var(--purple-2);
+            padding: 10px 16px;
+            border-radius: 10px;
+            font-weight: 700;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 8px 22px rgba(0, 0, 0, 0.18);
+        }
+        
+        .btn-primary:active {
+            transform: translateY(1px);
+        }
+        
+        .sr-only {
+            position: absolute !important;
+            height: 1px;
+            width: 1px;
+            overflow: hidden;
+            clip: rect(1px, 1px, 1px, 1px);
+            white-space: nowrap;
+        }
+        
+        @media (max-width:980px) {
+            .auth-card {
+                width: min(420px, 90vw);
+                padding: 16px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <section class="hero">
+        <div class="container">
+            <div style="width:100%">
+                <nav>
+                    <div class="logo">
+                        <div class="brand">
+                            <img src="logo/eventy_logo.png" alt="Eventy logo">
+                        </div>
+                    </div>
+
+                    <div class="nav-links" aria-hidden="true">
+                        <a href="#">Home</a>
+                        <a href="#">About us</a>
+                        <a href="#">Features</a>
+                        <a href="#">Contacts</a>
+                    </div>
+                    <a class="btn" href="#">Get Started</a>
+                </nav>
+
+                <div class="hero-grid">
+                    <div class="left">
+                        <div class="eyebrow">Community • Events</div>
+                        <h1>Connect Effortlessly</h1>
+                        <p class="lead">Bringing people together has never been easier. Host events, join activities, and meet like‑minded people — all in one place.</p>
+
+                        <div class="cta-row">
+                            <a class="btn" href="#">Dont Have an Account? →</a>
+                        </div>
+                    </div>
+
+                    <div class="illustration" aria-hidden="false">
+                        <div class="auth-card" role="region" aria-label="Login form">
+                            <h2>Log In</h2>
+                            <form id="loginForm" autocomplete="on" novalidate>
+                                <div class="form-group">
+                                    <label class="sr-only" for="username">Username</label>
+                                    <input id="username" name="username" type="text" placeholder="Username" required>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="sr-only" for="password">Password</label>
+                                    <input id="password" name="password" type="password" placeholder="Password" required>
+                                </div>
+
+                                <div class="actions">
+                                    <label class="show-pw"><input id="showPw" type="checkbox" aria-controls="password"> Show password</label>
+                                    <a class="forgot" href="#" tabindex="0">Forgot password?</a>
+                                </div>
+
+                                <div style="margin-top:14px; display:flex; justify-content:flex-end;">
+                                    <button type="submit" class="btn-primary">Sign in</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </section>
+
+</body>
+
+</html>
+
+<script>
+    // filepath: c:\xampp\htdocs\Eventy\index.html
+    // Toggle show password
+    (function() {
+        const show = document.getElementById('showPw');
+        const pwd = document.getElementById('password');
+        if (show && pwd) {
+            show.addEventListener('change', function() {
+                pwd.type = this.checked ? 'text' : 'password';
+            });
+        }
+
+        // Simple submit handler (replace with real auth)
+        const form = document.getElementById('loginForm');
+        if (form) {
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                const u = document.getElementById('username').value.trim();
+                // Basic validation
+                if (!u || !pwd.value) {
+                    alert('Please enter username and password.');
+                    return;
+                }
+                // simulate submit
+                alert('Signing in as ' + u);
+                // TODO: replace with real POST to server
+            });
+        }
+    })();
+</script>
