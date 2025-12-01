@@ -30,6 +30,17 @@ The application is built around the fundamental principles of **C.R.U.D.** (Crea
 **Note:** *Please fill in the specific technologies your team used.*
 
 ---
+## 👥 The Development Team
+
+Eventy was a collaborative effort by four students from the **National University** for the Information Management final project.
+
+| Name | Role / Key Contribution |
+| :--- | :--- |
+| **[Bruce Cuevas]** | [Frontend Development] |
+| **[Joseph Gabriel Lontoc]** | [Database Developer] |
+| **[Mark Dwayne P. Dela Cruz]** | [Frontend Development, UI UX Design] |
+| **[Yhvhan Suba]** | [Project Lead] |
+---
 
 ## 💻 Installation and Setup
 
