@@ -21,11 +21,11 @@ The application is built around the fundamental principles of **C.R.U.D.** (Crea
 
 | Category | Technology/Tool |
 | :--- | :--- |
-| **Frontend** | [e.g., HTML5, CSS3, JavaScript, Bootstrap/Tailwind CSS] |
-| **Backend** | [e.g., PHP / Python (Flask/Django) / Node.js (Express)] |
-| **Database** | [e.g., MySQL / PostgreSQL / MongoDB] |
-| **Web Server** | [e.g., Apache / Nginx] |
-| **Environment** | [e.g., XAMPP / WAMP / Local Python Environment] |
+| **Frontend** | [HTML, CSS, JavaScript] |
+| **Backend** | [PHP / Python (Flask/Django) / Node.js (Express)] |
+| **Database** | [] |
+| **Web Server** | [Apache / Live Server] |
+| **Environment** | [XAMPP / WAMP / Local Host Environment] |
 
 **Note:** *Please fill in the specific technologies your team used.*
 
@@ -38,5 +38,5 @@ Follow these steps to set up the Eventy application on your local development en
 ### 1. Clone the Repository
 
 ```bash
-git clone [Your Repository URL Here]
+git clone [github.com/cwossant/Eventy]
 cd Eventy
