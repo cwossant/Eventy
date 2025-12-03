@@ -1,0 +1,31 @@
+body {
+    font-family: Arial, sans-serif;
+    background: #f3f3f3;
+    padding: 20px;
+}
+
+.event-card {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    width: 300px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.event-title {
+    margin: 0;
+    font-size: 22px;
+}
+
+.event-details {
+    margin: 10px 0;
+}
+
+button {
+    padding: 10px 15px;
+    border: none;
+    background: #007bff;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+}

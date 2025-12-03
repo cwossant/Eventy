@@ -58,7 +58,7 @@
             /* allow the wave to overlap outside the hero cleanly */
             overflow: visible;
             /* use image/bg.png only as the hero background (no overlays) */
-            background: url('images/bg.png') center/cover no-repeat;
+            background: url('bg.png') center/cover no-repeat;
             color: var(--accent);
             padding: 28px 64px;
         }
@@ -656,7 +656,7 @@
             display: flex;
             gap: 10px;
             justify-content: flex-end;
-            margin-top: 19px;
+            margin-top: 14px;
         }
         /* ensure buttons contrast on purple modal */
         
@@ -732,7 +732,7 @@
                 <nav>
                     <div class="logo">
                         <div class="brand">
-                            <img src="logo/eventy_logo.png" alt="Eventy logo">
+                            <img src="eventy_logo.png" alt="Eventy logo">
                         </div>
                     </div>
 
@@ -757,50 +757,34 @@
                     </div>
 
                     <div class="illustration" aria-hidden="false">
-                        <div class="auth-card" role="region" aria-label="Login form">
-
-
-                            
+                       <div class="auth-card" role="region" aria-label="Login form">
                             <h2>Registration</h2>
-                            <form id="loginForm" autocomplete="on" novalidate>
+                            
+                            <form method="POST" action="register.php">
                                 <div class="form-group">
-                                    <label class="sr-only" for="firstname">First name</label>
                                     <input id="firstname" name="firstname" type="text" placeholder="First name" required>
                                 </div>
 
                                 <div class="form-group">
-                                    <label class="sr-only" for="lastname">Last name</label>
                                     <input id="lastname" name="lastname" type="text" placeholder="Last name" required>
                                 </div>
 
                                 <div class="form-group">
-                                    <label class="sr-only" for="username">Username</label>
-                                    <input id="username" name="username" type="text" placeholder="Username" required>
-                                </div>
-
-                                <div class="form-group">
-                                    <label class="sr-only" for="email">Email</label>
                                     <input id="email" name="email" type="email" placeholder="Email" required>
                                 </div>
 
-                                <div class="form-group password-row">
-                                    <label class="sr-only" for="password">Password</label>
+                                <div class="form-group">
+                                    <input id="contactno" name="contactno" type="text" placeholder="Contact Number" required>
+                                </div>
+
+                                <div class="form-group">
                                     <input id="password" name="password" type="password" placeholder="Password" required>
                                 </div>
 
-                                <div class="actions">
-                                    <label class="show-pw">
-                                        <input id="showPw" type="checkbox" aria-controls="password" />
-                                        <span class="checkbox" aria-hidden="true"></span>
-                                        <span class="label-text">Show password</span>
-                                    </label>
-                                </div>
-
-                                <div style="margin-top:14px; display:flex; justify-content:flex-end;">
-                                    <button type="submit" class="btn-primary">Create Account</button>
-                                </div>
+                                <button type="submit" class="btn-primary">Create Account</button>
                             </form>
                         </div>
+
                     </div>
                 </div>
             </div>
@@ -857,7 +841,6 @@
 </html>
 
 <script>
-    // filepath: c:\xampp\htdocs\Eventy\index.html
     // Toggle show password + Coming Soon modal
     (function() {
         const show = document.getElementById('showPw');

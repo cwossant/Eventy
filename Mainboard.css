@@ -1,0 +1,194 @@
+/* Sidebar */
+#profile-bg {
+    width: 400px;
+    height: 100vh;
+    background-color: #6F42C7;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1;
+}
+
+#Icon {
+    margin-top: 30px;
+    margin-left: 50px;
+    width: 250px;
+    height: 250px;
+    object-fit: cover;
+    border-radius: 50%;
+    display: block;
+}
+
+#profile-bg h1 {
+    margin-left: 105px;
+    margin-top: -15px;
+    font-family: 'Source Sans 3', sans-serif;
+    color: white;
+    font-weight: 700;
+    font-size: 55px;
+}
+
+/* Events label */
+#events-label {
+    font-family: 'Source Sans 3', sans-serif;
+    color: #6F42C7;
+    font-weight: 700;
+    font-size: 50px;
+    position: absolute;
+    top: 55px;
+    left: 450px;
+    background-color: #f9f9f9;
+    transition: background 0.3s;
+}
+
+/* Modal Background */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 10000;
+    left: 0;
+    top: 0;
+    width: 100%;       /* make sure it covers the full viewport */
+    height: 100%;
+    background: rgba(0,0,0,0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Modal Card - Add Event & Update Event */
+.modal-content {
+    background: white;
+    padding: 30px;          /* give more padding for spacing */
+    width: 850px;           /* increased width to make it obviously wider */
+    max-width: 95%;         /* responsive on small screens */
+    border-radius: 10px;
+    font-family: "Source Sans 3", sans-serif;
+    border: 2px solid #6F42C7;
+    box-sizing: border-box; /* ensures padding doesn't shrink content */
+}
+
+.modal-content h2 {
+    font-size: 40px;
+    color: #6F42C7;
+    margin-bottom: 20px;
+}
+
+/* Inputs */
+.modal-content input,
+.modal-content textarea {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 20px;
+    border-radius: 5px;
+    border: 2px solid #6F42C7;
+    box-sizing: border-box;
+}
+
+
+/* Confirm (Green) */
+.modal-content button[type="submit"] {
+    padding: 10px 15px;
+    cursor: pointer;
+    border-radius: 5px;
+    background: green;
+    color: white;
+    border: 2px solid #6F42C7;
+}
+
+/* Cancel (Red) */
+#closeEventBtn {
+    padding: 10px 15px;
+    cursor: pointer;
+    border-radius: 5px;
+    background: red;
+    color: white;
+    border: 2px solid #6F42C7;
+}
+
+
+/* Open Button */
+.floating-btn {
+    position: absolute;
+    top: 110px;
+    left: 610px;
+    z-index: 9999;
+    background:#6F42C7;
+    color: white;
+    padding: 10px 15px;
+    border: 2px solid #6F42C7;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    font-family: "Source Sans 3", sans-serif;
+    transition: 0.2s ease-in-out;
+}
+
+.floating-btn:hover {
+    background: #6629de;
+    color: white;
+}
+
+/* Events Table */
+#eventsTable {
+    position: absolute;
+    margin-top: -20px;
+    top: calc(50px + 50px + 40px + 20px); /* added extra 20px gap below the events label */
+    left: calc(400px + 30px); /* sidebar width 400px + 30px spacing */
+    width: 10px;
+    border-collapse: collapse;
+    font-family: "Source Sans 3", sans-serif;
+}
+
+
+/* Update & Delete Buttons inside table */
+#eventsTable .update-btn {
+    margin-left: 15px;
+    margin-right: -20px;
+    background-color: orange;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: 0.2s ease-in-out;
+}
+
+#eventsTable .update-btn:hover {
+    background-color: darkorange;
+}
+
+#eventsTable .delete-btn {
+    margin-left: 15px;
+    margin-right: -20px;
+    background-color: red;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: 0.2s ease-in-out;
+}
+
+#eventsTable .delete-btn:hover {
+    background-color: darkred;
+}
+
+#events-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-left: 420px;
+    margin-top: 50px;
+    }
+
+    #searchInput {
+    margin-top: 65px; 
+    margin-left: 525px;
+    padding: 5px 10px;
+    border-radius: 5px;
+    border: 1px solid #6F42C7;
+    width: 250px;
+        }
