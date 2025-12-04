@@ -1030,7 +1030,7 @@
                     <h4 class="footer-title">Support</h4>
                     <ul class="footer-links">
                         <li><a href="#">Help Center</a></li>
-                        <li><a href="#">Contact Us</a></li>
+                        <li><a href="pages/contact_us.php">Contact Us</a></li>
                         <li><a href="#">FAQ</a></li>
                         <li><a href="#">Privacy Policy</a></li>
                     </ul>
