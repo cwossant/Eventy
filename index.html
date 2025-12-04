@@ -58,7 +58,7 @@
             /* allow the wave to overlap outside the hero cleanly */
             overflow: visible;
             /* use image/bg.png only as the hero background (no overlays) */
-            background: url('bg.png') center/cover no-repeat;
+            background: url('assets/images/bg.png') center/cover no-repeat;
             color: var(--accent);
             padding: 28px 64px;
         }
@@ -732,7 +732,7 @@
                 <nav>
                     <div class="logo">
                         <div class="brand">
-                            <img src="eventy_logo.png" alt="Eventy logo">
+                            <img src="assets/logo/eventy_logo.png" alt="Eventy logo">
                         </div>
                     </div>
 
@@ -757,10 +757,10 @@
                     </div>
 
                     <div class="illustration" aria-hidden="false">
-                       <div class="auth-card" role="region" aria-label="Login form">
+                        <div class="auth-card" role="region" aria-label="Login form">
                             <h2>Registration</h2>
-                            
-                            <form method="POST" action="register.php">
+
+                            <form method="POST" action="src/php/register.php">
                                 <div class="form-group">
                                     <input id="firstname" name="firstname" type="text" placeholder="First name" required>
                                 </div>
