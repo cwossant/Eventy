@@ -8,6 +8,8 @@
 
     <!-- Google Fonts: added Simonetta -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Playfair+Display:wght@700&family=Simonetta:wght@400;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
     <style>
         /* load local Handyman font (place font files in /fonts/) */
@@ -34,7 +36,11 @@
             margin: 0;
             padding: 0
         }
-        
+
+        html {
+            scroll-behavior: smooth;
+        }
+
         html,
         body {
             height: 100%
@@ -726,7 +732,7 @@
 
 <body>
 
-    <section class="hero">
+    <section id="home" class="hero">
         <div class="container">
             <div style="width:100%">
                 <nav>
@@ -737,10 +743,10 @@
                     </div>
 
                     <div class="nav-links" aria-hidden="true">
-                        <a href="#">Home</a>
-                        <a href="#">About us</a>
-                        <a href="#">Features</a>
-                        <a href="#">Contacts</a>
+                        <a href="#home">Home</a>
+                        <a href="#about-us">About us</a>
+                        <a href="#features">Features</a>
+                        <a href="#contacts">Contacts</a>
                     </div>
                     <a class="btn" href="#">Get Started</a>
                 </nav>
@@ -791,6 +797,90 @@
         </div>
 
     </section>
+
+    <!-- About Us Section -->
+    <section id="about-us" style="padding: 80px 64px; background: #f7f7fb; color: #111; text-align: center;">
+        <div class="container">
+            <i class="fas fa-users" style="font-size: 64px; color: var(--purple-2); margin-bottom: 24px;"></i>
+            <h2 style="font-family: 'Simonetta', serif; font-size: 48px; margin-bottom: 24px; color: var(--purple-2);">About Us</h2>
+            <p style="font-size: 18px; max-width: 800px; margin: 0 auto; line-height: 1.6;">Eventy is a platform designed to bring communities together through seamless event management. Whether you're hosting a local meetup, a corporate conference, or a social gathering, our tools make it easy to connect with like-minded people and create unforgettable experiences.</p>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" style="padding: 80px 64px; background: #ffffff; color: #111;">
+        <div class="container">
+            <h2 style="font-family: 'Simonetta', serif; font-size: 48px; text-align: center; margin-bottom: 48px; color: var(--purple-2);">Features</h2>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 32px;">
+                <div style="text-align: center;">
+                    <i class="fas fa-calendar-plus" style="font-size: 48px; color: var(--purple-2); margin-bottom: 16px;"></i>
+                    <h3 style="font-size: 24px; margin-bottom: 16px;">Easy Event Creation</h3>
+                    <p style="font-size: 16px; line-height: 1.6;">Create and manage events with our intuitive interface. Set dates, locations, and descriptions in minutes.</p>
+                </div>
+                <div style="text-align: center;">
+                    <i class="fas fa-users-cog" style="font-size: 48px; color: var(--purple-2); margin-bottom: 16px;"></i>
+                    <h3 style="font-size: 24px; margin-bottom: 16px;">Community Building</h3>
+                    <p style="font-size: 16px; line-height: 1.6;">Connect with attendees, share updates, and build lasting relationships through our integrated community tools.</p>
+                </div>
+                <div style="text-align: center;">
+                    <i class="fas fa-bell" style="font-size: 48px; color: var(--purple-2); margin-bottom: 16px;"></i>
+                    <h3 style="font-size: 24px; margin-bottom: 16px;">Real-Time Updates</h3>
+                    <p style="font-size: 16px; line-height: 1.6;">Stay informed with live notifications and updates on event changes, RSVPs, and more.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer id="contacts" style="padding: 80px 64px; background: #f7f7fb; color: #111; border-top: 1px solid #ddd;">
+        <div class="container">
+            <div class="footer-content" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 48px; margin-bottom: 48px;">
+                <div class="footer-section">
+                    <div class="footer-logo">
+                        <img src="assets/logo/eventy_logo.png" alt="Eventy" class="footer-logo-img" style="height: 48px; width: auto; margin-bottom: 16px;" />
+                        <span class="footer-logo-text" style="font-family: 'Simonetta', serif; font-size: 32px; font-weight: 700; color: var(--purple-2);">EVENTY</span>
+                    </div>
+                    <p class="footer-description" style="font-size: 16px; line-height: 1.6; color: #555;">
+                        Bringing people together through seamless event management. Whether you're hosting a local meetup, a corporate conference, or a social gathering, our tools make it easy to connect with like-minded people and create unforgettable experiences.
+                    </p>
+                </div>
+
+                <div class="footer-section">
+                    <h4 class="footer-title" style="font-size: 20px; margin-bottom: 16px; color: var(--purple-2);">About</h4>
+                    <ul class="footer-links" style="list-style: none; padding: 0; margin: 0;">
+                        <li style="margin-bottom: 8px;"><a href="#about-us" style="color: #666; text-decoration: none;">About Us</a></li>
+                        <li style="margin-bottom: 8px;"><a href="#features" style="color: #666; text-decoration: none;">Features</a></li>
+                        <li style="margin-bottom: 8px;"><a href="#" style="color: #666; text-decoration: none;">Our Team</a></li>
+                        <li style="margin-bottom: 8px;"><a href="#" style="color: #666; text-decoration: none;">Careers</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-section">
+                    <h4 class="footer-title" style="font-size: 20px; margin-bottom: 16px; color: var(--purple-2);">Support</h4>
+                    <ul class="footer-links" style="list-style: none; padding: 0; margin: 0;">
+                        <li style="margin-bottom: 8px;"><a href="#" style="color: #666; text-decoration: none;">Help Center</a></li>
+                        <li style="margin-bottom: 8px;"><a href="#" style="color: #666; text-decoration: none;">Contact Us</a></li>
+                        <li style="margin-bottom: 8px;"><a href="#" style="color: #666; text-decoration: none;">FAQ</a></li>
+                        <li style="margin-bottom: 8px;"><a href="#" style="color: #666; text-decoration: none;">Privacy Policy</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-section">
+                    <h4 class="footer-title" style="font-size: 20px; margin-bottom: 16px; color: var(--purple-2);">Contacts</h4>
+                    <p style="font-size: 16px; margin-bottom: 16px;"><strong>Eventy Team:</strong> John Doe, Jane Smith, Alex Johnson</p>
+                    <div>
+                        <p style="font-size: 14px; margin: 0; color: #666;"><strong>Email:</strong> support@eventy.com</p>
+                        <p style="font-size: 14px; margin: 4px 0; color: #666;"><strong>Phone:</strong> +1 (555) 123-4567</p>
+                        <p style="font-size: 14px; margin: 0; color: #666;"><strong>Address:</strong> 123 Event Street, Community City, CC 12345</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="footer-bottom" style="border-top: 1px solid #ddd; padding-top: 24px; text-align: center;">
+                <p style="font-size: 14px; color: #666; margin: 0;">© 2023 Eventy. All rights reserved. | <a href="#" style="color: #666; text-decoration: none;">Privacy Policy</a> | <a href="#" style="color: #666; text-decoration: none;">Terms of Service</a></p>
+            </div>
+        </div>
+    </footer>
 
     <!-- Coming Soon modal -->
     <div id="comingSoonModal" class="modal-overlay" role="dialog" aria-modal="true" aria-hidden="true">
@@ -871,7 +961,7 @@
         /* Coming Soon modal logic */
         const modal = document.getElementById('comingSoonModal');
         if (modal) {
-            const showTargets = document.querySelectorAll('nav .nav-links a, nav .btn');
+            const showTargets = document.querySelectorAll('nav .btn');
 
             function openModal(title, msg) {
                 const h = modal.querySelector('#comingTitle');
@@ -890,7 +980,7 @@
             }
             showTargets.forEach(el => {
                 el.addEventListener('click', function(e) {
-                    // only intercept navigation from nav area
+                    // only intercept the Get Started button
                     e.preventDefault();
                     openModal('Feature Coming Soon', 'This feature is being prepared. Stay tuned!');
                 });
