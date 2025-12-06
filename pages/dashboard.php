@@ -246,7 +246,7 @@ $userData = $userResult->fetch_assoc();
 
         // Load all events
         function loadEvents(query = "") {
-            fetch(`/Eventy/src/php/search_events.php?search=${encodeURIComponent(query)}`)
+            fetch(`../src/php/SearchEvents.php?search=${encodeURIComponent(query)}`)
                 .then(res => res.json())
                 .then(events => {
                     tableBody.innerHTML = "";
@@ -263,7 +263,7 @@ $userData = $userResult->fetch_assoc();
         eventForm.addEventListener("submit", function(e) {
             e.preventDefault();
             const formData = new FormData(eventForm);
-            fetch('/Eventy/src/php/create_event.php', {
+            fetch('../src/php/create_event.php', {
                     method: 'POST',
                     body: formData
                 })
