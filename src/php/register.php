@@ -58,7 +58,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         if (password_verify($password, $user['password'])) {
             $_SESSION['HostID'] = $user['HostID'];
-            header("Location: Mainboard.php");
+            header("Location: /Eventy/pages/Mainboard.php");
             exit();
         } else {
             echo "❌ Password incorrect.";
@@ -77,7 +77,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     if ($stmt->execute()) {
         $_SESSION['HostID'] = $stmt->insert_id;
-        header("Location: Mainboard.php");
+        header("Location: /Eventy/pages/Mainboard.php");
         exit();
     } else {
         echo "❌ Database error: " . $stmt->error;

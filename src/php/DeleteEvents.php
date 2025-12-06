@@ -1,40 +1,49 @@
 <?php
+error_reporting(0);
 session_start();
 
-// Database credentials
-$servername = "localhost";
-$dbusername = "root";
-$dbpassword = "";
-$dbname = "eventy";
+// Check if not logged in
+if (!isset($_SESSION['HostID'])) {
+    echo json_encode(['status' => 'error', 'message' => 'Not logged in']);
+    exit();
+}
 
-// Connect to DB
-$conn = new mysqli($servername, $dbusername, $dbpassword, $dbname);
+$HostID = $_SESSION['HostID'];
 
-// Connection check
+// Database connection
+$conn = new mysqli("localhost", "root", "", "eventy");
+
+// Check connection
 if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
+    echo json_encode(['status' => 'error', 'message' => 'Database connection failed']);
+    exit();
 }
 
-// Validate event ID
-if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
-    die("Invalid Event ID.");
-}
+// Check if form is submitted
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
-$eventId = intval($_GET['id']);
+    // Get JSON input
+    $input = file_get_contents('php://input');
+    $data = json_decode($input, true);
 
-// Prepare delete query
-$stmt = $conn->prepare("DELETE FROM events WHERE id = ?");
-$stmt->bind_param("i", $eventId);
+    if (!isset($data['id']) || !is_numeric($data['id'])) {
+        echo json_encode(['status' => 'error', 'message' => 'Invalid Event ID.']);
+        exit();
+    }
 
-if ($stmt->execute()) {
-    echo "<script>
-            alert('Event deleted successfully.');
-            window.location.href = 'Mainboard.php';
-          </script>";
+    $eventId = intval($data['id']);
+
+    // Delete events table
+    $query = $conn->prepare("DELETE FROM events WHERE id = ? AND HostID = ?");
+
+    $query->bind_param("ii", $eventId, $HostID);
+
+    if ($query->execute()) {
+        echo json_encode(['status' => 'success', 'message' => 'Event deleted successfully']);
+    } else {
+        echo json_encode(['status' => 'error', 'message' => 'Database error: ' . $query->error]);
+    }
 } else {
-    echo "Error deleting event: " . $conn->error;
+    echo json_encode(['status' => 'error', 'message' => 'Invalid request method']);
 }
-
-$stmt->close();
-$conn->close();
 ?>

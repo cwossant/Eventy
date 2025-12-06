@@ -1,5 +1,7 @@
-1. Add link to assets/css/vantage-style.css in index.php head
-2. Update footer to use dark background and white text (class="footer")
-3. Apply class="features" to Features section
-4. Adjust inline styles in sections to match vantage-style theme
-5. Test the changes
+- [x] Add error_reporting(0) to src/php/Mainboard.php
+- [x] Add error_reporting(0) to src/php/UpdateEvents.php
+- [x] Add error_reporting(0) to src/php/DeleteEvents.php
+- [x] Add error_reporting(0) to src/php/SearchEvents.php
+- [x] Remove 'status' from insert query in src/php/Mainboard.php
+- [x] Rewrite src/php/DeleteEvents.php to handle POST JSON and return JSON
+- [x] Fix update fetch path in pages/Mainboard.php

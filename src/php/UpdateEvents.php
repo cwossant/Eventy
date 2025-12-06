@@ -1,37 +1,60 @@
 <?php
+error_reporting(0);
 session_start();
 
+// Check if not logged in
+if (!isset($_SESSION['HostID'])) {
+    echo json_encode(['status' => 'error', 'message' => 'Not logged in']);
+    exit();
+}
+
+$HostID = $_SESSION['HostID'];
+
+// Database connection
 $conn = new mysqli("localhost", "root", "", "eventy");
 
+// Check connection
 if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
+    echo json_encode(['status' => 'error', 'message' => 'Database connection failed']);
+    exit();
 }
 
-$id = $_POST['id'];
-$name = $_POST['name'];
-$description = $_POST['description'];
-$capacity = $_POST['capacity'];
-$event_date = $_POST['event_date'];
-$event_time = $_POST['event_time'];
-$location = $_POST['location'];
-$status = $_POST['status'];
+// Check if form is submitted
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
-$stmt = $conn->prepare("UPDATE events SET 
-    name=?, description=?, capacity=?, event_date=?, event_time=?, location=?, status=?
-    WHERE id=?");
+    // Retrieve form values
+    $id = $_POST['id'];
+    $name = $_POST['name'];
+    $description = $_POST['description'];
+    $capacity = $_POST['capacity'];
+    $event_date = $_POST['event_date'];
+    $event_time = $_POST['event_time'];
+    $location = $_POST['location'];
 
-$stmt->bind_param("ssissssi", 
-    $name, $description, $capacity, $event_date, $event_time, $location, $status, $id);
+    // Update events table
+    $query = $conn->prepare("
+        UPDATE events SET name = ?, description = ?, capacity = ?, event_date = ?, event_time = ?, location = ?
+        WHERE id = ? AND HostID = ?
+    ");
 
-if ($stmt->execute()) {
-    echo "<script>
-        alert('Event updated successfully!');
-        window.location.href = 'Mainboard.php';
-    </script>";
+    $query->bind_param(
+        "ssisssii",
+        $name,
+        $description,
+        $capacity,
+        $event_date,
+        $event_time,
+        $location,
+        $id,
+        $HostID
+    );
+
+    if ($query->execute()) {
+        echo json_encode(['status' => 'success', 'message' => 'Event updated successfully']);
+    } else {
+        echo json_encode(['status' => 'error', 'message' => 'Database error: ' . $query->error]);
+    }
 } else {
-    echo "Error updating event: " . $conn->error;
+    echo json_encode(['status' => 'error', 'message' => 'Invalid request method']);
 }
-
-$stmt->close();
-$conn->close();
 ?>

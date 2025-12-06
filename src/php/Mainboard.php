@@ -1,10 +1,10 @@
 <?php
+error_reporting(0);
 session_start();
-$HostID = $_SESSION['HostID'];
 
-// Redirect if not logged in
+// Check if not logged in
 if (!isset($_SESSION['HostID'])) {
-    header("Location: registration.php");
+    echo json_encode(['status' => 'error', 'message' => 'Not logged in']);
     exit();
 }
 
@@ -15,7 +15,8 @@ $conn = new mysqli("localhost", "root", "", "eventy");
 
 // Check connection
 if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
+    echo json_encode(['status' => 'error', 'message' => 'Database connection failed']);
+    exit();
 }
 
 // Check if form is submitted
@@ -28,33 +29,30 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $event_date = $_POST['event_date'];
     $event_time = $_POST['event_time'];
     $location = $_POST['location'];
-    $status = intval($_POST['status']);
-
 
     // Insert into events table
     $query = $conn->prepare("
-        INSERT INTO events (HostID, name, description, capacity, event_date, event_time, location, status)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+        INSERT INTO events (HostID, name, description, capacity, event_date, event_time, location)
+        VALUES (?, ?, ?, ?, ?, ?, ?)
     ");
 
     $query->bind_param(
-        "ississss",
-        $HostID, 
-        $name, 
-        $description, 
-        $capacity, 
-        $event_date, 
-        $event_time, 
-        $location, 
-        $status
+        "ississs",
+        $HostID,
+        $name,
+        $description,
+        $capacity,
+        $event_date,
+        $event_time,
+        $location
     );
 
     if ($query->execute()) {
-        // Redirect back to mainboard
-        header("Location: Mainboard.php?success=1");
-        exit();
+        echo json_encode(['status' => 'success', 'message' => 'Event added successfully']);
     } else {
-        echo "Error: " . $query->error;
+        echo json_encode(['status' => 'error', 'message' => 'Database error: ' . $query->error]);
     }
+} else {
+    echo json_encode(['status' => 'error', 'message' => 'Invalid request method']);
 }
 ?>

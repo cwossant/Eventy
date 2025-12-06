@@ -930,25 +930,30 @@
                         <div class="auth-card" role="region" aria-label="Login form">
                             <h2>Registration</h2>
 
-                            <form method="POST" action="src/php/register.php">
+                            <form method="POST" action="src/php/register.php" id="regForm">
                                 <div class="form-group">
                                     <input id="firstname" name="firstname" type="text" placeholder="First name" required>
+                                    <span class="error" id="fnameError"></span>
                                 </div>
 
                                 <div class="form-group">
                                     <input id="lastname" name="lastname" type="text" placeholder="Last name" required>
+                                    <span class="error" id="lnameError"></span>
                                 </div>
 
                                 <div class="form-group">
                                     <input id="email" name="email" type="email" placeholder="Email" required>
+                                    <span class="error" id="emailError"></span>
                                 </div>
 
                                 <div class="form-group">
                                     <input id="contactno" name="contactno" type="text" placeholder="Contact Number" required>
+                                    <span class="error" id="contactError"></span>
                                 </div>
 
                                 <div class="form-group">
                                     <input id="password" name="password" type="password" placeholder="Password" required>
+                                    <span class="error" id="passwordError"></span>
                                 </div>
 
                                 <button type="submit" class="btn-primary">Create Account</button>
@@ -1216,4 +1221,95 @@
             }
         }
     })();
+
+<script>
+document.getElementById("regForm").addEventListener("submit", function (e) {
+    let valid = true;
+
+    // Clear previous errors
+    document.querySelectorAll(".error").forEach(el => el.textContent = "");
+
+    let email = document.getElementById("email").value.trim();
+    let contact = document.getElementById("contactno").value.trim();
+    let password = document.getElementById("password").value.trim();
+
+    // Email validation
+    let emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailPattern.test(email)) {
+        document.getElementById("emailError").textContent = "Invalid email format.";
+        valid = false;
+    }
+
+    // Contact number validation
+    let contactPattern = /^09\d{9}$/;
+    if (!contactPattern.test(contact)) {
+        document.getElementById("contactError").textContent = "Must start with 09 and be 11 digits.";
+        valid = false;
+    }
+
+    // Password validation
+    let upper = /[A-Z]/.test(password);
+    let lower = /[a-z]/.test(password);
+    let number = /[0-9]/.test(password);
+
+    if (!(upper && lower && number) || password.length < 8) {
+        document.getElementById("passwordError").textContent =
+            "At least 8 chars, 1 uppercase, 1 lowercase, 1 number.";
+        valid = false;
+    }
+
+    // Stop form submit if errors exist
+    if (!valid) {
+        e.preventDefault();
+    }
+});
 </script>
+
+</html>
+
+</script>
+
+<script>
+document.getElementById("regForm").addEventListener("submit", function (e) {
+    let valid = true;
+
+    // Clear previous errors
+    document.querySelectorAll(".error").forEach(el => el.textContent = "");
+
+    let email = document.getElementById("email").value.trim();
+    let contact = document.getElementById("contactno").value.trim();
+    let password = document.getElementById("password").value.trim();
+
+    // Email validation
+    let emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailPattern.test(email)) {
+        document.getElementById("emailError").textContent = "Invalid email format.";
+        valid = false;
+    }
+
+    // Contact number validation
+    let contactPattern = /^09\d{9}$/;
+    if (!contactPattern.test(contact)) {
+        document.getElementById("contactError").textContent = "Must start with 09 and be 11 digits.";
+        valid = false;
+    }
+
+    // Password validation
+    let upper = /[A-Z]/.test(password);
+    let lower = /[a-z]/.test(password);
+    let number = /[0-9]/.test(password);
+
+    if (!(upper && lower && number) || password.length < 8) {
+        document.getElementById("passwordError").textContent =
+            "At least 8 chars, 1 uppercase, 1 lowercase, 1 number.";
+        valid = false;
+    }
+
+    // Stop form submit if errors exist
+    if (!valid) {
+        e.preventDefault();
+    }
+});
+</script>
+
+</html>
