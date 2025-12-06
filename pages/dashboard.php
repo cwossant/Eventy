@@ -29,7 +29,7 @@ $userData = $userResult->fetch_assoc();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mainboard</title>
+    <title>Dashboard</title>
 
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -246,7 +246,7 @@ $userData = $userResult->fetch_assoc();
 
         // Load all events
         function loadEvents(query = "") {
-            fetch(`/Eventy/src/php/SearchEvents.php?search=${encodeURIComponent(query)}`)
+            fetch(`/Eventy/src/php/search_events.php?search=${encodeURIComponent(query)}`)
                 .then(res => res.json())
                 .then(events => {
                     tableBody.innerHTML = "";
@@ -263,7 +263,7 @@ $userData = $userResult->fetch_assoc();
         eventForm.addEventListener("submit", function(e) {
             e.preventDefault();
             const formData = new FormData(eventForm);
-            fetch('/Eventy/src/php/Mainboard.php', {
+            fetch('/Eventy/src/php/create_event.php', {
                     method: 'POST',
                     body: formData
                 })
@@ -286,7 +286,7 @@ $userData = $userResult->fetch_assoc();
             // Delete
             if (e.target.classList.contains('delete-btn')) {
                 if (confirm("Are you sure you want to delete this entry?")) {
-                    fetch('../src/php/DeleteEvents.php', {
+                    fetch('../src/php/delete_event.php', {
                             method: 'POST',
                             headers: {
                                 'Content-Type': 'application/json'
@@ -318,7 +318,7 @@ $userData = $userResult->fetch_assoc();
                 updateForm.onsubmit = function(ev) {
                     ev.preventDefault();
                     const updateData = new FormData(updateForm);
-                    fetch('../src/php/UpdateEvents.php', {
+                    fetch('../src/php/update_event.php', {
                             method: 'POST',
                             body: updateData
                         })
