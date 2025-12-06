@@ -1,11 +1,11 @@
 <?php
-$servername = "localhost";
-$dbusername = "root";
-$dbpassword = "";
-$dbname = "eventy";
+session_start();
 
-$conn = new mysqli($servername, $dbusername, $dbpassword, $dbname);
-if ($conn->connect_error) die(json_encode(["status"=>"error","message"=>$conn->connect_error]));
+$conn = new mysqli("localhost", "root", "", "eventy");
+
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
 
 $id = $_POST['id'];
 $name = $_POST['name'];
@@ -14,16 +14,24 @@ $capacity = $_POST['capacity'];
 $event_date = $_POST['event_date'];
 $event_time = $_POST['event_time'];
 $location = $_POST['location'];
+$status = $_POST['status'];
 
-$sql = "UPDATE events SET 
-        name='$name', description='$description', capacity='$capacity', 
-        event_date='$event_date', event_time='$event_time', location='$location'
-        WHERE id=$id";
+$stmt = $conn->prepare("UPDATE events SET 
+    name=?, description=?, capacity=?, event_date=?, event_time=?, location=?, status=?
+    WHERE id=?");
 
-if($conn->query($sql)===TRUE){
-    echo json_encode(["status"=>"success"]);
+$stmt->bind_param("ssissssi", 
+    $name, $description, $capacity, $event_date, $event_time, $location, $status, $id);
+
+if ($stmt->execute()) {
+    echo "<script>
+        alert('Event updated successfully!');
+        window.location.href = 'Mainboard.php';
+    </script>";
 } else {
-    echo json_encode(["status"=>"error","message"=>$conn->error]);
+    echo "Error updating event: " . $conn->error;
 }
+
+$stmt->close();
 $conn->close();
 ?>

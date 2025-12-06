@@ -1,32 +1,60 @@
 <?php
-$servername = "localhost";
-$dbusername = "root";
-$dbpassword = "";
-$dbname = "eventy";
+session_start();
+$HostID = $_SESSION['HostID'];
 
-$conn = new mysqli($servername, $dbusername, $dbpassword, $dbname);
+// Redirect if not logged in
+if (!isset($_SESSION['HostID'])) {
+    header("Location: registration.php");
+    exit();
+}
+
+$HostID = $_SESSION['HostID'];
+
+// Database connection
+$conn = new mysqli("localhost", "root", "", "eventy");
+
+// Check connection
 if ($conn->connect_error) {
-    die(json_encode(["status"=>"error","message"=>$conn->connect_error]));
+    die("Connection failed: " . $conn->connect_error);
 }
 
-// Get POST values
-$name = $_POST['name'];
-$description = $_POST['description'];
-$capacity = $_POST['capacity'];
-$event_date = $_POST['event_date'];
-$event_time = $_POST['event_time'];
-$location = $_POST['location'];
+// Check if form is submitted
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
-$sql = "INSERT INTO events (name, description, capacity, event_date, event_time, location) 
-        VALUES ('$name','$description','$capacity','$event_date','$event_time','$location')";
+    // Retrieve form values
+    $name = $_POST['name'];
+    $description = $_POST['description'];
+    $capacity = $_POST['capacity'];
+    $event_date = $_POST['event_date'];
+    $event_time = $_POST['event_time'];
+    $location = $_POST['location'];
+    $status = intval($_POST['status']);
 
-if($conn->query($sql)===TRUE){
-    $id = $conn->insert_id;
-    $newEvent = $conn->query("SELECT * FROM events WHERE id=$id")->fetch_assoc();
-    echo json_encode(["status"=>"success","event"=>$newEvent]);
-}else{
-    echo json_encode(["status"=>"error","message"=>$conn->error]);
+
+    // Insert into events table
+    $query = $conn->prepare("
+        INSERT INTO events (HostID, name, description, capacity, event_date, event_time, location, status)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+    ");
+
+    $query->bind_param(
+        "ississss",
+        $HostID, 
+        $name, 
+        $description, 
+        $capacity, 
+        $event_date, 
+        $event_time, 
+        $location, 
+        $status
+    );
+
+    if ($query->execute()) {
+        // Redirect back to mainboard
+        header("Location: Mainboard.php?success=1");
+        exit();
+    } else {
+        echo "Error: " . $query->error;
+    }
 }
-
-$conn->close();
 ?>

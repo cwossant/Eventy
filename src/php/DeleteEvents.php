@@ -1,24 +1,40 @@
 <?php
+session_start();
+
+// Database credentials
 $servername = "localhost";
 $dbusername = "root";
 $dbpassword = "";
 $dbname = "eventy";
 
+// Connect to DB
 $conn = new mysqli($servername, $dbusername, $dbpassword, $dbname);
+
+// Connection check
 if ($conn->connect_error) {
-    die(json_encode(["status"=>"error","message"=>$conn->connect_error]));
+    die("Connection failed: " . $conn->connect_error);
 }
 
-$data = json_decode(file_get_contents("php://input"), true);
-$id = $data['id'];
-
-$sql = "DELETE FROM events WHERE id=$id";
-
-if($conn->query($sql)===TRUE){
-    echo json_encode(["status"=>"success"]);
-}else{
-    echo json_encode(["status"=>"error","message"=>$conn->error]);
+// Validate event ID
+if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
+    die("Invalid Event ID.");
 }
 
+$eventId = intval($_GET['id']);
+
+// Prepare delete query
+$stmt = $conn->prepare("DELETE FROM events WHERE id = ?");
+$stmt->bind_param("i", $eventId);
+
+if ($stmt->execute()) {
+    echo "<script>
+            alert('Event deleted successfully.');
+            window.location.href = 'Mainboard.php';
+          </script>";
+} else {
+    echo "Error deleting event: " . $conn->error;
+}
+
+$stmt->close();
 $conn->close();
 ?>
