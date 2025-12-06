@@ -77,7 +77,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     if ($stmt->execute()) {
         $_SESSION['HostID'] = $stmt->insert_id;
-        header("Location: /Eventy/pages/Mainboard.php");
+        header("Location: /Eventy/pages/dashboard.php");
         exit();
     } else {
         echo "❌ Database error: " . $stmt->error;
