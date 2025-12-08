@@ -4,7 +4,7 @@ if (!isset($_SESSION['username'])) {
     header("Location: index.php");
     exit();
 }
-require_once 'config/database.php';
+require_once '../config/database.php';
 $db = new Database();
 $conn = $db->getConnection();
 ?>
@@ -18,112 +18,286 @@ $conn = $db->getConnection();
     <link rel="apple-touch-icon" href="images/logo.png?v=2" />
     <link rel="manifest" href="manifest.webmanifest" />
     <meta name="theme-color" content="#1a1a2e" />
-    <link rel="stylesheet" href="css/vantage-style.css" />
-    <link rel="stylesheet" href="assets/css/fontawesome-all.min.css" />
+    <!-- Google Fonts: added Simonetta -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Playfair+Display:wght@700&family=Simonetta:wght@400;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <!-- Vantage Style CSS -->
+    <link rel="stylesheet" href="../assets/css/vantage-style.css">
+
     <style>
-        :root {
-            --primary-color: #00c2ce;
-            --primary-dark: #0e3a49;
-            --secondary-color: #f8fafc;
-            --accent-color: #e2e8f0;
-            --text-primary: #1a202c;
-            --text-secondary: rgba(26, 32, 44, 0.8);
-            --text-muted: rgba(26, 32, 44, 0.6);
-            --bg-primary: #ffffff;
-            --bg-secondary: #f8fafc;
-            --bg-card: #ffffff;
-            --border-color: rgba(26, 32, 44, 0.1);
-            --shadow-light: rgba(0, 194, 206, 0.1);
-            --shadow-medium: rgba(0, 194, 206, 0.2);
-            --shadow-strong: rgba(0, 194, 206, 0.3);
+        /* load local Handyman font (place font files in /fonts/) */
+
+        @font-face {
+            font-family: "Handyman";
+            src: url("../fonts/Handyman.woff2") format("woff2"), url("../fonts/Handyman.woff") format("woff"), url("../fonts/Handyman.ttf") format("truetype");
+            font-weight: 400;
+            font-style: normal;
+            font-display: swap;
         }
 
-        .header {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            width: 100vw;
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(20px);
-            border-bottom: 1px solid var(--border-color);
-            z-index: 1000;
-            transition: all 0.3s ease;
+         :root {
+            --purple-1: #6b3be6;
+            --purple-2: #7f4fdc;
+            --accent: #ffffff;
+            /* slightly less bright muted text for better contrast on purple */
+            --muted: rgba(255, 255, 255, 0.88);
+            --logo-size: clamp(36px, 6vw, 120px);
         }
 
-        .header.scrolled {
-            background: rgba(255, 255, 255, 0.98);
-            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.15);
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0
         }
 
-        .terms-hero {
-            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
-            padding: 120px 0 80px;
-            text-align: center;
+        html {
+            scroll-behavior: smooth;
+        }
+
+        html,
+        body {
+            height: 100%
+        }
+
+        body {
+            font-family: "Poppins", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+            background: #f7f7fb;
+            color: #111;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+        /* HERO */
+
+        .hero {
             position: relative;
-            overflow: hidden;
+            min-height: 100vh;
+            /* changed from 85vh so hero always reaches bottom of the viewport */
+            display: flex;
+            align-items: flex-start;
+            /* allow the wave to overlap outside the hero cleanly */
+            overflow: visible;
+            /* use image/bg.png only as the hero background (no overlays) */
+            background: url('../assets/images/bg.png') center/cover no-repeat;
+            color: var(--accent);
+            padding: 28px 64px;
         }
+        /* dotted pattern on the right - smaller, softly faded, responsive */
 
-        .terms-hero::before {
-            content: '';
+        .hero::before {
+            content: "";
             position: absolute;
+            right: clamp(28px, 6vw, 6%);
+            top: clamp(24px, 5vh, 6%);
+            width: clamp(160px, 20vw, 320px);
+            height: clamp(160px, 20vw, 320px);
+            /* small repeating dots */
+            background-image: radial-gradient(rgba(255, 255, 255, 0.12) 1px, transparent 1px);
+            background-size: 10px 10px;
+            background-repeat: repeat;
+            border-radius: 50%;
+            opacity: 0.85;
+            pointer-events: none;
+            transform: translateZ(0);
+            /* soft fade at the edges so it blends with the gradient */
+            -webkit-mask-image: radial-gradient(circle at 60% 40%, black 55%, transparent 100%);
+            mask-image: radial-gradient(circle at 60% 40%, black 55%, transparent 100%);
+        }
+        /* thin vertical guide - keep subtle and hide on small screens */
+
+        .hero::after {
+            content: "";
+            position: absolute;
+            left: 50%;
             top: 0;
-            left: 0;
-            right: 0;
             bottom: 0;
-            background: radial-gradient(circle at 20% 80%, rgba(0, 194, 206, 0.15) 0%, transparent 50%);
-            z-index: 1;
+            width: 1px;
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.06) 0%, rgba(255, 255, 255, 0.02) 50%, transparent 100%);
+            transform: translateX(-50%);
+            pointer-events: none;
+            opacity: 0.9;
         }
 
-        .terms-hero-content {
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            gap: 32px;
+            align-items: center;
             position: relative;
             z-index: 2;
         }
+        /* NAV */
 
-        .terms-content {
-            padding: 80px 0;
-            background: white;
+        nav {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+            width: 100%;
+            padding: 8px 0 24px 0;
         }
 
-        .terms-section {
-            margin-bottom: 3rem;
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-right: auto;
+            /* allow per-container override of logo size - falls back to :root --logo-size */
+            --logo-size: var(--logo-size);
+        }
+        /* removed the fixed .logo img size so brand image can scale via the CSS variable */
+
+        .logo img {
+            display: block;
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
         }
 
-        .terms-section h2 {
-            font-size: 1.8rem;
+        .brand {
+            font-weight: 900;
+            letter-spacing: 0.4px;
+            /* optional: set a different size for this logo instance:
+               uncomment and tweak the line below to override :root for this .logo container
+            */
+            /* --logo-size: clamp(48px, 8vw, 140px); */
+        }
+
+        .brand img {
+            /* use the adjustable variable so the logo scales with viewport */
+            height: var(--logo-size);
+            max-height: 140px;
+            /* absolute upper bound */
+            width: auto;
+            display: block;
+            object-fit: contain;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 20px;
+            align-items: center;
             font-weight: 600;
-            color: var(--text-primary);
-            margin-bottom: 1rem;
-            border-bottom: 2px solid var(--primary-color);
-            padding-bottom: 0.5rem;
+            font-size: 15px;
         }
 
-        .terms-section p {
-            color: var(--text-secondary);
-            line-height: 1.6;
-            margin-bottom: 1rem;
+        .nav-links a {
+            color: rgba(255, 255, 255, 0.95);
+            text-decoration: none;
+            padding: 8px 12px;
+            border-radius: 6px;
         }
 
-        .terms-section ul {
-            margin-left: 1.5rem;
-            color: var(--text-secondary);
-            line-height: 1.6;
+        .nav-links a:hover {
+            background: rgba(255, 255, 255, 0.06);
         }
 
-        .terms-section li {
-            margin-bottom: 0.5rem;
+        .cta-nav {
+            margin-left: 16px;
+            background: var(--accent);
+            color: var(--purple-2);
+            padding: 8px 16px;
+            border-radius: 10px;
+            font-weight: 700;
+            text-decoration: none;
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+        }
+        /* Hero content layout */
+
+        .hero-grid {
+            display: grid;
+            grid-template-columns: 1fr 540px;
+            gap: 32px;
+            align-items: center;
+            width: 100%;
         }
 
-        @media (max-width: 768px) {
-            .terms-hero {
-                padding: 100px 0 60px;
-            }
+        .left {
+            padding: 32px 0;
         }
-    </style>
+
+        .eyebrow {
+            display: inline-block;
+            background: rgba(0, 0, 0, 0.08);
+            color: var(--accent);
+            padding: 6px 12px;
+            border-radius: 999px;
+            font-weight: 600;
+            font-size: 14px;
+            margin-bottom: 18px;
+            opacity: 0.95;
+        }
+        /* Heading uses Simonetta */
+
+        h1 {
+            font-family: "Simonetta", "Playfair Display", serif;
+            font-size: 64px;
+            line-height: 0.95;
+            margin-bottom: 18px;
+            color: var(--accent);
+            text-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+        }
+        /* Lead paragraph uses Handyman (fallback to a handwriting font) */
+
+        p.lead {
+            font-family: "Handyman", "Handlee", "Poppins", cursive;
+            font-size: 18px;
+            color: var(--muted);
+            max-width: 540px;
+            margin-bottom: 22px;
+        }
+
+        .cta-row {
+            display: flex;
+            gap: 16px;
+            align-items: center;
+        }
+
+        .btn {
+            background: var(--accent);
+            color: var(--purple-2);
+            padding: 12px 18px;
+            border-radius: 12px;
+            font-weight: 700;
+            text-decoration: none;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+            display: inline-flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .btn.secondary {
+            background: transparent;
+            color: var(--accent);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            padding: 11px 16px;
+            font-weight: 600;
+        }
+        /* Right illustration area */
+
+        .illustration {
+            position: relative;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            /* allow interaction for the form */
+            pointer-events: auto;
+        }
+        /* Login form / auth card styles (replaces the decorative scene) */
+
+        .auth-card {
+            width: min(460px, 42vw);
+            max-width: 100%;
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0.02));
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: 0 18px 50px rgba(0, 0, 0, 0.30);
+            backdrop-filter: blur(6px);
 </head>
 <body>
-    <!-- Header -->
-    <?php include __DIR__ . '/partials/header.php'; ?>
+    <!-- Header Removed -->
 
     <!-- Terms Hero -->
     <section class="terms-hero">

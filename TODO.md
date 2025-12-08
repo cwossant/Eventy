@@ -1,7 +1,6 @@
-- [x] Add error_reporting(0) to src/php/Mainboard.php
-- [x] Add error_reporting(0) to src/php/UpdateEvents.php
-- [x] Add error_reporting(0) to src/php/DeleteEvents.php
-- [x] Add error_reporting(0) to src/php/SearchEvents.php
-- [x] Remove 'status' from insert query in src/php/Mainboard.php
-- [x] Rewrite src/php/DeleteEvents.php to handle POST JSON and return JSON
-- [x] Fix update fetch path in pages/Mainboard.php
+# TODO: Copy Design from index.php to Pages
+
+## Tasks
+- [ ] Update terms_of_service.php: Replace <head> with full adjusted index.php <head>, add navigation bar, update hero styles (background, ::before, ::after, text colors)
+- [ ] Update privacy_policy.php: Replace <head> with full adjusted index.php <head>, add navigation bar, update hero styles (background, ::before, ::after, text colors)
+- [ ] Update our_team.php: Replace <head> with full adjusted index.php <head>, add navigation bar, update hero styles (background, ::before, ::after, text colors)

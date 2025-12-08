@@ -4,7 +4,7 @@ if (!isset($_SESSION['username'])) {
     header("Location: index.php");
     exit();
 }
-require_once 'config/database.php';
+require_once '../config/database.php';
 $db = new Database();
 $conn = $db->getConnection();
 ?>
@@ -122,8 +122,7 @@ $conn = $db->getConnection();
     </style>
 </head>
 <body>
-    <!-- Header -->
-    <?php include __DIR__ . '/partials/header.php'; ?>
+    <!-- Header Removed -->
 
     <!-- Privacy Hero -->
     <section class="privacy-hero">

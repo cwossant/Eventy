@@ -4,7 +4,7 @@ if (!isset($_SESSION['username'])) {
     header("Location: index.php");
     exit();
 }
-require_once 'config/database.php';
+require_once '../config/database.php';
 $db = new Database();
 $conn = $db->getConnection();
 ?>
@@ -282,23 +282,7 @@ $conn = $db->getConnection();
     </style>
 </head>
 <body>
-    <!-- Header -->
-        <?php include __DIR__ . '/partials/header.php'; ?>
-
-        <div class="mobile-menu" id="mobileMenu">
-            <div class="mobile-menu-content">
-                <ul class="mobile-nav-list">
-                    <li><a href="#" onclick="openMonitorWeb(); return false;" class="mobile-nav-link">Monitor</a></li>
-                    <li><a href="link.php" class="mobile-nav-link">Link</a></li>
-                    <li><a href="history.php" class="mobile-nav-link">History</a></li>
-                    <li><a href="profile.php" class="mobile-nav-link">Profile</a></li>
-                </ul>
-                <div class="mobile-header-actions">
-                    <a href="dashboard.php" class="mobile-auth-link">Dashboard</a>
-                </div>
-            </div>
-        </div>
-    </header>
+    <!-- Header Removed -->
 
     <!-- Team Hero -->
     <section class="team-hero">
