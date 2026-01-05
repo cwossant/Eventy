@@ -946,7 +946,7 @@
                         return;
                     }
 
-                    fetch('login.php', {
+                    fetch('api/login.php', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
                         body: new URLSearchParams({ email, password })
@@ -1016,7 +1016,7 @@
                 if (!valid) return;
 
                 // Submit registration
-                fetch('register.php', {
+                fetch('api/register.php', {
                     method: 'POST',
                     body: new FormData(this)
                 })
@@ -1062,7 +1062,7 @@ if (otpSubmitBtn) {
 
         otpError.style.display = 'none';
 
-        fetch('verify_otp.php', {
+        fetch('api/verify_otp.php', {
             method: 'POST',
             headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
             body: 'otp=' + otp

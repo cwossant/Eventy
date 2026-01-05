@@ -42,7 +42,7 @@ $user = $result->fetch_assoc();
     </div>
 
     <!-- PROFILE DETAILS -->
-    <form id="updateForm" method="POST" action="update_profile.php">
+    <form id="updateForm" method="POST" action="api/update_profile.php">
 
         <label>First Name</label>
         <input type="text" name="firstname" value="<?php echo htmlspecialchars($user['firstname']); ?>" required>
@@ -94,7 +94,7 @@ document.getElementById("updateForm").onsubmit = function(e) {
     e.preventDefault();
     let form = new FormData(this);
 
-    fetch("update_profile.php", {
+    fetch("api/update_profile.php", {
         method: "POST",
         body: form
     })
@@ -109,7 +109,7 @@ document.getElementById("passwordForm").onsubmit = function(e) {
     e.preventDefault();
     let form = new FormData(this);
 
-    fetch("update_profile.php", {
+    fetch("api/update_profile.php", {
         method: "POST",
         body: form
     })
@@ -129,7 +129,7 @@ document.getElementById("profilePicInput").addEventListener("change", function (
     let form = new FormData();
     form.append("profile_picture", file);
 
-    fetch("upload_profile_picture.php", {
+    fetch("api/upload_profile_picture.php", {
         method: "POST",
         body: form
     })

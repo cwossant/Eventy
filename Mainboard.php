@@ -284,7 +284,7 @@ $events = $eventQuery->get_result();
                 const form = new FormData(document.getElementById("changePasswordForm"));
                 form.append("action", "change_password");
 
-                fetch("update_settings.php", {
+                fetch("api/update_settings.php", {
                     method: "POST",
                     body: form
                 })
@@ -316,7 +316,7 @@ $events = $eventQuery->get_result();
 
                 const otp = document.getElementById("otpPasswordInput").value;
 
-                fetch("verify_password_otp.php", {
+                fetch("api/verify_password_otp.php", {
                     method: "POST",
                     headers: { "Content-Type": "application/x-www-form-urlencoded" },
                     body: "otp=" + encodeURIComponent(otp)
@@ -353,7 +353,7 @@ $events = $eventQuery->get_result();
 
                 const lang = document.getElementById("languageSelect").value;
 
-                fetch("update_settings.php", {
+                fetch("api/update_settings.php", {
                     method: "POST",
                     body: new URLSearchParams({ language: lang })
                 })
@@ -377,7 +377,7 @@ $events = $eventQuery->get_result();
 
                 document.body.classList.toggle("dark-mode", darkMode === 1);
 
-                fetch("update_settings.php", {
+                fetch("api/update_settings.php", {
                     method: "POST",
                     body: new URLSearchParams({ darkmode: darkMode })
                 });
@@ -394,7 +394,7 @@ $events = $eventQuery->get_result();
         <div class="popup-box">
             <h2 class="popup-title">Create Event</h2>
 
-            <form action="create_event.php" method="POST" class="popup-form">
+            <form action="api/create_event.php" method="POST" class="popup-form">
                 <label>Event Name</label>
                 <input type="text" name="name" required>
 
@@ -432,7 +432,7 @@ $events = $eventQuery->get_result();
         <div class="popup-box">
             <h2 class="popup-title">Update Event</h2>
 
-            <form action="UpdateEvent.php" method="POST" class="popup-form">
+            <form action="api/UpdateEvent.php" method="POST" class="popup-form">
                 <input type="hidden" name="id" id="edit_event_id">
 
                 <label>Event Name</label>
@@ -494,13 +494,13 @@ $events = $eventQuery->get_result();
         // ===== DELETE EVENT =====
         function confirmDelete(eventId) {
             if (confirm("Are you sure you want to delete this event?")) {
-                window.location.href = "DeleteEvent.php?id=" + eventId;
+                window.location.href = "api/DeleteEvent.php?id=" + eventId;
             }
         }
 
         // ===== EDIT EVENT POPUP =====
         function openEditPopup(eventId) {
-            fetch("get_event.php?id=" + eventId)
+            fetch("api/get_event.php?id=" + eventId)
                 .then(response => response.json())
                 .then(data => {
                     if (data.error) {
@@ -680,7 +680,7 @@ $events = $eventQuery->get_result();
             let formData = new FormData();
             formData.append("profile_picture", file);
 
-            fetch("upload_profile_picture.php", {
+            fetch("api/upload_profile_picture.php", {
                 method: "POST",
                 body: formData
             })
@@ -725,7 +725,7 @@ $events = $eventQuery->get_result();
 document.getElementById("saveProfileBtn").addEventListener("click", function () {
     let formData = new FormData(document.getElementById("profileForm"));
 
-    fetch("update_profile.php", {
+    fetch("api/update_profile.php", {
         method: "POST",
         body: formData
     })
@@ -766,7 +766,7 @@ document.getElementById("saveProfileBtn").addEventListener("click", function () 
     
     <script>
         // Load dark mode setting on page load
-        fetch("get_settings.php")
+        fetch("api/get_settings.php")
             .then(res => res.json())
             .then(settings => {
                 if (settings.darkmode == 1) {
