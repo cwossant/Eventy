@@ -1,6 +1,5 @@
-# TODO: Copy Design from index.php to Pages
-
-## Tasks
-- [ ] Update terms_of_service.php: Replace <head> with full adjusted index.php <head>, add navigation bar, update hero styles (background, ::before, ::after, text colors)
-- [ ] Update privacy_policy.php: Replace <head> with full adjusted index.php <head>, add navigation bar, update hero styles (background, ::before, ::after, text colors)
-- [ ] Update our_team.php: Replace <head> with full adjusted index.php <head>, add navigation bar, update hero styles (background, ::before, ::after, text colors)
+- [x] Modify send_otp.php to send HTML email instead of plain text
+- [x] Embed Eventy logo in the email using PHPMailer
+- [x] Style the email with inline CSS using site's color scheme (--purple-1: #6b3be6, --purple-2: #7f4fdc, --accent: #ffffff)
+- [x] Include professional greeting, prominent OTP display, expiration notice, and security footer
+- [x] Test the email to ensure it renders correctly (User to test by registering or triggering OTP send)

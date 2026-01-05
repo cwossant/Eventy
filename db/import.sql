@@ -101,3 +101,13 @@ CREATE TABLE IF NOT EXISTS `events` (
 
 INSERT IGNORE INTO `events` (`name`,`description`,`capacity`,`event_date`,`event_time`,`location`,`status`,`HostID`) VALUES
 ('Sample Event','This is a sample event',100,'2026-05-10','09:00:00','Main Hall',1,1);
+
+-- 5) Email verification storage for OTPs
+CREATE TABLE IF NOT EXISTS `email_verification` (
+  `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  `email` VARCHAR(255) NOT NULL,
+  `otp` VARCHAR(6) NOT NULL,
+  `expires_at` DATETIME NOT NULL,
+  `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  INDEX `idx_email` (`email`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
