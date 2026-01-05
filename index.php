@@ -482,18 +482,24 @@
             padding: 6px;
         }
         
+        /* Primary button with adjustable height via `--btn-height` */
         .btn-primary {
+            --btn-height: 48px;
             background: var(--accent);
             color: var(--purple-2);
-            padding: 10px 16px;
+            height: var(--btn-height);
+            padding: 0 16px;
             border-radius: 10px;
             font-weight: 700;
             border: none;
             cursor: pointer;
             box-shadow: 0 8px 22px rgba(0, 0, 0, 0.18);
             width: 100%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
         }
-        
+
         .btn-primary:active {
             transform: translateY(1px);
         }
@@ -531,66 +537,67 @@
             }
         }
         
+        /* Make the login modal match the OTP modal styling (white card, centered) */
         #loginModal .modal {
-            width: min(460px, 42vw);
+            width: 350px;
             max-width: 96%;
-            background: linear-gradient(180deg, rgba(127, 79, 220, 0.22), rgba(127, 79, 220, 0.14));
-            color: var(--accent);
-            border-radius: 16px;
-            padding: 20px;
-            box-shadow: 0 24px 60px rgba(0, 0, 0, 0.48);
-            backdrop-filter: blur(8px);
+            background: #ffffff;
+            color: #111;
+            border-radius: 12px;
+            padding: 24px 22px;
+            box-shadow: 0 18px 60px rgba(0, 0, 0, 0.28);
             position: relative;
-            text-align: left;
+            text-align: center;
         }
-        
+
         #loginModal .modal h3 {
             margin: 0 0 8px;
             font-size: 20px;
-            color: var(--accent);
+            color: var(--purple-2);
             font-weight: 700;
             text-align: center;
         }
-        
+
         #loginModal .modal .auth-form {
             margin-top: 10px;
         }
-        
+
         #loginModal .modal input[type="text"],
+        #loginModal .modal input[type="email"],
         #loginModal .modal input[type="password"] {
-            padding: 14px 16px;
-            border-radius: 12px;
-            border: 1px solid rgba(0, 0, 0, 0.08);
-            background: #ffffff;
+            padding: 12px 14px;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            background: #fff;
             color: #111;
             width: 100%;
             box-sizing: border-box;
-            font-size: 16px;
+            font-size: 15px;
         }
-        
+
         #loginModal .modal input::placeholder {
             color: #777;
         }
-        
+
         #loginModal .modal .modal-actions {
             display: flex;
             gap: 10px;
-            justify-content: flex-end;
+            justify-content: center;
             margin-top: 14px;
         }
-        
+
         #loginModal .modal .btn.secondary {
             background: transparent;
-            color: var(--accent);
-            border: 1px solid rgba(255, 255, 255, 0.16);
+            color: var(--purple-2);
+            border: 1px solid rgba(127, 79, 220, 0.12);
             padding: 8px 12px;
             border-radius: 10px;
             font-weight: 700;
         }
-        
+
         #loginModal .modal .btn.primary {
-            background: var(--accent);
-            color: var(--purple-2);
+            background: var(--purple-2);
+            color: #fff;
             padding: 8px 12px;
             border-radius: 10px;
             font-weight: 700;
@@ -602,30 +609,54 @@
             display: inline-flex;
             align-items: center;
             gap: 8px;
-            color: #ffffff !important;
+            color: var(--purple-2) !important;
+            font-weight: 600;
         }
-        
-        #loginModal .show-pw input[type="checkbox"]:checked+.checkbox {
-            background: #ffffff !important;
-            border-color: rgba(0, 0, 0, 0.06) !important;
-            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12) !important;
-            transform: translateY(-50%) scale(1.02);
+
+        /* Ensure the label text is visible on the white login modal */
+        #loginModal .show-pw .label-text {
+            margin-left: 6px;
+            color: var(--purple-2) !important;
+            transition: color .12s ease;
+            font-weight: 600;
         }
-        
-        #loginModal .show-pw input[type="checkbox"]:checked+.checkbox::after {
-            background-image: url("data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%237f4fdc' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20 6L9 17l-5-5'/%3E%3C/svg%3E");
-            opacity: 1;
-            transform: translate(-50%, -50%) scale(1);
+
+        /* Override checked-state rules so label stays visible */
+        #loginModal .show-pw input[type="checkbox"]:checked~.label-text,
+        #loginModal .show-pw input[type="checkbox"]:checked+.checkbox+.label-text {
+            color: var(--purple-2) !important;
+            font-weight: 600 !important;
         }
-        
+
+        /* default small checkbox box styling inside login modal */
         #loginModal .show-pw .checkbox {
             position: absolute;
             left: 0;
             top: 50%;
             transform: translateY(-50%);
+            width: var(--cb-size);
+            height: var(--cb-size);
+            border-radius: 6px;
+            background: #fff;
+            border: 1px solid rgba(127,79,220,0.12);
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.04);
             overflow: visible;
         }
-        
+
+        /* checked state: purple background with white checkmark */
+        #loginModal .show-pw input[type="checkbox"]:checked+.checkbox {
+            background: var(--purple-2) !important;
+            border-color: var(--purple-2) !important;
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12) !important;
+            transform: translateY(-50%) scale(1.02);
+        }
+
+        #loginModal .show-pw input[type="checkbox"]:checked+.checkbox::after {
+            background-image: url("data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23ffffff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20 6L9 17l-5-5'/%3E%3C/svg%3E");
+            opacity: 1;
+            transform: translate(-50%, -50%) scale(1);
+        }
+
         #loginModal .show-pw .checkbox::after {
             left: 50%;
             top: 50%;
