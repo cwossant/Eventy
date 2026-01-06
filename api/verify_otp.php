@@ -20,14 +20,15 @@ if ($inputOTP != ($stored['otp'] ?? '')) {
     exit();
 }
 
-// INSERT THE NEW USER
-$stmt = $conn->prepare("INSERT INTO users (firstname, lastname, email, contactno, password) VALUES (?, ?, ?, ?, ?)");
-$stmt->bind_param("sssss",
+// INSERT THE NEW USER (include profile_picture)
+$stmt = $conn->prepare("INSERT INTO users (firstname, lastname, email, contactno, password, profile_picture) VALUES (?, ?, ?, ?, ?, ?)");
+$stmt->bind_param("ssssss",
     $stored['firstname'],
     $stored['lastname'],
     $stored['email'],
     $stored['contactno'],
-    $stored['password']
+    $stored['password'],
+    $stored['profile_picture']
 );
 
 if ($stmt->execute()) {

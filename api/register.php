@@ -58,6 +58,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         "email" => $email,
         "contactno" => $contactno,
         "password" => password_hash($password, PASSWORD_DEFAULT),
+        "profile_picture" => "default_profile.jpg",
         "otp" => $otp,
         "expires" => time() + 300
     ];
