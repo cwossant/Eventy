@@ -28,7 +28,8 @@ $firstname = $firstname ?? "";
 $lastname = $lastname ?? "";
 $city = $city ?? "";
 $bio = $bio ?? "";
-$profilePicture = $profilePicture ? "uploads/profile_pics/" . $profilePicture : "uploads/profile_pics/default.png";
+// Use a consistent default icon and prefer stored filename when available
+$profilePicture = !empty($profilePicture) ? "uploads/profile_pics/" . $profilePicture : "uploads/profile_pics/profileicon.png";
 
 $userData = [
     'firstname' => $firstname,
@@ -685,35 +686,38 @@ $events = $eventQuery->get_result();
                 body: formData
             })
             .then(res => res.json())
-            .then(data => {
-                if (data.error) {
-                    // show error toast
-                    if (typeof showToast === 'function') showToast(data.error, '#dc2626');
-                    else alert(data.error);
-                    return;
-                }
+                .then(data => {
+                    if (data.error) {
+                        // show error toast
+                        if (typeof showToast === 'function') showToast(data.error, '#dc2626');
+                        else alert(data.error);
+                        return;
+                    }
 
-                const timestamp = "?v=" + Date.now();
-                document.getElementById("profilePicImg").src = data.newPath + timestamp;
+                    const timestamp = "?v=" + Date.now();
+                    document.getElementById("profilePicImg").src = data.newPath + timestamp;
 
-                const sidebarPic = document.getElementById("sidebarProfilePic");
-                if (sidebarPic) {
-                    sidebarPic.src = data.newPath + timestamp;
-                }
+                    const sidebarPic = document.getElementById("sidebarProfilePic");
+                    if (sidebarPic) {
+                        sidebarPic.src = data.newPath + timestamp;
+                    }
 
-                const navPic = document.getElementById("navProfilePic");
-                if (navPic) {
-                    navPic.src = data.newPath + timestamp;
-                }
+                    const navPic = document.getElementById("navProfilePic");
+                    if (navPic) {
+                        navPic.src = data.newPath + timestamp;
+                    }
 
-                // show success toast and temporary message
-                if (typeof showToast === 'function') showToast('Profile picture updated!', '#16a34a');
-                const msg = document.createElement("p");
-                msg.textContent = "Profile picture updated!";
-                msg.classList.add("upload-success-msg");
-                document.querySelector(".profile-picture-box").appendChild(msg);
-                setTimeout(() => msg.remove(), 2000);
-            })
+                    // show success toast and temporary message
+                    if (typeof showToast === 'function') showToast('Profile picture updated!', '#16a34a');
+                    const msg = document.createElement("p");
+                    msg.textContent = "Profile picture updated!";
+                    msg.classList.add("upload-success-msg");
+                    document.querySelector(".profile-picture-box").appendChild(msg);
+                    setTimeout(() => msg.remove(), 2000);
+
+                    // Reload page shortly after showing success message so updated image is used everywhere
+                    setTimeout(() => { location.reload(); }, 1500);
+                })
             .catch(err => {
                 console.error(err);
                 if (typeof showToast === 'function') showToast('Upload error', '#dc2626');
