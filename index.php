@@ -21,11 +21,14 @@
         }
         
          :root {
-            --purple-1: #6b3be6;
-            --purple-2: #7f4fdc;
+            --purple-1: #6F42C7; /* base color requested */
+            --purple-2: #8A5CF0; /* lighter accent */
             --accent: #ffffff;
             /* slightly less bright muted text for better contrast on purple */
-            --muted: rgba(255, 255, 255, 0.88);
+                --muted: rgba(255, 255, 255, 0.92);
+                /* feature sizing - change these via data attributes on the #features section */
+                --feature-card-height: 360px;
+                --feature-card-min-width: 120px;
             --logo-size: clamp(36px, 6vw, 120px);
         }
         
@@ -750,6 +753,137 @@
             margin-top: 8px;
             display: none;
         }
+        /* Features and Sponsors sections */
+        .section-title {
+            font-size: 28px;
+            color: var(--accent);
+            margin-bottom: 8px;
+            text-align: left;
+        }
+
+        .section-sub {
+            color: rgba(255,255,255,0.85);
+            margin-bottom: 20px;
+            max-width: 720px;
+        }
+
+        .features {
+            background: linear-gradient(135deg, var(--purple-1) 0%, var(--purple-2) 60%);
+            background-repeat: no-repeat;
+            padding: 56px 0;
+            color: var(--accent);
+        }
+
+        /* Make the container inside features and sponsors stack vertically */
+        .features .container,
+        .sponsors .container {
+            display: block;
+            max-width: 1100px;
+            padding-left: 20px;
+            padding-right: 20px;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(var(--feature-card-min-width), 1fr));
+            gap: 22px;
+            align-items: stretch;
+            margin-top: 18px;
+        }
+
+        .feature-card {
+            background: linear-gradient(180deg, #ffffff, #fbfbfd);
+            border-radius: 16px;
+            padding: 22px;
+            box-shadow: 0 30px 60px rgba(11,8,39,0.12), inset 0 1px 0 rgba(255,255,255,0.6);
+            color: #0b0b10;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            min-height: var(--feature-card-height);
+            transition: transform .28s cubic-bezier(.2,.9,.3,1), box-shadow .22s ease;
+            border: 1px solid rgba(11,8,39,0.04);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-12px) scale(1.02);
+            box-shadow: 0 40px 80px rgba(11,8,39,0.16);
+        }
+
+        .feature-icon {
+            width: 64px;
+            height: 64px;
+            border-radius: 14px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            flex-shrink: 0;
+            font-size: 26px;
+            box-shadow: 0 8px 20px rgba(11,8,39,0.08);
+        }
+
+        .feature-title {
+            font-weight: 800;
+            font-size: 20px;
+            color: #111;
+        }
+
+        .feature-desc {
+            color: #4b4b4b;
+            font-size: 15px;
+            margin-top: auto;
+            line-height: 1.45;
+        }
+
+        .sponsors {
+            padding: 36px 0 64px 0;
+            background: linear-gradient(180deg, rgba(111,66,199,0.04), rgba(255,255,255,0.00));
+            color: var(--muted);
+        }
+
+        .sponsor-strip {
+            display: flex;
+            gap: 18px;
+            align-items: center;
+            overflow-x: auto;
+            padding: 12px 6px;
+        }
+
+        .sponsor-item {
+            min-width: 140px;
+            height: 80px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(180deg,#ffffff,#faf9ff);
+            border-radius: 12px;
+            padding: 12px 18px;
+            color: #222;
+            font-weight: 700;
+            letter-spacing: 0.2px;
+            flex: 0 0 auto;
+            transition: transform .18s ease, background .18s ease, box-shadow .18s ease;
+            box-shadow: 0 8px 24px rgba(11,8,39,0.06);
+            border: 1px solid rgba(111,66,199,0.06);
+        }
+
+        .sponsor-item:hover {
+            transform: translateY(-8px) scale(1.03);
+            background: linear-gradient(90deg, rgba(127,79,220,0.08), rgba(138,92,240,0.06));
+            color: #111;
+            box-shadow: 0 32px 60px rgba(11,8,39,0.12);
+        }
+
+        /* colorful icon backgrounds per card to make cards distinct */
+        .features-grid .feature-card:nth-child(1) .feature-icon { background: linear-gradient(135deg,#6F42C7,#8A5CF0); }
+        .features-grid .feature-card:nth-child(2) .feature-icon { background: linear-gradient(135deg,#19A7CE,#4FD1C5); }
+        .features-grid .feature-card:nth-child(3) .feature-icon { background: linear-gradient(135deg,#FF7A59,#FFB199); }
+        .features-grid .feature-card:nth-child(4) .feature-icon { background: linear-gradient(135deg,#7C6FF5,#A98CFF); }
+
+        /* reveal animation */
+        .reveal { opacity: 0; transform: translateY(12px); transition: opacity .6s ease, transform .6s ease; }
+        .reveal.visible { opacity: 1; transform: translateY(0); }
     </style>
 </head>
 
@@ -826,6 +960,8 @@
         </div>
 
     </section>
+
+ 
 
     <!-- Coming Soon modal -->
     <div id="comingSoonModal" class="modal-overlay" role="dialog" aria-modal="true" aria-hidden="true">
@@ -1141,6 +1277,33 @@ if (otpSubmitBtn) {
     });
 }
 
+    })();
+    
+    // Apply adjustable feature card sizing from data attributes on the #features section
+    (function() {
+        const featuresEl = document.getElementById('features');
+        if (!featuresEl) return;
+        const h = featuresEl.getAttribute('data-card-height');
+        const w = featuresEl.getAttribute('data-card-min-width');
+        try {
+            if (h) document.documentElement.style.setProperty('--feature-card-height', h.match(/px$/) ? h : h + 'px');
+            if (w) document.documentElement.style.setProperty('--feature-card-min-width', w.match(/px$/) ? w : w + 'px');
+        } catch (e) { /* no-op */ }
+    })();
+    
+    // Reveal-on-scroll for features and sponsors
+    (function() {
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    // optional: unobserve to keep it simple
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.12 });
+
+        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
     })();
 </script>
 
