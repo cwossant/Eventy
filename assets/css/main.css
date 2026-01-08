@@ -430,12 +430,11 @@ input, select, textarea {
 				}
 
 		.row {
-			margin-top: -50px;
 			margin-left: -50px;
 		}
 
 			.row > * {
-				padding: 50px 0 0 50px;
+				padding: 50px 50px 50px 50px;
 			}
 
 			.row.gtr-uniform {
@@ -1446,10 +1445,8 @@ input, select, textarea {
 		background-color: #4091bf;
 		border-radius: 8px;
 		box-shadow: inset 0px 0px 0px 1px rgba(0, 0, 0, 0.35), inset 0px 2px 1px 0px rgba(255, 255, 255, 0.35);
-		text-shadow: -1px -1px 0 rgba(0, 0, 0, 0.5);
 		color: #fff !important;
 		text-decoration: none;
-		text-transform: uppercase;
 		font-weight: 800;
 		font-size: 0.95em;
 		letter-spacing: 0.075em;
@@ -1632,7 +1629,6 @@ input, select, textarea {
 			}
 
 			.box.feature1 header.second {
-				position: relative;
 				display: inline-block;
 				text-align: left;
 				margin: 0 auto;
