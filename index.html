@@ -39,7 +39,7 @@
 												<li><a href="#footer-wrapper">About Us</a></li>
 												<li><a href="#main-wrapper">Features</a></li>
 												<li><a href="our_team.php">Contacts</a></li>
-												<li><a href="get_started.php" style="background: #fff; border-radius: 12px; padding: 8px 18px; color: #6F42C7; font-weight: 700; ">Get Started</a></li>
+												<li><a id="getStartedBtn" class="get-started-btn">Get Started</a></li>
 											</ul>
 										</nav>
 
@@ -708,6 +708,528 @@
 				</div>
 
 		</div>
+
+		<!-- Get Started Button Styles -->
+		<style>
+			:root {
+				/* Adjust this value to change the Get Started button height */
+				--get-started-btn-height: 40px;
+			}
+
+			.get-started-btn {
+				background: #fff !important;
+				border-radius: 12px !important;
+				color: #7c3aed !important;
+				font-weight: 700 !important;
+				font-size: 14px !important;
+				line-height: 1.5 !important;
+				cursor: pointer !important;
+				display: inline-flex !important;
+				align-items: center !important;
+				justify-content: center !important;
+				height: var(--get-started-btn-height) !important;
+				padding: 0 18px !important;
+				transition: all 0.2s ease !important;
+				border: none !important;
+				text-decoration: none !important;
+				white-space: nowrap !important;
+				backface-visibility: hidden !important;
+				-webkit-font-smoothing: antialiased !important;
+				letter-spacing: 0.5px !important;
+			}
+
+			.get-started-btn:hover {
+				box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12) !important;
+				transform: translateY(-2px) translateZ(0) !important;
+			}
+
+			.get-started-btn:active {
+				transform: translateY(0) translateZ(0) !important;
+			}
+		</style>
+
+		<!-- Role Selection Modal -->
+		<div id="roleModal" class="modal-overlay">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h2>Join Eventy</h2>
+					<span class="modal-close" onclick="closeRoleModal()">&times;</span>
+				</div>
+				<p class="modal-subtitle">Are you joining as a Participant or a Host?</p>
+				<div class="role-buttons">
+					<button class="role-btn participant-btn" onclick="openRegistrationModal('participant')">
+						<i class="fas fa-user"></i>
+						<span>Participant</span>
+						<small>Join and attend events</small>
+					</button>
+					<button class="role-btn host-btn" onclick="openRegistrationModal('host')">
+						<i class="fas fa-calendar-plus"></i>
+						<span>Host</span>
+						<small>Create and manage events</small>
+					</button>
+				</div>
+			</div>
+		</div>
+
+		<!-- Participant Registration Modal -->
+		<div id="participantModal" class="modal-overlay">
+			<div class="modal-content registration-modal">
+				<div class="modal-header">
+					<h2>Create Your Account</h2>
+					<span class="modal-close" onclick="closeRegistrationModal()">&times;</span>
+				</div>
+				<p class="modal-subtitle">Join Eventy as a Participant</p>
+				<form class="registration-form" id="participantForm">
+					<div class="form-group">
+						<label for="participant_name">Full Name</label>
+						<input type="text" id="participant_name" name="name" placeholder="John Doe" required>
+					</div>
+					<div class="form-group">
+						<label for="participant_email">Email Address</label>
+						<input type="email" id="participant_email" name="email" placeholder="john@example.com" required>
+					</div>
+					<div class="form-group">
+						<label for="participant_phone">Phone Number</label>
+						<input type="tel" id="participant_phone" name="phone" placeholder="+63 9XX XXX XXXX" required>
+					</div>
+					<div class="form-group">
+						<label for="participant_interests">Interests</label>
+						<input type="text" id="participant_interests" name="interests" placeholder="e.g., Technology, Sports, Music" required>
+					</div>
+					<div class="form-group">
+						<label for="participant_password">Password</label>
+						<input type="password" id="participant_password" name="password" placeholder="Enter a strong password" required>
+					</div>
+					<div class="form-group">
+						<label for="participant_confirm">Confirm Password</label>
+						<input type="password" id="participant_confirm" name="confirm_password" placeholder="Confirm your password" required>
+					</div>
+					<button type="submit" class="form-submit">Create Account</button>
+					<p class="form-back"><a href="#" onclick="backToRole(); return false;">← Back to Role Selection</a></p>
+				</form>
+			</div>
+		</div>
+
+		<!-- Host Registration Modal -->
+		<div id="hostModal" class="modal-overlay">
+			<div class="modal-content registration-modal">
+				<div class="modal-header">
+					<h2>Create Your Host Account</h2>
+					<span class="modal-close" onclick="closeRegistrationModal()">&times;</span>
+				</div>
+				<p class="modal-subtitle">Start hosting amazing events on Eventy</p>
+				<form class="registration-form" id="hostForm">
+					<div class="form-group">
+						<label for="host_name">Full Name</label>
+						<input type="text" id="host_name" name="name" placeholder="Jane Smith" required>
+					</div>
+					<div class="form-group">
+						<label for="host_email">Email Address</label>
+						<input type="email" id="host_email" name="email" placeholder="jane@example.com" required>
+					</div>
+					<div class="form-group">
+						<label for="host_phone">Phone Number</label>
+						<input type="tel" id="host_phone" name="phone" placeholder="+63 9XX XXX XXXX" required>
+					</div>
+					<div class="form-group">
+						<label for="host_organization">Organization Name</label>
+						<input type="text" id="host_organization" name="organization" placeholder="Your Organization" required>
+					</div>
+					<div class="form-group">
+						<label for="host_event_type">Type of Events You'll Host</label>
+						<input type="text" id="host_event_type" name="event_type" placeholder="e.g., Tech, Business, Social" required>
+					</div>
+					<div class="form-group">
+						<label for="host_password">Password</label>
+						<input type="password" id="host_password" name="password" placeholder="Enter a strong password" required>
+					</div>
+					<div class="form-group">
+						<label for="host_confirm">Confirm Password</label>
+						<input type="password" id="host_confirm" name="confirm_password" placeholder="Confirm your password" required>
+					</div>
+					<button type="submit" class="form-submit">Create Host Account</button>
+					<p class="form-back"><a href="#" onclick="backToRole(); return false;">← Back to Role Selection</a></p>
+				</form>
+			</div>
+		</div>
+
+		<!-- Modal Styles -->
+		<style>
+			.modal-overlay {
+				display: none;
+				position: fixed;
+				top: 0;
+				left: 0;
+				width: 100%;
+				height: 100%;
+				background: rgba(0, 0, 0, 0.5);
+				z-index: 10000;
+				align-items: center;
+				justify-content: center;
+				will-change: opacity;
+				contain: paint;
+			}
+
+			.modal-overlay.active {
+				display: flex;
+				animation: fadeIn 0.3s ease-out forwards;
+			}
+
+			@keyframes fadeIn {
+				from {
+					opacity: 0;
+				}
+				to {
+					opacity: 1;
+				}
+			}
+
+			.modal-content {
+				background: #ffffff;
+				border-radius: 16px;
+				padding: 32px;
+				max-width: 500px;
+				width: 90%;
+				box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25);
+				max-height: 90vh;
+				overflow: hidden;
+				display: flex;
+				flex-direction: column;
+				will-change: transform;
+				contain: layout style paint;
+				backface-visibility: hidden;
+				-webkit-font-smoothing: antialiased;
+			}
+
+			.modal-header {
+				flex-shrink: 0;
+			}
+
+			.modal-subtitle {
+				flex-shrink: 0;
+			}
+
+			.registration-form {
+				overflow-y: auto;
+				padding-right: 8px;
+				margin-right: -8px;
+			}
+
+			.registration-form::-webkit-scrollbar {
+				width: 6px;
+			}
+
+			.registration-form::-webkit-scrollbar-track {
+				background: transparent;
+			}
+
+			.registration-form::-webkit-scrollbar-thumb {
+				background: #d1d5db;
+				border-radius: 3px;
+			}
+
+			.registration-form::-webkit-scrollbar-thumb:hover {
+				background: #9ca3af;
+			}
+
+			.modal-overlay.active .modal-content {
+				animation: slideUp 0.3s ease-out forwards;
+			}
+
+			@keyframes slideUp {
+				from {
+					transform: translateY(30px) translateZ(0);
+					opacity: 0;
+				}
+				to {
+					transform: translateY(0) translateZ(0);
+					opacity: 1;
+				}
+			}
+
+			.registration-modal {
+				max-width: 450px;
+			}
+
+			.modal-header {
+				display: flex;
+				justify-content: space-between;
+				align-items: center;
+				margin-bottom: 12px;
+			}
+
+			.modal-header h2 {
+				color: #6F42C7;
+				font-size: 24px;
+				font-weight: 700;
+				margin: 0;
+				font-family: 'Simonetta', 'Playfair Display', serif;
+			}
+
+			.modal-close {
+				font-size: 28px;
+				font-weight: 300;
+				color: #999;
+				cursor: pointer;
+				transition: color 0.2s;
+				line-height: 1;
+			}
+
+			.modal-close:hover {
+				color: #6F42C7;
+			}
+
+			.modal-subtitle {
+				color: #666;
+				font-size: 14px;
+				margin: 8px 0 24px 0;
+				font-family: 'Poppins', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+			}
+
+			.role-buttons {
+				display: grid;
+				grid-template-columns: 1fr 1fr;
+				gap: 16px;
+				margin-top: 24px;
+			}
+
+			.role-btn {
+				display: flex;
+				flex-direction: column;
+				align-items: center;
+				justify-content: center;
+				gap: 12px;
+				padding: 28px 16px;
+				border: 2px solid #e5e5e5;
+				border-radius: 12px;
+				background: #f9f9f9;
+				cursor: pointer;
+				transition: border-color 0.2s, background 0.2s, box-shadow 0.2s, transform 0.2s;
+				font-family: 'Poppins', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+				text-decoration: none;
+				will-change: transform, box-shadow;
+				backface-visibility: hidden;
+				-webkit-font-smoothing: antialiased;
+			}
+
+			.role-btn i {
+				font-size: 32px;
+				color: #6F42C7;
+				transition: color 0.2s;
+			}
+
+			.role-btn span {
+				font-size: 16px;
+				font-weight: 700;
+				color: #1f2937;
+			}
+
+			.role-btn small {
+				font-size: 12px;
+				color: #999;
+				text-align: center;
+			}
+
+			.role-btn:hover {
+				border-color: #6F42C7;
+				background: #f0ebf8;
+				transform: translateY(-2px) translateZ(0);
+				box-shadow: 0 8px 20px rgba(111, 66, 193, 0.15);
+			}
+
+			.role-btn:hover i {
+				color: #8A5CF0;
+			}
+
+			.registration-form {
+				display: flex;
+				flex-direction: column;
+				gap: 16px;
+				margin-top: 24px;
+			}
+
+			.form-group {
+				display: flex;
+				flex-direction: column;
+				gap: 6px;
+			}
+
+			.form-group label {
+				color: #6F42C7;
+				font-weight: 600;
+				font-size: 13px;
+				text-transform: uppercase;
+				letter-spacing: 0.5px;
+				font-family: 'Poppins', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+			}
+
+			.form-group input {
+				padding: 12px 14px;
+				border: 2px solid #e5e5e5;
+				border-radius: 8px;
+				font-size: 14px;
+				font-family: 'Poppins', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+				transition: border-color 0.2s;
+				outline: none;
+				will-change: border-color;
+				backface-visibility: hidden;
+				-webkit-font-smoothing: antialiased;
+			}
+
+			.form-group input::placeholder {
+				color: #bbb;
+			}
+
+			.form-group input:focus {
+				border-color: #6F42C7;
+				box-shadow: 0 0 0 3px rgba(111, 66, 193, 0.1);
+			}
+
+			.form-submit {
+				padding: 14px 20px;
+				background: linear-gradient(135deg, #6F42C7 0%, #8A5CF0 100%);
+				color: #ffffff;
+				border: none;
+				border-radius: 8px;
+				font-size: 15px;
+				font-weight: 700;
+				cursor: pointer;
+				transition: box-shadow 0.3s ease, transform 0.2s ease;
+				margin-top: 12px;
+				font-family: 'Poppins', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+				text-transform: uppercase;
+				letter-spacing: 0.5px;
+				will-change: box-shadow, transform;
+				backface-visibility: hidden;
+				-webkit-font-smoothing: antialiased;
+			}
+
+			.form-submit:hover {
+				box-shadow: 0 8px 20px rgba(111, 66, 193, 0.3);
+				transform: translateY(-2px) translateZ(0);
+			}
+
+			.form-submit:active {
+				transform: translateY(0) translateZ(0);
+			}
+
+			.form-back {
+				text-align: center;
+				margin-top: 16px;
+				font-size: 13px;
+			}
+
+			.form-back a {
+				color: #6F42C7;
+				text-decoration: none;
+				font-weight: 600;
+				transition: color 0.2s;
+			}
+
+			.form-back a:hover {
+				color: #8A5CF0;
+			}
+
+			@media (max-width: 600px) {
+				.modal-content {
+					padding: 24px;
+					width: 95%;
+				}
+
+				.role-buttons {
+					grid-template-columns: 1fr;
+				}
+
+				.modal-header h2 {
+					font-size: 20px;
+				}
+			}
+		</style>
+
+		<!-- Modal JavaScript -->
+		<script>
+			// Cache DOM elements for better performance
+			const getStartedBtn = document.getElementById('getStartedBtn');
+			const roleModal = document.getElementById('roleModal');
+			const participantModal = document.getElementById('participantModal');
+			const hostModal = document.getElementById('hostModal');
+			const participantForm = document.getElementById('participantForm');
+			const hostForm = document.getElementById('hostForm');
+			
+			// Open role selection modal
+			getStartedBtn.addEventListener('click', function(e) {
+				e.preventDefault();
+				openRoleModal();
+			});
+
+			function openRoleModal() {
+				roleModal.classList.add('active');
+				document.body.style.overflow = 'hidden';
+			}
+
+			function closeRoleModal() {
+				roleModal.classList.remove('active');
+				document.body.style.overflow = 'auto';
+			}
+
+			function openRegistrationModal(role) {
+				closeRoleModal();
+				const modalId = role === 'participant' ? participantModal : hostModal;
+				modalId.classList.add('active');
+				document.body.style.overflow = 'hidden';
+			}
+
+			function closeRegistrationModal() {
+				participantModal.classList.remove('active');
+				hostModal.classList.remove('active');
+				document.body.style.overflow = 'auto';
+			}
+
+			function backToRole() {
+				closeRegistrationModal();
+				openRoleModal();
+			}
+
+			// Optimized event delegation for modals
+			[roleModal, participantModal, hostModal].forEach(modal => {
+				modal.addEventListener('click', function(e) {
+					if (e.target === this) {
+						closeRoleModal();
+						closeRegistrationModal();
+					}
+				});
+			});
+
+			// Handle form submissions
+			participantForm.addEventListener('submit', function(e) {
+				e.preventDefault();
+				console.log('Participant registration:', {
+					name: document.getElementById('participant_name').value,
+					email: document.getElementById('participant_email').value,
+					phone: document.getElementById('participant_phone').value,
+					interests: document.getElementById('participant_interests').value,
+					password: document.getElementById('participant_password').value
+				});
+				alert('Participant account created successfully!');
+				closeRegistrationModal();
+				participantForm.reset();
+			});
+
+			hostForm.addEventListener('submit', function(e) {
+				e.preventDefault();
+				console.log('Host registration:', {
+					name: document.getElementById('host_name').value,
+					email: document.getElementById('host_email').value,
+					phone: document.getElementById('host_phone').value,
+					organization: document.getElementById('host_organization').value,
+					event_type: document.getElementById('host_event_type').value,
+					password: document.getElementById('host_password').value
+				});
+				alert('Host account created successfully!');
+				closeRegistrationModal();
+				hostForm.reset();
+			});
+		</script>
 
 		<!-- Scripts -->
 			<script src="assets/js/jquery.min.js"></script>
