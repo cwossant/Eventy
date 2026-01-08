@@ -853,6 +853,34 @@
 			</div>
 		</div>
 
+		<!-- Login Modal -->
+		<div id="loginModal" class="modal-overlay">
+			<div class="modal-content login-modal">
+				<div class="modal-header">
+					<h2>Login to Eventy</h2>
+					<span class="modal-close" onclick="closeLoginModal()">&times;</span>
+				</div>
+				<p class="modal-subtitle">Welcome back! Sign in to your account</p>
+				<form class="login-form" id="loginForm">
+					<div class="form-group">
+						<label for="login_email">Email Address</label>
+						<input type="email" id="login_email" name="email" placeholder="your@email.com" required>
+					</div>
+					<div class="form-group">
+						<label for="login_password">Password</label>
+						<div class="password-field">
+							<input type="password" id="login_password" name="password" placeholder="Enter your password" required>
+							<button type="button" class="password-toggle" onclick="togglePasswordVisibility()" tabindex="-1">
+								<i class="fas fa-eye" id="toggleIcon"></i>
+							</button>
+						</div>
+					</div>
+					<button type="submit" class="form-submit">Login</button>
+					<p class="form-footer">Don't have an account? <a href="#" onclick="switchToSignup(); return false;">Sign up here</a></p>
+				</form>
+			</div>
+		</div>
+
 		<!-- Modal Styles -->
 		<style>
 			.modal-overlay {
@@ -1144,6 +1172,64 @@
 					font-size: 20px;
 				}
 			}
+
+			/* Login Modal Styles */
+			.login-modal {
+				max-width: 420px;
+				min-width: 300px;
+			}
+
+			.password-field {
+				position: relative;
+				display: flex;
+				align-items: center;
+			}
+
+			.password-field input {
+				width: 100%;
+				padding-right: 44px;
+			}
+
+			.password-toggle {
+				position: absolute;
+				right: 12px;
+				background: none;
+				border: none;
+				cursor: pointer;
+				color: #8A5CF0;
+				font-size: 16px;
+				padding: 6px;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				transition: color 0.2s ease;
+			}
+
+			.password-toggle:hover {
+				color: #6F42C7;
+			}
+
+			.password-toggle i {
+				pointer-events: none;
+			}
+
+			.form-footer {
+				text-align: center;
+				margin-top: 16px;
+				font-size: 13px;
+				color: #6b7280;
+			}
+
+			.form-footer a {
+				color: #6F42C7;
+				text-decoration: none;
+				font-weight: 600;
+				transition: color 0.2s;
+			}
+
+			.form-footer a:hover {
+				color: #8A5CF0;
+			}
 		</style>
 
 		<!-- Modal JavaScript -->
@@ -1153,13 +1239,22 @@
 			const roleModal = document.getElementById('roleModal');
 			const participantModal = document.getElementById('participantModal');
 			const hostModal = document.getElementById('hostModal');
+			const loginModal = document.getElementById('loginModal');
 			const participantForm = document.getElementById('participantForm');
 			const hostForm = document.getElementById('hostForm');
+			const loginForm = document.getElementById('loginForm');
+			const openLoginModalBtn = document.getElementById('openLoginModal');
 			
 			// Open role selection modal
 			getStartedBtn.addEventListener('click', function(e) {
 				e.preventDefault();
 				openRoleModal();
+			});
+
+			// Open login modal
+			openLoginModalBtn.addEventListener('click', function(e) {
+				e.preventDefault();
+				openLoginModal();
 			});
 
 			function openRoleModal() {
@@ -1170,6 +1265,18 @@
 			function closeRoleModal() {
 				roleModal.classList.remove('active');
 				document.body.style.overflow = 'auto';
+			}
+
+			function openLoginModal() {
+				loginModal.classList.add('active');
+				document.body.style.overflow = 'hidden';
+			}
+
+			function closeLoginModal() {
+				loginModal.classList.remove('active');
+				document.body.style.overflow = 'auto';
+				loginForm.reset();
+				resetPasswordVisibility();
 			}
 
 			function openRegistrationModal(role) {
@@ -1190,12 +1297,42 @@
 				openRoleModal();
 			}
 
+			// Password visibility toggle
+			function togglePasswordVisibility() {
+				const passwordInput = document.getElementById('login_password');
+				const toggleIcon = document.getElementById('toggleIcon');
+
+				if (passwordInput.type === 'password') {
+					passwordInput.type = 'text';
+					toggleIcon.classList.remove('fa-eye');
+					toggleIcon.classList.add('fa-eye-slash');
+				} else {
+					passwordInput.type = 'password';
+					toggleIcon.classList.remove('fa-eye-slash');
+					toggleIcon.classList.add('fa-eye');
+				}
+			}
+
+			function resetPasswordVisibility() {
+				const passwordInput = document.getElementById('login_password');
+				const toggleIcon = document.getElementById('toggleIcon');
+				passwordInput.type = 'password';
+				toggleIcon.classList.remove('fa-eye-slash');
+				toggleIcon.classList.add('fa-eye');
+			}
+
+			function switchToSignup() {
+				closeLoginModal();
+				openRoleModal();
+			}
+
 			// Optimized event delegation for modals
-			[roleModal, participantModal, hostModal].forEach(modal => {
+			[roleModal, participantModal, hostModal, loginModal].forEach(modal => {
 				modal.addEventListener('click', function(e) {
 					if (e.target === this) {
 						closeRoleModal();
 						closeRegistrationModal();
+						closeLoginModal();
 					}
 				});
 			});
@@ -1228,6 +1365,20 @@
 				alert('Host account created successfully!');
 				closeRegistrationModal();
 				hostForm.reset();
+			});
+
+			// Login form submission
+			loginForm.addEventListener('submit', function(e) {
+				e.preventDefault();
+				console.log('Login attempt:', {
+					email: document.getElementById('login_email').value,
+					password: document.getElementById('login_password').value
+				});
+				alert('Login successful! Redirecting...');
+				closeLoginModal();
+				loginForm.reset();
+				// Here you would typically send the credentials to your backend API
+				// window.location.href = 'dashboard.php'; // Uncomment when ready
 			});
 		</script>
 
