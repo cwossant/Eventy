@@ -297,7 +297,7 @@
             <div class="leadership-grid">
                 <div class="team-member-card">
                     <div class="member-photo">
-                        <img src="images/team pictures/suba.png" alt="Yhvhan Suba" />
+                        <img src="images/team pictures/suba.jpg" alt="Yhvhan Suba" />
                     </div>
                     <div class="member-info">
                         <h3 class="member-name">Yhvhan Suba</h3>
@@ -307,10 +307,10 @@
                     </div>
                     <div class="member-social">
                         <div class="social-links">
-                            <a href="https://github.com/ItzEvhyx" class="social-link"><i class="fab fa-github"></i></a>
+                            <a href="https://github.com/ItzEvhyx" target="_blank" class="social-link"><i class="fab fa-github"></i></a>
                         </div>
                         <div class="social-links">
-                            <a style="margin-top: 10px;" href="https://www.linkedin.com/in/yhvhan-suba-4b985339b/" class="social-link"><i class="fab fa-linkedin"></i></a>
+                            <a style="margin-top: 10px;" href="https://www.linkedin.com/in/yhvhan-suba-4b985339b/" target="_blank" class="social-link"><i class="fab fa-linkedin"></i></a>
                         </div>
                     </div>
                 </div>
@@ -328,10 +328,10 @@
                     </div>
                     <div class="member-social">
                         <div class="social-links">
-                            <a href="https://github.com/cwossant" class="social-link"><i class="fab fa-github"></i></a>
+                            <a href="https://github.com/cwossant" target="_blank" class="social-link"><i class="fab fa-github"></i></a>
                         </div>
                         <div class="social-links">
-                            <a style="margin-top: 10px;" href="https://www.linkedin.com/in/markdwaynedelacruz/" class="social-link"><i class="fab fa-linkedin"></i></a>
+                            <a style="margin-top: 10px;" href="https://www.linkedin.com/in/markdwaynedelacruz/" target="_blank" class="social-link"><i class="fab fa-linkedin"></i></a>
                         </div>
                     </div>
                     
@@ -349,10 +349,10 @@
                     </div>
                     <div class="member-social">
                         <div class="social-links">
-                            <a href="https://github.com/" class="social-link"><i class="fab fa-github"></i></a>
+                            <a href="https://github.com/banana-juice" target="_blank" class="social-link"><i class="fab fa-github"></i></a>
                         </div>
                         <div class="social-links">
-                            <a style="margin-top: 10px;" href="" class="social-link"><i class="fab fa-linkedin"></i></a>
+                            <a style="margin-top: 10px;" href="https://www.linkedin.com/in/joseph-gabriel-lontoc-34649b295/" target="_blank" class="social-link"><i class="fab fa-linkedin"></i></a>
                         </div>
                     </div>
                 </div>
@@ -371,10 +371,10 @@
 
                     <div class="member-social">
                         <div class="social-links">
-                            <a href="" class="social-link"><i class="fab fa-github"></i></a>
+                            <a href="" target="_blank" class="social-link"><i class="fab fa-github"></i></a>
                         </div>
                         <div class="social-links">
-                            <a style="margin-top: 10px;" href="" class="social-link"><i class="fab fa-linkedin"></i></a>
+                            <a style="margin-top: 10px;" href="https://www.linkedin.com/in/wilhem-bruce-cuevas-452554379/" target="_blank" class="social-link"><i class="fab fa-linkedin"></i></a>
                         </div>
                     </div>
 
