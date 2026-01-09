@@ -359,7 +359,7 @@
 
                 <div class="team-member-card">
                     <div class="member-photo">
-                        <img src="images/team pictures/bruce.jpeg" alt="Bruce Cuevas" />
+                        <img src="images/team pictures/bruce.jpg" alt="Bruce Cuevas" />
                     </div>
                     <div class="member-info">
                         <h3 class="member-name">Bruce Cuevas</h3>
@@ -371,7 +371,7 @@
 
                     <div class="member-social">
                         <div class="social-links">
-                            <a href="" target="_blank" class="social-link"><i class="fab fa-github"></i></a>
+                            <a href="https://github.com/wbcjep0108" target="_blank" class="social-link"><i class="fab fa-github"></i></a>
                         </div>
                         <div class="social-links">
                             <a style="margin-top: 10px;" href="https://www.linkedin.com/in/wilhem-bruce-cuevas-452554379/" target="_blank" class="social-link"><i class="fab fa-linkedin"></i></a>
