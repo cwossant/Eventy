@@ -1,1310 +1,1795 @@
-<!doctype html>
-<html lang="en">
-
-<head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <title>Eventy - Connect Effortlessly</title>
-
-    <!-- Google Fonts: added Simonetta -->
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Playfair+Display:wght@700&family=Simonetta:wght@400;700&display=swap" rel="stylesheet">
-
-    <style>
-        /* load local Handyman font (place font files in /fonts/) */
-        
-        @font-face {
-            font-family: "Handyman";
-            src: url("fonts/Handyman.woff2") format("woff2"), url("fonts/Handyman.woff") format("woff"), url("fonts/Handyman.ttf") format("truetype");
-            font-weight: 400;
-            font-style: normal;
-            font-display: swap;
-        }
-        
-         :root {
-            --purple-1: #6F42C7; /* base color requested */
-            --purple-2: #8A5CF0; /* lighter accent */
-            --accent: #ffffff;
-            /* slightly less bright muted text for better contrast on purple */
-                --muted: rgba(255, 255, 255, 0.92);
-                /* feature sizing - change these via data attributes on the #features section */
-                --feature-card-height: 360px;
-                --feature-card-min-width: 120px;
-            --logo-size: clamp(36px, 6vw, 120px);
-        }
-        
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0
-        }
-        
-        html,
-        body {
-            height: 100%
-        }
-        
-        body {
-            font-family: "Poppins", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
-            background: #f7f7fb;
-            color: #111;
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
-        }
-        /* HERO */
-        
-        .hero {
-            position: relative;
-            min-height: 100vh;
-            display: flex;
-            align-items: flex-start;
-            overflow: visible;
-            background: url('bg.png') center/cover no-repeat;
-            color: var(--accent);
-            padding: 28px 64px;
-        }
-        
-        .hero::before {
-            content: "";
-            position: absolute;
-            right: clamp(28px, 6vw, 6%);
-            top: clamp(24px, 5vh, 6%);
-            width: clamp(160px, 20vw, 320px);
-            height: clamp(160px, 20vw, 320px);
-            background-image: radial-gradient(rgba(255, 255, 255, 0.12) 1px, transparent 1px);
-            background-size: 10px 10px;
-            background-repeat: repeat;
-            border-radius: 50%;
-            opacity: 0.85;
-            pointer-events: none;
-            transform: translateZ(0);
-            -webkit-mask-image: radial-gradient(circle at 60% 40%, black 55%, transparent 100%);
-            mask-image: radial-gradient(circle at 60% 40%, black 55%, transparent 100%);
-        }
-        
-        .hero::after {
-            content: "";
-            position: absolute;
-            left: 50%;
-            top: 0;
-            bottom: 0;
-            width: 1px;
-            background: linear-gradient(180deg, rgba(255, 255, 255, 0.06) 0%, rgba(255, 255, 255, 0.02) 50%, transparent 100%);
-            transform: translateX(-50%);
-            pointer-events: none;
-            opacity: 0.9;
-        }
-        
-        .container {
-            width: 100%;
-            max-width: 1200px;
-            margin: 0 auto;
-            display: flex;
-            gap: 32px;
-            align-items: center;
-            position: relative;
-            z-index: 2;
-        }
-        
-        nav {
-            display: flex;
-            align-items: center;
-            gap: 24px;
-            width: 100%;
-            padding: 8px 0 24px 0;
-        }
-        
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin-right: auto;
-            --logo-size: var(--logo-size);
-        }
-        
-        .logo img {
-            display: block;
-            max-width: 100%;
-            height: auto;
-            border-radius: 8px;
-        }
-        
-        .brand {
-            font-weight: 900;
-            letter-spacing: 0.4px;
-        }
-        
-        .brand img {
-            height: var(--logo-size);
-            max-height: 140px;
-            width: auto;
-            display: block;
-            object-fit: contain;
-        }
-        
-        .nav-links {
-            display: flex;
-            gap: 20px;
-            align-items: center;
-            font-weight: 600;
-            font-size: 15px;
-        }
-        
-        .nav-links a {
-            color: rgba(255, 255, 255, 0.95);
-            text-decoration: none;
-            padding: 8px 12px;
-            border-radius: 6px;
-        }
-        
-        .nav-links a:hover {
-            background: rgba(255, 255, 255, 0.06);
-        }
-        
-        .cta-nav {
-            margin-left: 16px;
-            background: var(--accent);
-            color: var(--purple-2);
-            padding: 8px 16px;
-            border-radius: 10px;
-            font-weight: 700;
-            text-decoration: none;
-            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
-        }
-        
-        .hero-grid {
-            display: grid;
-            grid-template-columns: 1fr 540px;
-            gap: 32px;
-            align-items: center;
-            width: 100%;
-        }
-        
-        .left {
-            padding: 32px 0;
-        }
-        
-        .eyebrow {
-            display: inline-block;
-            background: rgba(0, 0, 0, 0.08);
-            color: var(--accent);
-            padding: 6px 12px;
-            border-radius: 999px;
-            font-weight: 600;
-            font-size: 14px;
-            margin-bottom: 18px;
-            opacity: 0.95;
-        }
-        
-        h1 {
-            font-family: "Simonetta", "Playfair Display", serif;
-            font-size: 64px;
-            line-height: 0.95;
-            margin-bottom: 18px;
-            color: var(--accent);
-            text-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
-        }
-        
-        p.lead {
-            font-family: "Handyman", "Handlee", "Poppins", cursive;
-            font-size: 18px;
-            color: var(--muted);
-            max-width: 540px;
-            margin-bottom: 22px;
-        }
-        
-        .cta-row {
-            display: flex;
-            gap: 16px;
-            align-items: center;
-        }
-        
-        .btn {
-            background: var(--accent);
-            color: var(--purple-2);
-            padding: 12px 18px;
-            border-radius: 12px;
-            font-weight: 700;
-            text-decoration: none;
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
-            display: inline-flex;
-            gap: 10px;
-            align-items: center;
-            cursor: pointer;
-            border: none;
-        }
-        
-        .btn.secondary {
-            background: transparent;
-            color: var(--accent);
-            border: 1px solid rgba(255, 255, 255, 0.12);
-            padding: 11px 16px;
-            font-weight: 600;
-        }
-        
-        .illustration {
-            position: relative;
-            height: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            pointer-events: auto;
-        }
-        
-        .auth-card {
-            width: min(460px, 42vw);
-            max-width: 100%;
-            background: linear-gradient(180deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0.02));
-            border-radius: 16px;
-            padding: 20px;
-            box-shadow: 0 18px 50px rgba(0, 0, 0, 0.30);
-            backdrop-filter: blur(6px);
-            color: var(--accent);
-        }
-        
-        .auth-card h2 {
-            margin: 0 0 14px 0;
-            font-size: 28px;
-            font-weight: 700;
-            color: var(--accent);
-            text-align: center;
-            letter-spacing: 0.2px;
-        }
-        
-        .form-group {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-            margin-bottom: 12px;
-            width: 100%;
-        }
-        
-        input[type="text"],
-        input[type="email"],
-        input[type="password"] {
-            padding: 14px 16px;
-            border-radius: 12px;
-            border: 1px solid rgba(255, 255, 255, 0.12);
-            background: rgba(255, 255, 255, 0.03);
-            color: var(--accent);
-            outline: none;
-            font-size: 16px;
-            width: 100%;
-            box-sizing: border-box;
-        }
-        
-        input::placeholder {
-            color: rgba(255, 255, 255, 0.6);
-        }
-        
-        .error {
-            color: #ff6b6b;
-            font-size: 12px;
-            margin-top: 4px;
-        }
-        
-        .actions {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 12px;
-            margin-top: 4px;
-        }
-        
-        .show-pw {
-            --cb-size: 20px;
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            font-size: 14px;
-            color: var(--muted);
-            cursor: pointer;
-            user-select: none;
-            position: relative;
-            padding-left: calc(var(--cb-size) + 6px);
-        }
-        
-        .show-pw input[type="checkbox"] {
-            position: absolute;
-            left: 0;
-            top: 50%;
-            transform: translateY(-50%);
-            width: var(--cb-size);
-            height: var(--cb-size);
-            margin: 0;
-            opacity: 0;
-            cursor: pointer;
-        }
-        
-        .show-pw .checkbox {
-            position: absolute;
-            left: 0;
-            top: 50%;
-            transform: translateY(-50%);
-            width: var(--cb-size);
-            height: var(--cb-size);
-            border-radius: 6px;
-            background: rgba(255, 255, 255, 0.06);
-            border: 1px solid rgba(255, 255, 255, 0.10);
-            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.12);
-            transition: background .16s ease, border-color .12s ease, transform .12s ease;
-            display: inline-block;
-            overflow: visible;
-            z-index: 0;
-        }
-        
-        .show-pw .checkbox::after {
-            content: "";
-            position: absolute;
-            left: 50%;
-            top: 50%;
-            width: 12px;
-            height: 12px;
-            transform: translate(-50%, -50%) scale(.8);
-            background-repeat: no-repeat;
-            background-position: center center;
-            background-size: 12px 12px;
-            background-image: none;
-            opacity: 0;
-            transition: opacity .14s ease, transform .18s ease;
-            pointer-events: none;
-            z-index: 1;
-        }
-        
-        .show-pw input[type="checkbox"]:checked+.checkbox {
-            background: #ffffff;
-            border-color: rgba(0, 0, 0, 0.06);
-            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
-            transform: translateY(-50%) scale(1.02);
-        }
-        
-        .show-pw input[type="checkbox"]:checked+.checkbox::after {
-            background-image: url("data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%237f4fdc' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20 6L9 17l-5-5'/%3E%3C/svg%3E");
-            opacity: 1;
-            transform: translate(-50%, -50%) scale(1);
-        }
-        
-        .show-pw input[type="checkbox"]:focus+.checkbox {
-            box-shadow: 0 0 0 4px rgba(127, 79, 220, 0.12), inset 0 2px 4px rgba(0, 0, 0, 0.06);
-            outline: none;
-        }
-        
-        .show-pw .label-text {
-            margin-left: 6px;
-            color: var(--muted);
-            transition: color .12s ease;
-        }
-        
-        .show-pw input[type="checkbox"]:checked~.label-text,
-        .show-pw input[type="checkbox"]:checked+.checkbox+.label-text {
-            color: var(--muted) !important;
-            font-weight: 400 !important;
-        }
-        
-        @media (prefers-reduced-motion: reduce) {
-            .show-pw .checkbox,
-            .show-pw .checkbox::after {
-                transition: none;
-            }
-        }
-        
-        .modal-overlay {
-            position: fixed;
-            inset: 0;
-            display: none;
-            align-items: center;
-            justify-content: center;
-            background: rgba(0, 0, 0, 0.65);
-            z-index: 9999;
-            padding: 24px;
-        }
-        
-        .modal-overlay[open] {
-            display: flex;
-        }
-        
-        .modal {
-            width: min(460px, 96%);
-            background: linear-gradient(180deg, #ffffff, #f7f8fb);
-            color: #111;
-            border-radius: 12px;
-            padding: 18px 18px 16px;
-            box-shadow: 0 18px 60px rgba(0, 0, 0, 0.28);
-            position: relative;
-            text-align: center;
-        }
-        
-        .modal h3 {
-            margin: 0 0 8px;
-            font-size: 18px;
-            color: var(--purple-2);
-            font-weight: 700;
-        }
-        
-        .modal p {
-            margin: 0 0 14px;
-            color: #444;
-            font-size: 14px;
-        }
-        
-        .modal .modal-actions {
-            display: flex;
-            gap: 10px;
-            justify-content: center;
-            margin-top: 6px;
-        }
-        
-        .modal .btn {
-            padding: 8px 14px;
-            border-radius: 8px;
-            font-weight: 700;
-            box-shadow: none;
-        }
-        
-        .modal .btn.secondary {
-            background: transparent;
-            color: var(--purple-2);
-            border: 1px solid rgba(127, 79, 220, 0.12);
-        }
-        
-        .modal .btn.primary {
-            background: var(--purple-2);
-            color: #fff;
-            border: none;
-        }
-        
-        .close-modal {
-            position: absolute;
-            right: 10px;
-            top: 8px;
-            background: transparent;
-            border: none;
-            font-size: 20px;
-            color: #666;
-            cursor: pointer;
-            line-height: 1;
-            padding: 6px;
-        }
-        
-        /* Primary button with adjustable height via `--btn-height` */
-        .btn-primary {
-            --btn-height: 48px;
-            background: var(--accent);
-            color: var(--purple-2);
-            height: var(--btn-height);
-            padding: 0 16px;
-            border-radius: 10px;
-            font-weight: 700;
-            border: none;
-            cursor: pointer;
-            box-shadow: 0 8px 22px rgba(0, 0, 0, 0.18);
-            width: 100%;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .btn-primary:active {
-            transform: translateY(1px);
-        }
-        
-        .sr-only {
-            position: absolute !important;
-            height: 1px;
-            width: 1px;
-            overflow: hidden;
-            clip: rect(1px, 1px, 1px, 1px);
-            white-space: nowrap;
-        }
-        
-        .password-row {
-            display: block;
-            margin-bottom: 12px;
-        }
-        
-        .password-row input[type="password"],
-        .password-row input[type="text"] {
-            width: 100%;
-            padding: 14px 16px;
-            border-radius: 12px;
-            border: 1px solid rgba(255, 255, 255, 0.12);
-            background: rgba(255, 255, 255, 0.03);
-            color: var(--accent);
-            font-size: 16px;
-            box-sizing: border-box;
-        }
-        
-        @media (max-width:980px) {
-            .auth-card {
-                width: min(420px, 90vw);
-                padding: 16px;
-            }
-        }
-        
-        /* Make the login modal match the OTP modal styling (white card, centered) */
-        #loginModal .modal {
-            width: 350px;
-            max-width: 96%;
-            background: #ffffff;
-            color: #111;
-            border-radius: 12px;
-            padding: 24px 22px;
-            box-shadow: 0 18px 60px rgba(0, 0, 0, 0.28);
-            position: relative;
-            text-align: center;
-        }
-
-        #loginModal .modal h3 {
-            margin: 0 0 8px;
-            font-size: 20px;
-            color: var(--purple-2);
-            font-weight: 700;
-            text-align: center;
-        }
-
-        #loginModal .modal .auth-form {
-            margin-top: 10px;
-        }
-
-        #loginModal .modal input[type="text"],
-        #loginModal .modal input[type="email"],
-        #loginModal .modal input[type="password"] {
-            padding: 12px 14px;
-            border-radius: 8px;
-            border: 1px solid #ddd;
-            background: #fff;
-            color: #111;
-            width: 100%;
-            box-sizing: border-box;
-            font-size: 15px;
-        }
-
-        #loginModal .modal input::placeholder {
-            color: #777;
-        }
-
-        #loginModal .modal .modal-actions {
-            display: flex;
-            gap: 10px;
-            justify-content: center;
-            margin-top: 14px;
-        }
-
-        #loginModal .modal .btn.secondary {
-            background: transparent;
-            color: var(--purple-2);
-            border: 1px solid rgba(127, 79, 220, 0.12);
-            padding: 8px 12px;
-            border-radius: 10px;
-            font-weight: 700;
-        }
-
-        #loginModal .modal .btn.primary {
-            background: var(--purple-2);
-            color: #fff;
-            padding: 8px 12px;
-            border-radius: 10px;
-            font-weight: 700;
-        }
-        
-        #loginModal .show-pw {
-            --cb-size: 20px;
-            padding-left: calc(var(--cb-size) + 8px) !important;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            color: var(--purple-2) !important;
-            font-weight: 600;
-        }
-
-        /* Ensure the label text is visible on the white login modal */
-        #loginModal .show-pw .label-text {
-            margin-left: 6px;
-            color: var(--purple-2) !important;
-            transition: color .12s ease;
-            font-weight: 600;
-        }
-
-        /* Override checked-state rules so label stays visible */
-        #loginModal .show-pw input[type="checkbox"]:checked~.label-text,
-        #loginModal .show-pw input[type="checkbox"]:checked+.checkbox+.label-text {
-            color: var(--purple-2) !important;
-            font-weight: 600 !important;
-        }
-
-        /* default small checkbox box styling inside login modal */
-        #loginModal .show-pw .checkbox {
-            position: absolute;
-            left: 0;
-            top: 50%;
-            transform: translateY(-50%);
-            width: var(--cb-size);
-            height: var(--cb-size);
-            border-radius: 6px;
-            background: #fff;
-            border: 1px solid rgba(127,79,220,0.12);
-            box-shadow: inset 0 2px 4px rgba(0,0,0,0.04);
-            overflow: visible;
-        }
-
-        /* checked state: purple background with white checkmark */
-        #loginModal .show-pw input[type="checkbox"]:checked+.checkbox {
-            background: var(--purple-2) !important;
-            border-color: var(--purple-2) !important;
-            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12) !important;
-            transform: translateY(-50%) scale(1.02);
-        }
-
-        #loginModal .show-pw input[type="checkbox"]:checked+.checkbox::after {
-            background-image: url("data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23ffffff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20 6L9 17l-5-5'/%3E%3C/svg%3E");
-            opacity: 1;
-            transform: translate(-50%, -50%) scale(1);
-        }
-
-        #loginModal .show-pw .checkbox::after {
-            left: 50%;
-            top: 50%;
-            width: 12px;
-            height: 12px;
-            background-size: 12px 12px;
-            background-position: center center;
-            background-repeat: no-repeat;
-            transform: translate(-50%, -50%) scale(.8);
-        }
-        
-        /* OTP Modal Styling */
-        #otpModal {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.6);
-            display: none;
-            align-items: center;
-            justify-content: center;
-            z-index: 10000;
-        }
-        
-        #otpModal.show {
-            display: flex;
-        }
-        
-        .otp-container {
-            background: white;
-            padding: 30px;
-            border-radius: 12px;
-            width: 350px;
-            text-align: center;
-            box-shadow: 0 18px 60px rgba(0, 0, 0, 0.28);
-        }
-        
-        .otp-container h2 {
-            margin-bottom: 10px;
-            font-size: 22px;
-            color: var(--purple-2);
-            font-weight: 700;
-        }
-        
-        .otp-container p {
-            margin-bottom: 20px;
-            color: #6b3be6;
-            font-size: 14px;
-        }
-        
-        .otp-container input {
-            width: 100%;
-            font-size: 20px;
-            padding: 12px;
-            text-align: center;
-            border: 2px solid #ddd;
-            border-radius: 8px;
-            letter-spacing: 8px;
-            font-weight: bold;
-            margin-bottom: 15px;
-            color: #6b3be6;  /* Add this line */
-        }
-        
-        .otp-container input:focus {
-            outline: none;
-            border-color: var(--purple-2);
-            box-shadow: 0 0 0 3px rgba(127, 79, 220, 0.1);
-        }
-        
-        .otp-container button {
-            width: 100%;
-            padding: 12px;
-            background: var(--purple-2);
-            color: white;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: 700;
-            font-size: 16px;
-            transition: background .2s ease;
-        }
-        
-        .otp-container button:hover {
-            background: #6b3be6;
-        }
-        
-        .otp-error {
-            color: #ff6b6b;
-            font-size: 12px;
-            margin-top: 8px;
-            display: none;
-        }
-        /* Features and Sponsors sections */
-        .section-title {
-            font-size: 28px;
-            color: var(--accent);
-            margin-bottom: 8px;
-            text-align: left;
-        }
-
-        .section-sub {
-            color: rgba(255,255,255,0.85);
-            margin-bottom: 20px;
-            max-width: 720px;
-        }
-
-        .features {
-            background: linear-gradient(135deg, var(--purple-1) 0%, var(--purple-2) 60%);
-            background-repeat: no-repeat;
-            padding: 56px 0;
-            color: var(--accent);
-        }
-
-        /* Make the container inside features and sponsors stack vertically */
-        .features .container,
-        .sponsors .container {
-            display: block;
-            max-width: 1100px;
-            padding-left: 20px;
-            padding-right: 20px;
-        }
-
-        .features-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(var(--feature-card-min-width), 1fr));
-            gap: 22px;
-            align-items: stretch;
-            margin-top: 18px;
-        }
-
-        .feature-card {
-            background: linear-gradient(180deg, #ffffff, #fbfbfd);
-            border-radius: 16px;
-            padding: 22px;
-            box-shadow: 0 30px 60px rgba(11,8,39,0.12), inset 0 1px 0 rgba(255,255,255,0.6);
-            color: #0b0b10;
-            display: flex;
-            flex-direction: column;
-            gap: 14px;
-            min-height: var(--feature-card-height);
-            transition: transform .28s cubic-bezier(.2,.9,.3,1), box-shadow .22s ease;
-            border: 1px solid rgba(11,8,39,0.04);
-        }
-
-        .feature-card:hover {
-            transform: translateY(-12px) scale(1.02);
-            box-shadow: 0 40px 80px rgba(11,8,39,0.16);
-        }
-
-        .feature-icon {
-            width: 64px;
-            height: 64px;
-            border-radius: 14px;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            color: #fff;
-            flex-shrink: 0;
-            font-size: 26px;
-            box-shadow: 0 8px 20px rgba(11,8,39,0.08);
-        }
-
-        .feature-title {
-            font-weight: 800;
-            font-size: 20px;
-            color: #111;
-        }
-
-        .feature-desc {
-            color: #4b4b4b;
-            font-size: 15px;
-            margin-top: auto;
-            line-height: 1.45;
-        }
-
-        .sponsors {
-            padding: 36px 0 64px 0;
-            background: linear-gradient(180deg, rgba(111,66,199,0.04), rgba(255,255,255,0.00));
-            color: var(--muted);
-        }
-
-        .sponsor-strip {
-            display: flex;
-            gap: 18px;
-            align-items: center;
-            overflow-x: auto;
-            padding: 12px 6px;
-        }
-
-        .sponsor-item {
-            min-width: 140px;
-            height: 80px;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            background: linear-gradient(180deg,#ffffff,#faf9ff);
-            border-radius: 12px;
-            padding: 12px 18px;
-            color: #222;
-            font-weight: 700;
-            letter-spacing: 0.2px;
-            flex: 0 0 auto;
-            transition: transform .18s ease, background .18s ease, box-shadow .18s ease;
-            box-shadow: 0 8px 24px rgba(11,8,39,0.06);
-            border: 1px solid rgba(111,66,199,0.06);
-        }
-
-        .sponsor-item:hover {
-            transform: translateY(-8px) scale(1.03);
-            background: linear-gradient(90deg, rgba(127,79,220,0.08), rgba(138,92,240,0.06));
-            color: #111;
-            box-shadow: 0 32px 60px rgba(11,8,39,0.12);
-        }
-
-        /* colorful icon backgrounds per card to make cards distinct */
-        .features-grid .feature-card:nth-child(1) .feature-icon { background: linear-gradient(135deg,#6F42C7,#8A5CF0); }
-        .features-grid .feature-card:nth-child(2) .feature-icon { background: linear-gradient(135deg,#19A7CE,#4FD1C5); }
-        .features-grid .feature-card:nth-child(3) .feature-icon { background: linear-gradient(135deg,#FF7A59,#FFB199); }
-        .features-grid .feature-card:nth-child(4) .feature-icon { background: linear-gradient(135deg,#7C6FF5,#A98CFF); }
-
-        /* reveal animation */
-        .reveal { opacity: 0; transform: translateY(12px); transition: opacity .6s ease, transform .6s ease; }
-        .reveal.visible { opacity: 1; transform: translateY(0); }
-    </style>
-</head>
-
-<body>
-
-    <section class="hero">
-        <div class="container">
-            <div style="width:100%">
-                <nav>
-                    <div class="logo">
-                        <div class="brand">
-                            <img src="eventy_logo.png" alt="Eventy logo">
-                        </div>
-                    </div>
-
-                    <div class="nav-links" aria-hidden="true">
-                        <a href="#">Home</a>
-                        <a href="#">About us</a>
-                        <a href="#">Features</a>
-                        <a href="#">Contacts</a>
-                    </div>
-                    <a class="btn" href="#">Get Started</a>
-                </nav>
-
-                <div class="hero-grid">
-                    <div class="left">
-                        <div class="eyebrow">Community • Events</div>
-                        <h1><strong>Connect Effortlessly</strong></h1>
-                        <p class="lead">Bringing people together has never been easier. Host events, join activities, and meet like‑minded people — all in one place.</p>
-
-                        <div class="cta-row">
-                            <a id="openLoginModal" class="btn" href="#" aria-haspopup="dialog">Already Have an Account? →</a>
-                        </div>
-                    </div>
-
-                    <div class="illustration" aria-hidden="false">
-                       <div class="auth-card" role="region" aria-label="Registration form">
-                            <h2>Registration</h2>
-                            
-                           <form id="registerForm" method="POST">
-                            <div class="form-group">
-                                <input id="firstname" name="firstname" type="text" placeholder="First name" required>
-                                <span class="error" id="fnameError"></span>
-                            </div>
-
-                            <div class="form-group">
-                                <input id="lastname" name="lastname" type="text" placeholder="Last name" required>
-                                <span class="error" id="lnameError"></span>
-                            </div>
-
-                            <div class="form-group">
-                                <input id="email" name="email" type="email" placeholder="Email" required>
-                                <span class="error" id="emailError"></span>
-                            </div>
-
-                            <div class="form-group">
-                                <input id="contactno" name="contactno" type="text" placeholder="Contact Number" required>
-                                <span class="error" id="contactError"></span>
-                            </div>
-
-                            <div class="form-group">
-                                <input id="password" name="password" type="password" placeholder="Password" required>
-                                <span class="error" id="passwordError"></span>
-                            </div>
-
-                            <button type="submit" class="btn-primary">Create Account</button>
-                        </form>
-
-                        </div>
-
-                    </div>
-                </div>
-            </div>
-        </div>
-
-    </section>
-
- 
-
-    <!-- Coming Soon modal -->
-    <div id="comingSoonModal" class="modal-overlay" role="dialog" aria-modal="true" aria-hidden="true">
-        <div class="modal" role="document" aria-labelledby="comingTitle">
-            <button class="close-modal" aria-label="Close">&times;</button>
-            <h3 id="comingTitle">Feature Coming Soon</h3>
-            <p id="comingMsg">This feature is being prepared. Stay tuned!</p>
-            <div class="modal-actions">
-                <button class="btn primary" type="button">Okay</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Login modal (for "Already Have an Account?") -->
-    <div id="loginModal" class="modal-overlay" role="dialog" aria-modal="true" aria-hidden="true">
-        <div class="modal" role="document" aria-labelledby="loginTitle">
-            <button class="close-modal" aria-label="Close">&times;</button>
-            <h3 id="loginTitle">Sign in</h3>
-
-            <form id="loginModalForm" class="auth-form" autocomplete="on" novalidate>
-                <p id="loginError" style="color:red; display:none; margin-bottom:10px;"></p>
-                <div class="form-group">
-                    <label class="sr-only" for="modal-email">Email</label>
-                    <input id="modal-email" name="email" type="email" placeholder="Email" required>
-                </div>
-
-                <div class="form-group password-row">
-                    <label class="sr-only" for="modal-password">Password</label>
-                    <input id="modal-password" name="password" type="password" placeholder="Password" required>
-                </div>
-
-                <div class="actions" style="justify-content:flex-start;">
-                    <label class="show-pw">
-                        <input id="modal-showPw" type="checkbox" aria-controls="modal-password" />
-                        <span class="checkbox" aria-hidden="true"></span>
-                        <span class="label-text">Show password</span>
-                    </label>
-                </div>
-
-                <div class="modal-actions" style="margin-top:16px;">
-                    <button type="button" class="btn secondary" data-action="cancel">Cancel</button>
-                    <button type="submit" class="btn primary">Sign in</button>
-                </div>
-            </form>
-        </div>
-    </div>
-
-    <!-- OTP Modal -->
-    <div id="otpModal">
-        <div class="otp-container">
-            <h2>Email Verification</h2>
-            <p>Enter the 6-digit OTP sent to your email</p>
-            <input type="text" id="otpInput" maxlength="6" placeholder="000000" required>
-            <span class="otp-error" id="otpError"></span>
-            <button type="button" id="otpSubmitBtn">Verify OTP</button>
-        </div>
-    </div>
-
-</body>
-
-</html>
-
-<script>
-    // Initialize all modals and form handlers
-    (function() {
-        // 1. COMING SOON MODAL
-        const comingSoonModal = document.getElementById('comingSoonModal');
-        if (comingSoonModal) {
-            const navTargets = document.querySelectorAll('nav .nav-links a, nav .btn');
-            
-            function openComingSoon() {
-                comingSoonModal.setAttribute('open', '');
-                comingSoonModal.setAttribute('aria-hidden', 'false');
-                document.body.style.overflow = 'hidden';
-            }
-            
-            function closeComingSoon() {
-                comingSoonModal.removeAttribute('open');
-                comingSoonModal.setAttribute('aria-hidden', 'true');
-                document.body.style.overflow = '';
-            }
-            
-            navTargets.forEach(el => {
-                el.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    openComingSoon();
-                });
-            });
-            
-            comingSoonModal.addEventListener('click', function(e) {
-                if (e.target === comingSoonModal) closeComingSoon();
-            });
-            comingSoonModal.querySelectorAll('.close-modal, .modal-actions .btn').forEach(b => {
-                b.addEventListener('click', closeComingSoon);
-            });
-            document.addEventListener('keydown', function(e) {
-                if (e.key === 'Escape' && comingSoonModal.hasAttribute('open')) closeComingSoon();
-            });
-        }
-
-        // 2. LOGIN MODAL
-        const loginModal = document.getElementById('loginModal');
-        if (loginModal) {
-            const openLoginBtn = document.getElementById('openLoginModal');
-            const closeLoginBtns = loginModal.querySelectorAll('.close-modal, .btn[data-action="cancel"]');
-            const loginForm = document.getElementById('loginModalForm');
-            const modalShowPw = document.getElementById('modal-showPw');
-            const modalPassword = document.getElementById('modal-password');
-
-            function openLogin() {
-                loginModal.setAttribute('open', '');
-                loginModal.setAttribute('aria-hidden', 'false');
-                document.body.style.overflow = 'hidden';
-            }
-
-            function closeLogin() {
-                loginModal.removeAttribute('open');
-                loginModal.setAttribute('aria-hidden', 'true');
-                document.body.style.overflow = '';
-            }
-
-            if (openLoginBtn) {
-                openLoginBtn.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    openLogin();
-                });
-            }
-
-            closeLoginBtns.forEach(btn => btn.addEventListener('click', closeLogin));
-
-            // Toggle password visibility
-            if (modalShowPw && modalPassword) {
-                modalShowPw.addEventListener('change', function() {
-                    modalPassword.type = this.checked ? 'text' : 'password';
-                });
-            }
-
-            // Handle login submission
-            if (loginForm) {
-                loginForm.addEventListener('submit', function(e) {
-                    e.preventDefault();
-                    const email = document.getElementById('modal-email').value.trim();
-                    const password = document.getElementById('modal-password').value.trim();
-                    const errorBox = document.getElementById('loginError');
-
-                    if (!email || !password) {
-                        errorBox.textContent = 'Please enter your Email and Password.';
-                        errorBox.style.display = 'block';
-                        return;
-                    }
-
-                    fetch('api/login.php', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                        body: new URLSearchParams({ email, password })
-                    })
-                    .then(res => res.text())
-                    .then(data => {
-                        if (data.trim() === 'success') {
-                            window.location.href = 'Mainboard.php';
-                        } else {
-                            errorBox.textContent = 'Email or Password is Incorrect';
-                            errorBox.style.display = 'block';
-                        }
-                    })
-                    .catch(err => {
-                        errorBox.textContent = 'Connection error. Try again.';
-                        errorBox.style.display = 'block';
-                    });
-                });
-            }
-        }
-
-        // 3. REGISTRATION FORM
-        const registerForm = document.getElementById('registerForm');
-        if (registerForm) {
-            registerForm.addEventListener('submit', function(e) {
-                e.preventDefault();
-
-                let valid = true;
-                document.querySelectorAll('.error').forEach(el => el.textContent = '');
-
-                const firstname = document.getElementById('firstname').value.trim();
-                const lastname = document.getElementById('lastname').value.trim();
-                const email = document.getElementById('email').value.trim();
-                const contact = document.getElementById('contactno').value.trim();
-                const password = document.getElementById('password').value.trim();
-
-                // Validate first name
-                if (!firstname) {
-                    document.getElementById('fnameError').textContent = 'First name is required.';
-                    valid = false;
-                }
-
-                // Validate last name
-                if (!lastname) {
-                    document.getElementById('lnameError').textContent = 'Last name is required.';
-                    valid = false;
-                }
-
-                // Validate email
-                if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-                    document.getElementById('emailError').textContent = 'Invalid email format.';
-                    valid = false;
-                }
-
-                // Validate contact
-                if (!/^09\d{9}$/.test(contact)) {
-                    document.getElementById('contactError').textContent = 'Must start with 09 and be 11 digits.';
-                    valid = false;
-                }
-
-                // Validate password
-                if (!/[A-Z]/.test(password) || !/[a-z]/.test(password) || !/[0-9]/.test(password) || password.length < 8) {
-                    document.getElementById('passwordError').textContent = 'At least 8 chars, 1 uppercase, 1 lowercase, 1 number.';
-                    valid = false;
-                }
-
-                if (!valid) return;
-
-                // Submit registration
-                fetch('api/register.php', {
-                    method: 'POST',
-                    body: new FormData(this)
-                })
-                .then(res => res.text())
-                .then(response => {
-                    console.log('Registration response:', response);
-                    if (response.trim() === 'otp_required') {
-                        document.getElementById('otpModal').classList.add('show');
-                    } else if (response.trim() === 'email_exists') {
-                        alert('Email already exists.');
-                    } else if (response.trim() === 'invalid_email') {
-                        alert('Invalid email format.');
-                    } else if (response.trim() === 'invalid_contact') {
-                        alert('Contact number must be like 09XXXXXXXXX.');
-                    } else if (response.trim() === 'weak_password') {
-                        alert('Password must be 8+ chars with upper, lower & number.');
-                    } else if (response.trim() === 'mail_error') {
-                        alert('Failed to send OTP email.');
-                    } else {
-                        alert('Error: ' + response);
-                    }
-                })
-                .catch(err => {
-                    console.error('Registration error:', err);
-                    alert('An error occurred. Please try again.');
-                });
-            });
-        }
-
-        // 4. OTP VERIFICATION
-       // 4. OTP VERIFICATION
-const otpSubmitBtn = document.getElementById('otpSubmitBtn');
-if (otpSubmitBtn) {
-    otpSubmitBtn.addEventListener('click', function() {
-        const otp = document.getElementById('otpInput').value.trim();
-        const otpError = document.getElementById('otpError');
-
-        if (otp.length !== 6 || !/^\d+$/.test(otp)) {
-            otpError.textContent = 'Please enter a valid 6-digit OTP.';
-            otpError.style.display = 'block';
-            return;
-        }
-
-        otpError.style.display = 'none';
-
-        fetch('api/verify_otp.php', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-            body: 'otp=' + otp
-        })
-        .then(res => res.text())
-        .then(response => {
-            console.log('OTP response:', response);
-            const trimmed = response.trim();
-
-            if (trimmed === 'success') {
-                window.location.href = 'Mainboard.php';
-
-            } else if (trimmed === 'invalid_otp') {
-                otpError.textContent = 'Incorrect OTP. Please try again.';
-                otpError.style.display = 'block';
-
-            } else if (trimmed === 'otp_expired') {
-                alert('OTP expired. Please register again.');
-                location.reload();
-
-            } else if (trimmed === 'no_pending') {
-                alert('Session expired. Please register again.');
-                location.reload();
-
-            } else if (trimmed === 'db_error') {
-                otpError.textContent = 'Database error. Try again later.';
-                otpError.style.display = 'block';
-
-            } else {
-                otpError.textContent = 'Error: ' + trimmed;
-                otpError.style.display = 'block';
-            }
-        })
-        .catch(err => {
-            console.error('OTP verification error:', err);
-            otpError.textContent = 'Connection error. Please try again.';
-            otpError.style.display = 'block';
-        });
-    });
-
-    document.getElementById('otpInput').addEventListener('keypress', function(e) {
-        if (e.key === 'Enter') {
-            otpSubmitBtn.click();
-        }
-    });
-}
-
-    })();
-    
-    // Apply adjustable feature card sizing from data attributes on the #features section
-    (function() {
-        const featuresEl = document.getElementById('features');
-        if (!featuresEl) return;
-        const h = featuresEl.getAttribute('data-card-height');
-        const w = featuresEl.getAttribute('data-card-min-width');
-        try {
-            if (h) document.documentElement.style.setProperty('--feature-card-height', h.match(/px$/) ? h : h + 'px');
-            if (w) document.documentElement.style.setProperty('--feature-card-min-width', w.match(/px$/) ? w : w + 'px');
-        } catch (e) { /* no-op */ }
-    })();
-    
-    // Reveal-on-scroll for features and sponsors
-    (function() {
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('visible');
-                    // optional: unobserve to keep it simple
-                    observer.unobserve(entry.target);
-                }
-            });
-        }, { threshold: 0.12 });
-
-        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
-    })();
-</script>
-
+<!DOCTYPE HTML>
+<!--
+	ZeroFour by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html style="scroll-behavior: smooth;">
+	<head>
+		<title>Eventy</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="assets/css/main.css" />
+	</head>
+	<body class="homepage is-preload">
+		<div id="page-wrapper">
+
+			<!-- Header -->
+				<div id="header-wrapper">
+					<div class="container">
+
+						<!-- Header -->
+							<header id="header">
+								<div class="inner">
+
+									<!-- Logo -->
+										<h1><a href="index.html" id="logo"><img src="eventy_logo.png" alt="Eventy logo" class="eventy-logo"></a></h1>
+								<style>
+									.eventy-logo {
+									width: 120px; /* Adjust width as needed */
+									height: auto;
+									max-height: 80px; /* Optional: limit height */
+									}
+								</style>
+
+									<!-- Nav -->
+										<nav id="nav">
+											<ul>
+												<li class="current_page_item"><a href="index.html">Home</a></li>						
+												<li><a href="#footer-wrapper">About Us</a></li>
+												<li><a href="#main-wrapper">Features</a></li>
+												<li><a href="our_team.php">Contacts</a></li>
+												<li><a id="getStartedBtn" class="get-started-btn">Get Started</a></li>
+											</ul>
+										</nav>
+
+								</div>
+							</header>
+
+
+						<!-- Hero Grid Modern Section -->
+						<section class="hero-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 32px; align-items: center; border-radius: 18px; min-height: 70vh; margin-top: var(--hero-top-margin, 24px); margin-bottom: 0; padding: 48px 32px; font-family: 'Poppins', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;">
+							<div class="left">
+								<div class="eyebrow" style="background: rgba(0,0,0,0.08); color: #fff; padding: 6px 12px; border-radius: 999px; font-weight: 600; font-size: 14px; margin-bottom: 18px; opacity: 0.95; display: inline-block; font-family: 'Poppins', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;">Community • Events</div>
+								<style>
+									.hero-title {
+										color: rgba(255,255,255,0.92) !important;
+									}
+								</style>
+								<p class="hero-title" style="font-family: 'Simonetta', 'Playfair Display', serif; font-size: 64px; line-height: 0.95; margin-bottom: 18px; font-weight: 500;">Connect Effortlessly</p>
+								<p class="lead" style="font-family: 'Handyman', 'Handlee', 'Poppins', cursive; font-size: 18px; color: rgba(255,255,255,0.92); max-width: 540px; margin-bottom: 22px;">Bringing people together has never been easier. Host events, join activities, and meet like‑minded people — all in one place.</p>
+								<div class="cta-row" style="display: flex; gap: 16px; align-items: center;">
+									<a id="openLoginModal" class="btn" href="#" aria-haspopup="dialog" style="background: #fff; color: var(--purple-2, #8A5CF0); padding: 12px 18px; border-radius: 12px; font-weight: 700; text-decoration: none; box-shadow: 0 8px 24px rgba(0,0,0,0.12); display: inline-flex; gap: 10px; align-items: center; cursor: pointer; border: none;">Already Have an Account? →</a>
+								</div>
+							</div>
+							<div class="right" style="display: flex; align-items: center; justify-content: center;">
+								
+							</div>
+						</section>
+
+					</div>
+				</div>
+
+			<!-- Main Wrapper -->
+				<div id="main-wrapper">
+					<div class="wrapper style1">
+						<div class="inner">
+
+							<!-- Feature 1 -->
+								<section class="container box feature1">
+									<div class="row">
+										<div class="col-12">
+											<header class="first major">
+											<h2>Effortless Event Management</h2>
+											<p>Discover how Eventy empowers you to <strong>Create, Read, Update, and Delete</strong> events with ease. Manage your community, your way.</p>
+											</header>
+										</div>
+										<div class="col-3 col-12-medium">
+										<section class="feature-card card-create">
+											<div class="icon-circle">
+												<i class="fas fa-plus-circle"></i>
+											</div>
+											<header class="second">
+												<h3>Create</h3>
+												<p style="font-size: 12px;">Launch new events</p>
+												<p style="font-size: 12px;">in seconds.</p>
+											</header>
+										</section>
+									</div>
+									<div class="col-3 col-12-medium">
+										<section class="feature-card card-read">
+											<div class="icon-circle">
+												<i class="fas fa-eye"></i>
+											</div>
+											<header class="second">
+												<h3>Read</h3>
+												<p style="font-size: 12px;">Browse all upcoming</p>
+												<p style="font-size: 12px;">and past events.</p>	
+											</header>
+										</section>
+									</div>
+									<div class="col-3 col-12-medium">
+										<section class="feature-card card-update">
+											<div class="icon-circle">
+												<i class="fas fa-edit"></i>
+											</div>
+											<header class="second">
+												<h3>Update</h3>
+												<p style="font-size: 12px;">Modify event</p>
+												<p style="font-size: 12px;">information anytime.</p>
+											</header>
+										</section>
+									</div>
+									<div class="col-3 col-12-medium">
+										<section class="feature-card card-delete">
+											<div class="icon-circle">
+												<i class="fas fa-trash-alt"></i>
+											</div>
+											<header class="second">
+												<h3>Delete</h3>
+												<p style="font-size: 12px;">Remove events that</p>
+												<p style="font-size: 12px;">are no longer needed.</p>
+											</header>
+										</section>
+									</div>
+									<div class="col-12">
+										<p>With Eventy, managing your events is simple and intuitive. Experience the full power of CRUD—Create, Read, Update, and Delete—so you can focus on what matters: building great experiences.</p>
+									</div>
+								</div>
+							</section>
+
+							</div>
+					</div>
+
+					<!-- Feature Card Styling & Animation -->
+					<style>
+						@keyframes slideUpFade {
+							from {
+								opacity: 0;
+								transform: translateY(30px);
+							}
+							to {
+								opacity: 1;
+								transform: translateY(0);
+							}
+						}
+
+						.feature-card {
+							background: #ffffff;
+							border-radius: 12px;
+							overflow: hidden;
+							padding: 0;
+							box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+							transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+							opacity: 0;
+							transform: translateY(30px);
+							display: flex;
+							flex-direction: column;
+							height: 100%;
+							position: relative;
+						}
+
+						.feature-card::before {
+							content: '';
+							position: absolute;
+							top: 0;
+							left: 0;
+							right: 0;
+							height: 4px;
+							background: #6F42C7;
+							z-index: 1;
+						}
+
+						/* Color-coded top bars */
+						.feature-card.card-create::before {
+							background: linear-gradient(90deg, #10b981, #34d399);
+						}
+
+						.feature-card.card-read::before {
+							background: linear-gradient(90deg, #3b82f6, #60a5fa);
+						}
+
+						.feature-card.card-update::before {
+							background: linear-gradient(90deg, #f59e0b, #fbbf24);
+						}
+
+						.feature-card.card-delete::before {
+							background: linear-gradient(90deg, #ef4444, #f87171);
+						}
+
+						.feature-card.animate {
+							animation: slideUpFade 0.6s ease-out forwards;
+						}
+
+						.feature-card:hover {
+							box-shadow: 0 12px 24px rgba(0, 0, 0, 0.12);
+							transform: translateY(-4px);
+						}
+
+						.feature-card .icon-circle {
+							display: flex;
+							align-items: center;
+							justify-content: center;
+							width: 80px;
+							height: 80px;
+							border-radius: 50%;
+							margin: 24px auto 16px;
+							font-size: 40px;
+							position: relative;
+							z-index: 2;
+						}
+
+						.feature-card.card-create .icon-circle {
+							background: linear-gradient(135deg, #10b981 0%, #34d399 100%);
+							color: white;
+						}
+
+						.feature-card.card-read .icon-circle {
+							background: linear-gradient(135deg, #3b82f6 0%, #60a5fa 100%);
+							color: white;
+						}
+
+						.feature-card.card-update .icon-circle {
+							background: linear-gradient(135deg, #f59e0b 0%, #fbbf24 100%);
+							color: white;
+						}
+
+						.feature-card.card-delete .icon-circle {
+							background: linear-gradient(135deg, #ef4444 0%, #f87171 100%);
+							color: white;
+						}
+
+						.feature-card header.second {
+							text-align: center;
+							flex-grow: 1;
+							display: flex;
+							flex-direction: column;
+							justify-content: center;
+							align-items: center;
+							padding: 0 20px 24px;
+							width: 100%;
+						}
+
+						.feature-card header.second h3 {
+							color: #1f2937;
+							font-weight: 700;
+							text-align: center;
+							margin-bottom: 12px;
+							font-size: 18px;
+						}
+
+						.feature-card header.second p {
+							color: #6b7280;
+							line-height: 1.6;
+							text-align: center;
+							margin: 0;
+							padding: 0;
+							width: 100%;
+						}
+						}
+
+						/* Stagger animation for each card */
+						.col-3:nth-child(2) .feature-card.animate {
+							animation-delay: 0.1s;
+						}
+
+						.col-3:nth-child(3) .feature-card.animate {
+							animation-delay: 0.2s;
+						}
+
+						.col-3:nth-child(4) .feature-card.animate {
+							animation-delay: 0.3s;
+						}
+
+						.col-3:nth-child(5) .feature-card.animate {
+							animation-delay: 0.4s;
+						}
+
+						/* Featured Events Styling */
+						.event-card {
+							background: #ffffff;
+							border-radius: 12px;
+							border-left: 5px solid #8A5CF0;
+							padding: 20px;
+							margin-bottom: 20px;
+							box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+							transition: all 0.3s ease;
+						}
+
+						.event-card:hover {
+							box-shadow: 0 8px 20px rgba(139, 92, 246, 0.15);
+							transform: translateX(4px);
+						}
+
+						.event-header {
+							display: flex;
+							justify-content: space-between;
+							align-items: center;
+							margin-bottom: 12px;
+						}
+
+						.event-header h3 {
+							color: #1f2937;
+							font-weight: 700;
+							margin: 0;
+							font-size: 16px;
+						}
+
+						.event-category {
+							display: inline-block;
+							padding: 4px 12px;
+							border-radius: 20px;
+							font-size: 11px;
+							font-weight: 600;
+							text-transform: uppercase;
+						}
+
+						.event-category.tech {
+							background: #dbeafe;
+							color: #1e40af;
+						}
+
+						.event-category.community {
+							background: #dcfce7;
+							color: #15803d;
+						}
+
+						.event-category.networking {
+							background: #fed7aa;
+							color: #b45309;
+						}
+
+						.event-details {
+							display: grid;
+							grid-template-columns: 1fr 1fr;
+							gap: 12px;
+							margin-bottom: 12px;
+						}
+
+						.detail-item {
+							display: flex;
+							align-items: center;
+							gap: 6px;
+							font-size: 12px;
+							color: #6b7280;
+						}
+
+						.detail-item i {
+							color: #8A5CF0;
+							width: 16px;
+						}
+
+						.event-card p {
+							color: #6b7280;
+							font-size: 13px;
+							line-height: 1.6;
+							margin: 12px 0;
+						}
+
+						/* Stats Dashboard Styling */
+						.stats-dashboard {
+							background: #ffffff;
+							border-radius: 12px;
+							padding: 20px;
+							box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+						}
+
+						.stats-dashboard h2 {
+							color: #1f2937;
+							font-weight: 700;
+							margin-bottom: 24px;
+							padding-bottom: 12px;
+							border-bottom: 2px solid #f3f4f6;
+						}
+
+						.stat-card {
+							display: flex;
+							align-items: center;
+							gap: 16px;
+							padding: 16px;
+							margin-bottom: 12px;
+							border-radius: 8px;
+							background: #f9fafb;
+							transition: all 0.3s ease;
+						}
+
+						.stat-card:hover {
+							background: #f3f4f6;
+							transform: translateX(4px);
+						}
+
+						.stat-card.stat-events {
+							border-left: 4px solid #3b82f6;
+						}
+
+						.stat-card.stat-users {
+							border-left: 4px solid #8b5cf6;
+						}
+
+						.stat-card.stat-upcoming {
+							border-left: 4px solid #f59e0b;
+						}
+
+						.stat-card.stat-attendees {
+							border-left: 4px solid #10b981;
+						}
+
+						.stat-icon {
+							font-size: 24px;
+							width: 40px;
+							height: 40px;
+							display: flex;
+							align-items: center;
+							justify-content: center;
+							border-radius: 8px;
+						}
+
+						.stat-card.stat-events .stat-icon {
+							background: #dbeafe;
+							color: #3b82f6;
+						}
+
+						.stat-card.stat-users .stat-icon {
+							background: #ede9fe;
+							color: #8b5cf6;
+						}
+
+						.stat-card.stat-upcoming .stat-icon {
+							background: #fed7aa;
+							color: #f59e0b;
+						}
+
+						.stat-card.stat-attendees .stat-icon {
+							background: #dcfce7;
+							color: #10b981;
+						}
+
+						.stat-content h4 {
+							color: #6b7280;
+							font-size: 13px;
+							font-weight: 600;
+							margin: 0 0 6px 0;
+						}
+
+						.stat-number {
+							color: #1f2937;
+							font-size: 24px;
+							font-weight: 700;
+							margin: 0;
+						}
+
+						/* Button Small Styling */
+						.button.small {
+							background: #fff !important;
+							color: #8A5CF0 !important;
+							padding: 12px 18px !important;
+							border-radius: 12px !important;
+							font-weight: 700 !important;
+							text-decoration: none !important;
+							box-shadow: 0 8px 24px rgba(0,0,0,0.12) !important;
+							display: inline-flex !important;
+							align-items: center !important;
+							cursor: pointer !important;
+							border: none !important;
+							font-family: 'Poppins', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial !important;
+							font-size: 0.95em !important;
+							letter-spacing: 0.075em !important;
+							text-transform: uppercase !important;
+						}
+
+						.button.small:hover {
+							box-shadow: 0 12px 32px rgba(0,0,0,0.16) !important;
+						}
+
+						.button.small:active {
+							box-shadow: 0 4px 16px rgba(0,0,0,0.08) !important;
+						}
+					</style>
+
+					<script>
+						// Intersection Observer for scroll animations
+						document.addEventListener('DOMContentLoaded', function() {
+							const observerOptions = {
+								threshold: 0.15,
+								rootMargin: '0px 0px -50px 0px'
+							};
+
+							const observer = new IntersectionObserver(function(entries) {
+								entries.forEach(function(entry) {
+									if (entry.isIntersecting) {
+										entry.target.classList.add('animate');
+									}
+								});
+							}, observerOptions);
+
+							document.querySelectorAll('.feature-card').forEach(function(card) {
+								observer.observe(card);
+							});
+						});
+					</script>
+
+
+						<div class="inner">
+							<div class="container">
+								<div class="row">
+									<div class="col-8 col-12-medium">
+
+										<!-- Featured Events -->
+											<section class="box featured-events">
+												<h2 class="icon fa-calendar">Featured Events</h2>
+
+												<!-- Event Card 1 -->
+													<article class="event-card">
+														<div class="event-header">
+															<h3>Tech Conference 2026</h3>
+															<span class="event-category tech">Technology</span>
+														</div>
+														<div class="event-details">
+															<div class="detail-item">
+																<i class="fas fa-calendar-alt"></i>
+																<span>Jan 25, 2026</span>
+															</div>
+															<div class="detail-item">
+																<i class="fas fa-clock"></i>
+																<span>10:00 AM - 5:00 PM</span>
+															</div>
+															<div class="detail-item">
+																<i class="fas fa-map-marker-alt"></i>
+																<span>Convention Center, Manila</span>
+															</div>
+															<div class="detail-item">
+																<i class="fas fa-users"></i>
+																<span>324 Attendees</span>
+															</div>
+														</div>
+														<p>Join industry leaders and innovators for an exciting day of talks, workshops, and networking opportunities.</p>
+														<footer>
+															<a href="#" class="button small">Learn More</a>
+														</footer>
+													</article>
+
+												<!-- Event Card 2 -->
+													<article class="event-card">
+														<div class="event-header">
+															<h3>Community Charity Run</h3>
+															<span class="event-category community">Community</span>
+														</div>
+														<div class="event-details">
+															<div class="detail-item">
+																<i class="fas fa-calendar-alt"></i>
+																<span>Feb 8, 2026</span>
+															</div>
+															<div class="detail-item">
+																<i class="fas fa-clock"></i>
+																<span>6:00 AM - 9:00 AM</span>
+															</div>
+															<div class="detail-item">
+																<i class="fas fa-map-marker-alt"></i>
+																<span>Rizal Park, Manila</span>
+															</div>
+															<div class="detail-item">
+																<i class="fas fa-users"></i>
+																<span>156 Attendees</span>
+															</div>
+														</div>
+														<p>A fun and healthy way to support our local charity while connecting with your community.</p>
+														<footer>
+															<a href="#" class="button small">Learn More</a>
+														</footer>
+													</article>
+
+
+											</section>
+									</div>
+									<div class="col-4 col-12-medium">
+
+										<!-- Stats Dashboard -->
+											<section class="box stats-dashboard">
+												<h2 class="icon fa-chart-bar">Platform Stats</h2>
+												
+												<div class="stat-card stat-events">
+													<div class="stat-icon">
+														<i class="fas fa-calendar-check"></i>
+													</div>
+													<div class="stat-content">
+														<h4>Total Events</h4>
+														<p class="stat-number">1,247</p>
+													</div>
+												</div>
+
+												<div class="stat-card stat-users">
+													<div class="stat-icon">
+														<i class="fas fa-users-circle"></i>
+													</div>
+													<div class="stat-content">
+														<h4>Active Users</h4>
+														<p class="stat-number">3,892</p>
+													</div>
+												</div>
+
+												<div class="stat-card stat-upcoming">
+													<div class="stat-icon">
+														<i class="fas fa-hourglass-start"></i>
+													</div>
+													<div class="stat-content">
+														<h4>This Week</h4>
+														<p class="stat-number">24</p>
+													</div>
+												</div>
+
+												<div class="stat-card stat-attendees">
+													<div class="stat-icon">
+														<i class="fas fa-user-check"></i>
+													</div>
+													<div class="stat-content">
+														<h4>Total Attendees</h4>
+														<p class="stat-number">12,543</p>
+													</div>
+												</div>
+
+											</section>
+
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+			<!-- Footer Wrapper -->
+				<div id="footer-wrapper">
+					<footer id="footer" class="container">
+						<div class="row">
+							<div class="col-3 col-6-medium col-12-small">
+
+								<!-- Links -->
+									<section>
+										<h2>Links</h2>
+										<ul class="divided">
+											<li><a href="#">About Us</a></li>
+											<li><a href="#main-wrapper">Features</a></li>
+											<li><a href="our_team.php">Our Team</a></li>
+											<li><a href="#">Contacts</a></li>
+										</ul>
+									</section>
+
+							</div>
+							<div class="col-3 col-6-medium col-12-small">
+
+								<!-- Links -->
+									<section>
+									</section>
+
+							</div>
+							<div class="col-6 col-12-medium imp-medium">
+
+
+								<!-- Contact -->
+									<section>
+										<h2>Get in touch</h2>
+										<div>
+											<div style="margin-top: -50px;" class="row">
+												<div class="col-6 col-12-small">
+													<dl class="contact">
+														<dt>Twitter</dt>
+														<dd><a href="#">Eventy</a></dd>
+														<dt>Facebook</dt>
+														<dd><a href="#">facebook.com/Eventy</a></dd>
+														<dt>WWW</dt>
+														<dd><a href="#">Eventy.com</a></dd>
+														<dt>Email</dt>
+														<dd><a href="#">eventy.industries@gmail.com</a></dd>
+													</dl>
+												</div>
+												<div class="col-6 col-12-small">
+													<dl class="contact">
+														<dt>Address</dt>
+														<dd>
+															551 M.F. Jhocson Street<br />
+															Sampaloc, Manila<br />
+															Metro Manila, Philippines
+														</dd>	
+													</dl>
+												</div>
+											</div>
+										</div>
+									</section>
+
+							</div>
+							<div style="margin-top: -150px;"   class="col-12">
+								<div id="copyright">
+									<ul class="menu">
+										<li>&copy; Eventy. All rights reserved</li><li><a href="our_team.php">Eventy Design Team</a></li>
+									</ul>
+								</div>
+							</div>
+						</div>
+					</footer>
+				</div>
+
+		</div>
+
+		<!-- Get Started Button Styles -->
+		<style>
+			:root {
+				/* Adjust this value to change the Get Started button height */
+				--get-started-btn-height: 40px;
+			}
+
+			.get-started-btn {
+				background: #fff !important;
+				border-radius: 12px !important;
+				color: #7c3aed !important;
+				font-weight: 700 !important;
+				font-size: 14px !important;
+				line-height: 1.5 !important;
+				cursor: pointer !important;
+				display: inline-flex !important;
+				align-items: center !important;
+				justify-content: center !important;
+				height: var(--get-started-btn-height) !important;
+				padding: 0 18px !important;
+				transition: all 0.2s ease !important;
+				border: none !important;
+				text-decoration: none !important;
+				white-space: nowrap !important;
+				backface-visibility: hidden !important;
+				-webkit-font-smoothing: antialiased !important;
+				letter-spacing: 0.5px !important;
+			}
+
+			.get-started-btn:hover {
+				box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12) !important;
+				transform: translateY(-2px) translateZ(0) !important;
+			}
+
+			.get-started-btn:active {
+				transform: translateY(0) translateZ(0) !important;
+			}
+		</style>
+
+		<!-- Role Selection Modal -->
+		<div id="roleModal" class="modal-overlay">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h2>Join Eventy</h2>
+					<span class="modal-close" onclick="closeRoleModal()">&times;</span>
+				</div>
+				<p class="modal-subtitle">Are you joining as a Participant or a Host?</p>
+				<div class="role-buttons">
+					<button class="role-btn participant-btn" onclick="openRegistrationModal('participant')">
+						<i class="fas fa-user"></i>
+						<span>Participant</span>
+						<small>Join and attend events</small>
+					</button>
+					<button class="role-btn host-btn" onclick="openRegistrationModal('host')">
+						<i class="fas fa-calendar-plus"></i>
+						<span>Host</span>
+						<small>Create and manage events</small>
+					</button>
+				</div>
+			</div>
+		</div>
+
+		<!-- Participant Registration Modal -->
+		<div id="participantModal" class="modal-overlay">
+			<div class="modal-content registration-modal">
+				<div class="modal-header">
+					<h2>Create Your Account</h2>
+					<span class="modal-close" onclick="closeRegistrationModal()">&times;</span>
+				</div>
+				<p class="modal-subtitle">Join Eventy as a Participant</p>
+				<form class="registration-form" id="participantForm">
+					<div class="form-group">
+						<label for="participant_firstname">First Name</label>
+						<input type="text" id="participant_firstname" name="firstname" placeholder="John" required>
+					</div>
+					<div class="form-group">
+						<label for="participant_lastname">Last Name</label>
+						<input type="text" id="participant_lastname" name="lastname" placeholder="Doe" required>
+					</div>
+					<div class="form-group">
+						<label for="participant_email">Email Address</label>
+						<input type="email" id="participant_email" name="email" placeholder="john@eventy.com" required>
+					</div>
+					<div class="form-group">
+						<label for="participant_phone">Phone Number</label>
+						<input type="tel" id="participant_phone" name="contactno" placeholder="09XXXXXXXXX" required>
+					</div>
+					<div class="form-group">
+						<label for="participant_password">Password</label>
+						<input type="password" id="participant_password" name="password" placeholder="Enter a strong password" required>
+					</div>
+					<div class="form-group">
+						<label for="participant_confirm">Confirm Password</label>
+						<input type="password" id="participant_confirm" name="confirm_password" placeholder="Confirm your password" required>
+					</div>
+					<button type="submit" class="form-submit">Create Account</button>
+					<p class="form-back"><a href="#" onclick="backToRole(); return false;">← Back to Role Selection</a></p>
+				</form>
+			</div>
+		</div>
+
+		<!-- Host Registration Modal -->
+		<div id="hostModal" class="modal-overlay">
+			<div class="modal-content registration-modal">
+				<div class="modal-header">
+					<h2>Create Your Host Account</h2>
+					<span class="modal-close" onclick="closeRegistrationModal()">&times;</span>
+				</div>
+				<p class="modal-subtitle">Start hosting amazing events on Eventy</p>
+				<form class="registration-form" id="hostForm">
+					<div class="form-group">
+						<label for="host_firstname">First Name</label>
+						<input type="text" id="host_firstname" name="firstname" placeholder="Jane" required>
+					</div>
+					<div class="form-group">
+						<label for="host_lastname">Last Name</label>
+						<input type="text" id="host_lastname" name="lastname" placeholder="Doe" required>
+					</div>
+					<div class="form-group">
+						<label for="host_email">Email Address</label>
+						<input type="email" id="host_email" name="email" placeholder="jane@eventy.com" required>
+					</div>
+					<div class="form-group">
+						<label for="host_phone">Phone Number</label>
+						<input type="tel" id="host_phone" name="contactno" placeholder="09XXXXXXXXX" required>
+					</div>
+					<div class="form-group">
+						<label for="host_password">Password</label>
+						<input type="password" id="host_password" name="password" placeholder="Enter a strong password" required>
+					</div>
+					<div class="form-group">
+						<label for="host_confirm">Confirm Password</label>
+						<input type="password" id="host_confirm" name="confirm_password" placeholder="Confirm your password" required>
+					</div>
+					<button type="submit" class="form-submit">Create Host Account</button>
+					<p class="form-back"><a href="#" onclick="backToRole(); return false;">← Back to Role Selection</a></p>
+				</form>
+			</div>
+		</div>
+
+		<!-- Login Modal -->
+		<div id="loginModal" class="modal-overlay">
+			<div class="modal-content login-modal">
+				<div class="modal-header">
+					<h2>Login to Eventy</h2>
+					<span class="modal-close" onclick="closeLoginModal()">&times;</span>
+				</div>
+				<p class="modal-subtitle">Welcome back! Sign in to your account</p>
+				<form class="login-form" id="loginForm">
+					<div class="form-group">
+						<label for="login_email">Email Address</label>
+						<input type="email" id="login_email" name="email" placeholder="your@email.com" required>
+					</div>
+					<div class="form-group">
+						<label for="login_password">Password</label>
+						<div class="password-field">
+							<input type="password" id="login_password" name="password" placeholder="Enter your password" required>
+							<button type="button" class="password-toggle" onclick="togglePasswordVisibility()" tabindex="-1">
+								<i class="fas fa-eye" id="toggleIcon"></i>
+							</button>
+						</div>
+					</div>
+					<button type="submit" class="form-submit">Login</button>
+					<p class="form-footer">Don't have an account? <a href="#" onclick="switchToSignup(); return false;">Sign up here</a></p>
+				</form>
+			</div>
+		</div>
+
+		<!-- Loading Modal -->
+		<div id="loadingModal" class="modal-overlay">
+			<div class="modal-content loading-modal">
+				<div class="spinner"></div>
+				<p class="loading-text">Sending OTP to your email...</p>
+			</div>
+		</div>
+
+		<!-- OTP Verification Modal -->
+		<div id="otpModal" class="modal-overlay">
+			<div class="modal-content otp-modal">
+				<div class="modal-header">
+					<h2>Verify Your Email</h2>
+					<span class="modal-close" onclick="closeOtpModal()">&times;</span>
+				</div>
+				<p class="modal-subtitle">Enter the 6-digit OTP sent to your email</p>
+				<form class="otp-form" id="otpForm">
+					<div class="otp-input-group">
+						<input type="text" class="otp-input" maxlength="1" placeholder="0" inputmode="numeric" data-index="0">
+						<input type="text" class="otp-input" maxlength="1" placeholder="0" inputmode="numeric" data-index="1">
+						<input type="text" class="otp-input" maxlength="1" placeholder="0" inputmode="numeric" data-index="2">
+						<input type="text" class="otp-input" maxlength="1" placeholder="0" inputmode="numeric" data-index="3">
+						<input type="text" class="otp-input" maxlength="1" placeholder="0" inputmode="numeric" data-index="4">
+						<input type="text" class="otp-input" maxlength="1" placeholder="0" inputmode="numeric" data-index="5">
+					</div>
+					<button type="submit" class="form-submit otp-submit">Verify OTP</button>
+					<p class="form-back"><a href="#" onclick="closeOtpModal(); return false;">← Back</a></p>
+				</form>
+			</div>
+		</div>
+
+		<!-- Success Modal -->
+		<div id="successModal" class="modal-overlay">
+			<div class="modal-content success-modal">
+				<div class="success-icon">
+					<i class="fas fa-check-circle"></i>
+				</div>
+				<h2>Registration Successful!</h2>
+				<p class="modal-subtitle">Your account has been created successfully. You can now login.</p>
+				<button type="button" class="form-submit" onclick="successModalToLogin()">Go to Login</button>
+			</div>
+		</div>
+
+		<!-- Modal Styles -->
+		<style>
+			.modal-overlay {
+				display: none;
+				position: fixed;
+				top: 0;
+				left: 0;
+				width: 100%;
+				height: 100%;
+				background: rgba(0, 0, 0, 0.5);
+				z-index: 10000;
+				align-items: center;
+				justify-content: center;
+				will-change: opacity;
+				contain: paint;
+			}
+
+			.modal-overlay.active {
+				display: flex;
+				animation: fadeIn 0.3s ease-out forwards;
+			}
+
+			@keyframes fadeIn {
+				from {
+					opacity: 0;
+				}
+				to {
+					opacity: 1;
+				}
+			}
+
+			.modal-content {
+				background: #ffffff;
+				border-radius: 16px;
+				padding: 32px;
+				max-width: 500px;
+				width: 90%;
+				box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25);
+				max-height: 90vh;
+				overflow: hidden;
+				display: flex;
+				flex-direction: column;
+				will-change: transform;
+				contain: layout style paint;
+				backface-visibility: hidden;
+				-webkit-font-smoothing: antialiased;
+			}
+
+			.modal-header {
+				flex-shrink: 0;
+			}
+
+			.modal-subtitle {
+				flex-shrink: 0;
+			}
+
+			.registration-form {
+				overflow-y: auto;
+				padding-right: 8px;
+				margin-right: -8px;
+			}
+
+			.registration-form::-webkit-scrollbar {
+				width: 6px;
+			}
+
+			.registration-form::-webkit-scrollbar-track {
+				background: transparent;
+			}
+
+			.registration-form::-webkit-scrollbar-thumb {
+				background: #d1d5db;
+				border-radius: 3px;
+			}
+
+			.registration-form::-webkit-scrollbar-thumb:hover {
+				background: #9ca3af;
+			}
+
+			.modal-overlay.active .modal-content {
+				animation: slideUp 0.3s ease-out forwards;
+			}
+
+			@keyframes slideUp {
+				from {
+					transform: translateY(30px) translateZ(0);
+					opacity: 0;
+				}
+				to {
+					transform: translateY(0) translateZ(0);
+					opacity: 1;
+				}
+			}
+
+			.registration-modal {
+				max-width: 450px;
+			}
+
+			.modal-header {
+				display: flex;
+				justify-content: space-between;
+				align-items: center;
+				margin-bottom: 12px;
+			}
+
+			.modal-header h2 {
+				color: #6F42C7;
+				font-size: 24px;
+				font-weight: 700;
+				margin: 0;
+				font-family: 'Simonetta', 'Playfair Display', serif;
+			}
+
+			.modal-close {
+				font-size: 28px;
+				font-weight: 300;
+				color: #999;
+				cursor: pointer;
+				transition: color 0.2s;
+				line-height: 1;
+			}
+
+			.modal-close:hover {
+				color: #6F42C7;
+			}
+
+			.modal-subtitle {
+				color: #666;
+				font-size: 14px;
+				margin: 8px 0 24px 0;
+				font-family: 'Poppins', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+			}
+
+			.role-buttons {
+				display: grid;
+				grid-template-columns: 1fr 1fr;
+				gap: 16px;
+				margin-top: 24px;
+			}
+
+			.role-btn {
+				display: flex;
+				flex-direction: column;
+				align-items: center;
+				justify-content: center;
+				gap: 12px;
+				padding: 28px 16px;
+				border: 2px solid #e5e5e5;
+				border-radius: 12px;
+				background: #f9f9f9;
+				cursor: pointer;
+				transition: border-color 0.2s, background 0.2s, box-shadow 0.2s, transform 0.2s;
+				font-family: 'Poppins', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+				text-decoration: none;
+				will-change: transform, box-shadow;
+				backface-visibility: hidden;
+				-webkit-font-smoothing: antialiased;
+			}
+
+			.role-btn i {
+				font-size: 32px;
+				color: #6F42C7;
+				transition: color 0.2s;
+			}
+
+			.role-btn span {
+				font-size: 16px;
+				font-weight: 700;
+				color: #1f2937;
+			}
+
+			.role-btn small {
+				font-size: 12px;
+				color: #999;
+				text-align: center;
+			}
+
+			.role-btn:hover {
+				border-color: #6F42C7;
+				background: #f0ebf8;
+				transform: translateY(-2px) translateZ(0);
+				box-shadow: 0 8px 20px rgba(111, 66, 193, 0.15);
+			}
+
+			.role-btn:hover i {
+				color: #8A5CF0;
+			}
+
+			.registration-form {
+				display: flex;
+				flex-direction: column;
+				gap: 16px;
+				margin-top: 24px;
+			}
+
+			.form-group {
+				display: flex;
+				flex-direction: column;
+				gap: 6px;
+			}
+
+			.form-group label {
+				color: #6F42C7;
+				font-weight: 600;
+				font-size: 13px;
+				text-transform: uppercase;
+				letter-spacing: 0.5px;
+				font-family: 'Poppins', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+			}
+
+			.form-group input {
+				padding: 12px 14px;
+				border: 2px solid #e5e5e5;
+				border-radius: 8px;
+				font-size: 14px;
+				font-family: 'Poppins', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+				transition: border-color 0.2s;
+				outline: none;
+				will-change: border-color;
+				backface-visibility: hidden;
+				-webkit-font-smoothing: antialiased;
+			}
+
+			.form-group input::placeholder {
+				color: #bbb;
+			}
+
+			.form-group input:focus {
+				border-color: #6F42C7;
+				box-shadow: 0 0 0 3px rgba(111, 66, 193, 0.1);
+			}
+
+			.form-submit {
+				padding: 14px 20px;
+				background: linear-gradient(135deg, #6F42C7 0%, #8A5CF0 100%);
+				color: #ffffff;
+				border: none;
+				border-radius: 8px;
+				font-size: 15px;
+				font-weight: 700;
+				cursor: pointer;
+				transition: box-shadow 0.3s ease, transform 0.2s ease;
+				margin-top: 12px;
+				font-family: 'Poppins', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+				text-transform: uppercase;
+				letter-spacing: 0.5px;
+				will-change: box-shadow, transform;
+				backface-visibility: hidden;
+				-webkit-font-smoothing: antialiased;
+			}
+
+			.form-submit:hover {
+				box-shadow: 0 8px 20px rgba(111, 66, 193, 0.3);
+				transform: translateY(-2px) translateZ(0);
+			}
+
+			.form-submit:active {
+				transform: translateY(0) translateZ(0);
+			}
+
+			.form-back {
+				text-align: center;
+				margin-top: 16px;
+				font-size: 13px;
+			}
+
+			.form-back a {
+				color: #6F42C7;
+				text-decoration: none;
+				font-weight: 600;
+				transition: color 0.2s;
+			}
+
+			.form-back a:hover {
+				color: #8A5CF0;
+			}
+
+			@media (max-width: 600px) {
+				.modal-content {
+					padding: 24px;
+					width: 95%;
+				}
+
+				.role-buttons {
+					grid-template-columns: 1fr;
+				}
+
+				.modal-header h2 {
+					font-size: 20px;
+				}
+			}
+
+			/* Login Modal Styles */
+			.login-modal {
+				max-width: 420px;
+				min-width: 300px;
+			}
+
+			.password-field {
+				position: relative;
+				display: flex;
+				align-items: center;
+			}
+
+			.password-field input {
+				width: 100%;
+				padding-right: 44px;
+			}
+
+			.password-toggle {
+				position: absolute;
+				right: 12px;
+				background: none;
+				border: none;
+				cursor: pointer;
+				color: #8A5CF0;
+				font-size: 16px;
+				padding: 6px;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				transition: color 0.2s ease;
+			}
+
+			.password-toggle:hover {
+				color: #6F42C7;
+			}
+
+			.password-toggle i {
+				pointer-events: none;
+			}
+
+			.form-footer {
+				text-align: center;
+				margin-top: 16px;
+				font-size: 13px;
+				color: #6b7280;
+			}
+
+			.form-footer a {
+				color: #6F42C7;
+				text-decoration: none;
+				font-weight: 600;
+				transition: color 0.2s;
+			}
+
+			.form-footer a:hover {
+				color: #8A5CF0;
+			}
+		</style>
+
+		<!-- Loading Modal Styles -->
+		<style>
+			.loading-modal {
+				max-width: 300px;
+				text-align: center;
+				padding: 48px 32px;
+			}
+
+			.spinner {
+				width: 50px;
+				height: 50px;
+				border: 5px solid #f3f4f6;
+				border-top: 5px solid #8A5CF0;
+				border-radius: 50%;
+				animation: spin 1s linear infinite;
+				margin: 0 auto 24px;
+			}
+
+			@keyframes spin {
+				0% { transform: rotate(0deg); }
+				100% { transform: rotate(360deg); }
+			}
+
+			.loading-text {
+				color: #6b7280;
+				font-size: 14px;
+				margin: 0;
+			}
+
+			/* OTP Modal Styles */
+			.otp-modal {
+				max-width: 450px;
+			}
+
+			.otp-input-group {
+				display: flex;
+				justify-content: center;
+				gap: 12px;
+				margin: 24px 0;
+			}
+
+			.otp-input {
+				width: 60px;
+				height: 60px;
+				padding: 0;
+				text-align: center;
+				font-size: 24px;
+				font-weight: 700;
+				border: 2px solid #e5e5e5;
+				border-radius: 8px;
+				background: #ffffff;
+				color: #1f2937;
+				outline: none;
+				transition: all 0.2s;
+				font-family: 'Poppins', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+			}
+
+			.otp-input:focus {
+				border-color: #6F42C7;
+				box-shadow: 0 0 0 3px rgba(111, 66, 193, 0.1);
+			}
+
+			.otp-input::placeholder {
+				color: #d1d5db;
+			}
+
+			.otp-submit {
+				margin-top: 12px;
+			}
+
+			/* Success Modal Styles */
+			.success-modal {
+				max-width: 400px;
+				text-align: center;
+				padding: 48px 32px;
+			}
+
+			.success-icon {
+				font-size: 64px;
+				color: #10b981;
+				margin-bottom: 24px;
+				animation: scaleIn 0.5s ease-out;
+			}
+
+			@keyframes scaleIn {
+				from {
+					transform: scale(0.5);
+					opacity: 0;
+				}
+				to {
+					transform: scale(1);
+					opacity: 1;
+				}
+			}
+
+			.success-modal h2 {
+				color: #10b981;
+				margin-bottom: 12px;
+			}
+
+			.success-modal .modal-subtitle {
+				color: #6b7280;
+				margin-bottom: 24px;
+			}
+		</style>
+
+		<!-- Modal JavaScript -->
+		<script>
+			// Cache DOM elements for better performance
+			const getStartedBtn = document.getElementById('getStartedBtn');
+			const roleModal = document.getElementById('roleModal');
+			const participantModal = document.getElementById('participantModal');
+			const hostModal = document.getElementById('hostModal');
+			const loginModal = document.getElementById('loginModal');
+			const loadingModal = document.getElementById('loadingModal');
+			const otpModal = document.getElementById('otpModal');
+			const successModal = document.getElementById('successModal');
+			const participantForm = document.getElementById('participantForm');
+			const hostForm = document.getElementById('hostForm');
+			const loginForm = document.getElementById('loginForm');
+			const otpForm = document.getElementById('otpForm');
+			const openLoginModalBtn = document.getElementById('openLoginModal');
+
+			// OTP input variables
+			let pendingEmail = null;
+			
+			// Open role selection modal
+			getStartedBtn.addEventListener('click', function(e) {
+				e.preventDefault();
+				openRoleModal();
+			});
+
+			// Open login modal
+			openLoginModalBtn.addEventListener('click', function(e) {
+				e.preventDefault();
+				openLoginModal();
+			});
+
+			function openRoleModal() {
+				roleModal.classList.add('active');
+				document.body.style.overflow = 'hidden';
+			}
+
+			function closeRoleModal() {
+				roleModal.classList.remove('active');
+				document.body.style.overflow = 'auto';
+			}
+
+			function openLoginModal() {
+				loginModal.classList.add('active');
+				document.body.style.overflow = 'hidden';
+			}
+
+			function closeLoginModal() {
+				loginModal.classList.remove('active');
+				document.body.style.overflow = 'auto';
+				loginForm.reset();
+				resetPasswordVisibility();
+			}
+
+			function openRegistrationModal(role) {
+				closeRoleModal();
+				const modalId = role === 'participant' ? participantModal : hostModal;
+				modalId.classList.add('active');
+				document.body.style.overflow = 'hidden';
+			}
+
+			function closeRegistrationModal() {
+				participantModal.classList.remove('active');
+				hostModal.classList.remove('active');
+				document.body.style.overflow = 'auto';
+			}
+
+			function backToRole() {
+				closeRegistrationModal();
+				openRoleModal();
+			}
+
+			// Password visibility toggle
+			function togglePasswordVisibility() {
+				const passwordInput = document.getElementById('login_password');
+				const toggleIcon = document.getElementById('toggleIcon');
+
+				if (passwordInput.type === 'password') {
+					passwordInput.type = 'text';
+					toggleIcon.classList.remove('fa-eye');
+					toggleIcon.classList.add('fa-eye-slash');
+				} else {
+					passwordInput.type = 'password';
+					toggleIcon.classList.remove('fa-eye-slash');
+					toggleIcon.classList.add('fa-eye');
+				}
+			}
+
+			function resetPasswordVisibility() {
+				const passwordInput = document.getElementById('login_password');
+				const toggleIcon = document.getElementById('toggleIcon');
+				passwordInput.type = 'password';
+				toggleIcon.classList.remove('fa-eye-slash');
+				toggleIcon.classList.add('fa-eye');
+			}
+
+			function switchToSignup() {
+				closeLoginModal();
+				openRoleModal();
+			}
+
+			// Optimized event delegation for modals
+			[roleModal, participantModal, hostModal, loginModal, loadingModal, otpModal, successModal].forEach(modal => {
+				modal.addEventListener('click', function(e) {
+					if (e.target === this) {
+						closeRoleModal();
+						closeRegistrationModal();
+						closeLoginModal();
+						closeOtpModal();
+					}
+				});
+			});
+
+			// Handle form submissions
+			participantForm.addEventListener('submit', function(e) {
+				e.preventDefault();
+				const firstname = document.getElementById('participant_firstname').value;
+				const lastname = document.getElementById('participant_lastname').value;
+				const email = document.getElementById('participant_email').value;
+				const contactno = document.getElementById('participant_phone').value;
+				const password = document.getElementById('participant_password').value;
+				const confirmPassword = document.getElementById('participant_confirm').value;
+				
+				if (password !== confirmPassword) {
+					alert('Passwords do not match!');
+					return;
+				}
+				
+				const formData = new FormData();
+				formData.append('firstname', firstname);
+				formData.append('lastname', lastname);
+				formData.append('email', email);
+				formData.append('contactno', contactno);
+				formData.append('password', password);
+				
+				// Store email for OTP verification
+				pendingEmail = email;
+				
+				// Close registration modal and show loading
+				closeRegistrationModal();
+				loadingModal.classList.add('active');
+				
+				fetch('api/register.php', {
+					method: 'POST',
+					body: formData
+				})
+				.then(response => response.text())
+				.then(data => {
+					loadingModal.classList.remove('active');
+					
+					if (data.trim() === 'otp_required') {
+						// Show OTP modal
+						setTimeout(() => {
+							otpModal.classList.add('active');
+							document.getElementById('otpForm').reset();
+							// Focus first OTP input
+							document.querySelector('.otp-input[data-index="0"]').focus();
+						}, 500);
+					} else if (data.trim() === 'email_exists') {
+						alert('Email already registered. Please login instead.');
+					} else if (data.trim() === 'invalid_email') {
+						alert('Invalid email format.');
+					} else if (data.trim() === 'invalid_contact') {
+						alert('Invalid contact number. Use format: 09XXXXXXXXX');
+					} else if (data.trim() === 'weak_password') {
+						alert('Password must be at least 8 characters with uppercase, lowercase, and numbers.');
+					} else {
+						alert('An error occurred. Please try again.');
+					}
+					participantForm.reset();
+				})
+				.catch(error => {
+					console.error('Registration error:', error);
+					loadingModal.classList.remove('active');
+					alert('An error occurred. Please try again.');
+				});
+			});
+
+			hostForm.addEventListener('submit', function(e) {
+				e.preventDefault();
+				const firstname = document.getElementById('host_firstname').value;
+				const lastname = document.getElementById('host_lastname').value;
+				const email = document.getElementById('host_email').value;
+				const contactno = document.getElementById('host_phone').value;
+				const organization = document.getElementById('host_organization').value;
+				const eventType = document.getElementById('host_event_type').value;
+				const password = document.getElementById('host_password').value;
+				const confirmPassword = document.getElementById('host_confirm').value;
+				
+				if (password !== confirmPassword) {
+					alert('Passwords do not match!');
+					return;
+				}
+				
+				const formData = new FormData();
+				formData.append('firstname', firstname);
+				formData.append('lastname', lastname);
+				formData.append('email', email);
+				formData.append('contactno', contactno);
+				formData.append('organization', organization);
+				formData.append('event_type', eventType);
+				formData.append('password', password);
+				formData.append('role', 'host');
+				
+				// Store email for OTP verification
+				pendingEmail = email;
+				
+				// Close registration modal and show loading
+				closeRegistrationModal();
+				loadingModal.classList.add('active');
+				
+				fetch('api/register.php', {
+					method: 'POST',
+					body: formData
+				})
+				.then(response => response.text())
+				.then(data => {
+					loadingModal.classList.remove('active');
+					
+					if (data.trim() === 'otp_required') {
+						// Show OTP modal
+						setTimeout(() => {
+							otpModal.classList.add('active');
+							document.getElementById('otpForm').reset();
+							// Focus first OTP input
+							document.querySelector('.otp-input[data-index="0"]').focus();
+						}, 500);
+					} else if (data.trim() === 'email_exists') {
+						alert('Email already registered. Please login instead.');
+					} else if (data.trim() === 'invalid_email') {
+						alert('Invalid email format.');
+					} else if (data.trim() === 'invalid_contact') {
+						alert('Invalid contact number. Use format: 09XXXXXXXXX');
+					} else if (data.trim() === 'weak_password') {
+						alert('Password must be at least 8 characters with uppercase, lowercase, and numbers.');
+					} else {
+						alert('An error occurred. Please try again.');
+					}
+					hostForm.reset();
+				})
+				.catch(error => {
+					console.error('Host registration error:', error);
+					loadingModal.classList.remove('active');
+					alert('An error occurred. Please try again.');
+				});
+			});
+
+			// Login form submission
+			loginForm.addEventListener('submit', function(e) {
+				e.preventDefault();
+				const email = document.getElementById('login_email').value;
+				const password = document.getElementById('login_password').value;
+				
+				// Create FormData for POST request
+				const formData = new FormData();
+				formData.append('email', email);
+				formData.append('password', password);
+				
+				// Send login request to API
+				fetch('api/login.php', {
+					method: 'POST',
+					body: formData
+				})
+				.then(response => response.text())
+				.then(data => {
+					if (data.trim() === 'success') {
+						alert('Login successful! Redirecting...');
+						closeLoginModal();
+						loginForm.reset();
+						resetPasswordVisibility();
+						// Redirect to dashboard
+						window.location.href = 'Mainboard.php';
+					} else {
+						alert('Invalid email or password. Please try again.');
+					}
+				})
+				.catch(error => {
+					console.error('Login error:', error);
+					alert('An error occurred during login. Please try again.');
+				});
+			});
+
+			// OTP Form Submission
+			otpForm.addEventListener('submit', function(e) {
+				e.preventDefault();
+				
+				const otpInputs = document.querySelectorAll('.otp-input');
+				let otp = '';
+				
+				// Combine all OTP digits
+				otpInputs.forEach(input => {
+					otp += input.value;
+				});
+				
+				// Validate OTP is complete
+				if (otp.length !== 6) {
+					alert('Please enter all 6 digits of the OTP.');
+					return;
+				}
+				
+				const formData = new FormData();
+				formData.append('otp', otp);
+				
+				fetch('api/verify_otp.php', {
+					method: 'POST',
+					body: formData
+				})
+				.then(response => response.text())
+				.then(data => {
+					const response = data.trim();
+					console.log('OTP Response:', response); // Debug log
+					
+					if (response === 'success') {
+						// Close OTP modal and show success modal
+						otpModal.classList.remove('active');
+						successModal.classList.add('active');
+						document.body.style.overflow = 'hidden';
+					} else if (response === 'invalid_otp') {
+						alert('Invalid OTP. Please try again.');
+						otpForm.reset();
+						document.querySelector('.otp-input[data-index="0"]').focus();
+					} else if (response === 'otp_expired') {
+						alert('OTP has expired. Please register again.');
+						closeOtpModal();
+					} else if (response === 'no_pending') {
+						alert('No pending registration found. Please register again.');
+						closeOtpModal();
+					} else if (response === 'db_error') {
+						alert('Database error occurred. Please try again.');
+					} else {
+						console.error('Unexpected response:', response);
+						alert('An error occurred: ' + response);
+					}
+				})
+				.catch(error => {
+					console.error('OTP verification error:', error);
+					alert('An error occurred during verification. Please try again.');
+				});
+			});
+
+			// OTP Input Handling
+			const otpInputs = document.querySelectorAll('.otp-input');
+			
+			otpInputs.forEach((input, index) => {
+				// Handle input
+				input.addEventListener('input', function(e) {
+					const value = this.value;
+					
+					// Only allow digits
+					if (!/^\d?$/.test(value)) {
+						this.value = '';
+						return;
+					}
+					
+					// Move to next input if digit entered
+					if (value.length === 1 && index < otpInputs.length - 1) {
+						otpInputs[index + 1].focus();
+					}
+				});
+				
+				// Handle backspace
+				input.addEventListener('keydown', function(e) {
+					if (e.key === 'Backspace' && this.value === '' && index > 0) {
+						otpInputs[index - 1].focus();
+					}
+				});
+				
+				// Handle paste
+				input.addEventListener('paste', function(e) {
+					e.preventDefault();
+					const pastedData = e.clipboardData.getData('text');
+					const digits = pastedData.replace(/\D/g, '').split('');
+					
+					// Fill OTP inputs with pasted digits
+					for (let i = 0; i < Math.min(digits.length, otpInputs.length - index); i++) {
+						otpInputs[index + i].value = digits[i];
+					}
+					
+					// Focus last filled input or last input
+					const lastFilledIndex = Math.min(index + digits.length - 1, otpInputs.length - 1);
+					otpInputs[lastFilledIndex].focus();
+				});
+				
+				// Handle arrow keys
+				input.addEventListener('keydown', function(e) {
+					if (e.key === 'ArrowLeft' && index > 0) {
+						otpInputs[index - 1].focus();
+					} else if (e.key === 'ArrowRight' && index < otpInputs.length - 1) {
+						otpInputs[index + 1].focus();
+					}
+				});
+			});
+
+			function closeOtpModal() {
+				otpModal.classList.remove('active');
+				document.body.style.overflow = 'auto';
+				otpForm.reset();
+			}
+
+			function successModalToLogin() {
+				successModal.classList.remove('active');
+				document.body.style.overflow = 'auto';
+				openLoginModal();
+			}
+		</script>
+
+		<!-- Scripts -->
+			<script src="assets/js/jquery.min.js"></script>
+			<script src="assets/js/jquery.dropotron.min.js"></script>
+			<script src="assets/js/browser.min.js"></script>
+			<script src="assets/js/breakpoints.min.js"></script>
+			<script src="assets/js/util.js"></script>
+			<script src="assets/js/main.js"></script>
+
+	</body>
 </html>
