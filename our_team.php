@@ -339,7 +339,7 @@
 
                 <div class="team-member-card">
                     <div class="member-photo">
-                        <img src="images/team pictures/lontoc.jpg" alt="Joseph Gabriel Lontoc" />
+                        <img src="images/team pictures/lontoc.png" alt="Joseph Gabriel Lontoc" />
                     </div>
                     <div class="member-info">
                         <h3 class="member-name">Joseph Gabriel Lontoc</h3>
