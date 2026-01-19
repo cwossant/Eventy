@@ -793,11 +793,21 @@
 					</div>
 					<div class="form-group">
 						<label for="participant_password">Password</label>
-						<input type="password" id="participant_password" name="password" placeholder="Enter a strong password" required>
+						<div class="password-field">
+							<input type="password" id="participant_password" name="password" placeholder="Enter a strong password" required>
+							<button type="button" class="password-toggle" onclick="togglePasswordVisibilityField('participant_password','participantTogglePass')" tabindex="-1">
+								<i class="fas fa-eye" id="participantTogglePass"></i>
+							</button>
+						</div>
 					</div>
 					<div class="form-group">
 						<label for="participant_confirm">Confirm Password</label>
-						<input type="password" id="participant_confirm" name="confirm_password" placeholder="Confirm your password" required>
+						<div class="password-field">
+							<input type="password" id="participant_confirm" name="confirm_password" placeholder="Confirm your password" required>
+							<button type="button" class="password-toggle" onclick="togglePasswordVisibilityField('participant_confirm','participantToggleConfirm')" tabindex="-1">
+								<i class="fas fa-eye" id="participantToggleConfirm"></i>
+							</button>
+						</div>
 					</div>
 					<button type="submit" class="form-submit">Create Account</button>
 					<p class="form-back"><a href="#" onclick="backToRole(); return false;">← Back to Role Selection</a></p>
@@ -832,11 +842,21 @@
 					</div>
 					<div class="form-group">
 						<label for="host_password">Password</label>
-						<input type="password" id="host_password" name="password" placeholder="Enter a strong password" required>
+						<div class="password-field">
+							<input type="password" id="host_password" name="password" placeholder="Enter a strong password" required>
+							<button type="button" class="password-toggle" onclick="togglePasswordVisibilityField('host_password','hostTogglePass')" tabindex="-1">
+								<i class="fas fa-eye" id="hostTogglePass"></i>
+							</button>
+						</div>
 					</div>
 					<div class="form-group">
 						<label for="host_confirm">Confirm Password</label>
-						<input type="password" id="host_confirm" name="confirm_password" placeholder="Confirm your password" required>
+						<div class="password-field">
+							<input type="password" id="host_confirm" name="confirm_password" placeholder="Confirm your password" required>
+							<button type="button" class="password-toggle" onclick="togglePasswordVisibilityField('host_confirm','hostToggleConfirm')" tabindex="-1">
+								<i class="fas fa-eye" id="hostToggleConfirm"></i>
+							</button>
+						</div>
 					</div>
 					<button type="submit" class="form-submit">Create Host Account</button>
 					<p class="form-back"><a href="#" onclick="backToRole(); return false;">← Back to Role Selection</a></p>
@@ -863,7 +883,7 @@
 						<label for="login_password">Password</label>
 						<div class="password-field">
 							<input type="password" id="login_password" name="password" placeholder="Enter your password" required>
-							<button type="button" class="password-toggle" onclick="togglePasswordVisibility()" tabindex="-1">
+								<button type="button" class="password-toggle" onclick="togglePasswordVisibilityField('login_password','toggleIcon')" tabindex="-1">
 								<i class="fas fa-eye" id="toggleIcon"></i>
 							</button>
 						</div>
@@ -1490,6 +1510,21 @@
 			}
 
 			// Password visibility toggle
+			function togglePasswordVisibilityField(fieldId, iconId) {
+				const passwordInput = document.getElementById(fieldId);
+				const toggleIcon = document.getElementById(iconId);
+				if (!passwordInput || !toggleIcon) return;
+				if (passwordInput.type === 'password') {
+					passwordInput.type = 'text';
+					toggleIcon.classList.remove('fa-eye');
+					toggleIcon.classList.add('fa-eye-slash');
+				} else {
+					passwordInput.type = 'password';
+					toggleIcon.classList.remove('fa-eye-slash');
+					toggleIcon.classList.add('fa-eye');
+				}
+			}
+
 			function togglePasswordVisibility() {
 				const passwordInput = document.getElementById('login_password');
 				const toggleIcon = document.getElementById('toggleIcon');
