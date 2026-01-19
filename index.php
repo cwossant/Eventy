@@ -1715,14 +1715,23 @@
 					method: 'POST',
 					body: formData
 				})
-				.then(response => response.text())
+				.then(response => response.json())
 				.then(data => {
-					if (data.trim() === 'success') {
-						// Show success modal and auto-redirect to dashboard after 4s (no buttons)
+					if (data.status === 'success') {
+						// Show success modal and auto-redirect to dashboard after 2.6s based on user_type
 						closeLoginModal();
 						loginForm.reset();
 						resetPasswordVisibility();
-						showSuccessAndRedirect('Login Successful!', 'You have successfully signed in. Redirecting to your dashboard...', 'Mainboard.php', false, 2600);
+						
+						// Determine redirect URL based on user_type
+						let redirectUrl = 'Mainboard.php'; // default
+						if (data.user_type === 'participant') {
+							redirectUrl = 'participant.php';
+						} else if (data.user_type === 'host') {
+							redirectUrl = 'host.php';
+						}
+						
+						showSuccessAndRedirect('Login Successful!', 'You have successfully signed in. Redirecting to your dashboard...', redirectUrl, false, 2600);
 					} else {
 						// show inline error below the subtitle in the login modal
 						if (loginError) {

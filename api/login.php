@@ -7,7 +7,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $email = trim($_POST['email'] ?? '');
     $password = trim($_POST['password'] ?? '');
 
-    $stmt = $conn->prepare("SELECT HostID, password FROM users WHERE email = ?");
+    $stmt = $conn->prepare("SELECT HostID, user_type, password FROM users WHERE email = ?");
     $stmt->bind_param("s", $email);
     $stmt->execute();
     $result = $stmt->get_result();
@@ -17,11 +17,21 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
         if (password_verify($password, $user['password'])) {
             $_SESSION['HostID'] = $user['HostID'];
-            echo "success";
+            $_SESSION['user_type'] = $user['user_type'];
+            
+            // Return JSON response with user type for frontend redirection
+            header('Content-Type: application/json');
+            echo json_encode([
+                'status' => 'success',
+                'user_type' => $user['user_type']
+            ]);
             exit();
         }
     }
 
-    echo "invalid";
+    header('Content-Type: application/json');
+    echo json_encode([
+        'status' => 'invalid'
+    ]);
 }
 ?>
