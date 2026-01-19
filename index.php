@@ -852,6 +852,8 @@
 					<span class="modal-close" onclick="closeLoginModal()">&times;</span>
 				</div>
 				<p class="modal-subtitle">Welcome back! Sign in to your account</p>
+						<!-- inline error for login failures -->
+						<p id="loginError" class="modal-error" style="display:none;">&nbsp;</p>
 				<form class="login-form" id="loginForm">
 					<div class="form-group">
 						<label for="login_email">Email Address</label>
@@ -909,9 +911,9 @@
 				<div class="success-icon">
 					<i class="fas fa-check-circle"></i>
 				</div>
-				<h2>Registration Successful!</h2>
-				<p class="modal-subtitle">Your account has been created successfully. You can now login.</p>
-				<button type="button" class="form-submit" onclick="successModalToLogin()">Go to Login</button>
+				<h2 id="successTitle">Registration Successful!</h2>
+				<p id="successSubtitle" class="modal-subtitle">Your account has been created successfully. You can now login.</p>
+				<button type="button" id="successButton" class="form-submit" onclick="successModalToLogin()">Go to Login</button>
 			</div>
 		</div>
 
@@ -1264,6 +1266,14 @@
 			.form-footer a:hover {
 				color: #8A5CF0;
 			}
+
+			/* Inline error shown below subtitle in login modal */
+			.modal-error {
+				color: #dc2626;
+				font-size: 13px;
+				margin-top: 8px;
+				margin-bottom: 8px;
+			}
 		</style>
 
 		<!-- Loading Modal Styles -->
@@ -1383,9 +1393,13 @@
 			const loadingModal = document.getElementById('loadingModal');
 			const otpModal = document.getElementById('otpModal');
 			const successModal = document.getElementById('successModal');
+			const successTitle = document.getElementById('successTitle');
+			const successSubtitle = document.getElementById('successSubtitle');
+			const successButton = document.getElementById('successButton');
 			const participantForm = document.getElementById('participantForm');
 			const hostForm = document.getElementById('hostForm');
 			const loginForm = document.getElementById('loginForm');
+			const loginError = document.getElementById('loginError');
 			const otpForm = document.getElementById('otpForm');
 			const openLoginModalBtn = document.getElementById('openLoginModal');
 
@@ -1396,6 +1410,22 @@
 			getStartedBtn.addEventListener('click', function(e) {
 				e.preventDefault();
 				openRoleModal();
+			});
+
+			// Clear login error when opening login modal or when user types
+			function clearLoginError() {
+				if (loginError) {
+					loginError.innerText = '';
+					loginError.style.display = 'none';
+				}
+			}
+
+			// Clear the inline error when user starts typing in login inputs
+			['login_email','login_password'].forEach(id => {
+				const el = document.getElementById(id);
+				if (el) {
+					el.addEventListener('input', clearLoginError);
+				}
 			});
 
 			// Open login modal
@@ -1415,6 +1445,7 @@
 			}
 
 			function openLoginModal() {
+				clearLoginError();
 				loginModal.classList.add('active');
 				document.body.style.overflow = 'hidden';
 			}
@@ -1638,14 +1669,19 @@
 				.then(response => response.text())
 				.then(data => {
 					if (data.trim() === 'success') {
-						alert('Login successful! Redirecting...');
+						// Show success modal and auto-redirect to dashboard after 4s (no buttons)
 						closeLoginModal();
 						loginForm.reset();
 						resetPasswordVisibility();
-						// Redirect to dashboard
-						window.location.href = 'Mainboard.php';
+						showSuccessAndRedirect('Login Successful!', 'You have successfully signed in. Redirecting to your dashboard...', 'Mainboard.php', false, 2600);
 					} else {
-						alert('Invalid email or password. Please try again.');
+						// show inline error below the subtitle in the login modal
+						if (loginError) {
+							loginError.innerText = 'The email address or password is incorrect. Please try again.';
+							loginError.style.display = 'block';
+						}
+						// focus email field for correction
+						document.getElementById('login_email').focus();
 					}
 				})
 				.catch(error => {
@@ -1685,10 +1721,9 @@
 					console.log('OTP Response:', response); // Debug log
 					
 					if (response === 'success') {
-						// Close OTP modal and show success modal
+						// Close OTP modal and show success modal, then auto-open login modal after 4s
 						otpModal.classList.remove('active');
-						successModal.classList.add('active');
-						document.body.style.overflow = 'hidden';
+						showSuccessAndRedirect('Registration Successful!', 'Your account has been created successfully. Redirecting to login...', null, true, 2600);
 					} else if (response === 'invalid_otp') {
 						alert('Invalid OTP. Please try again.');
 						otpForm.reset();
@@ -1769,6 +1804,29 @@
 				otpModal.classList.remove('active');
 				document.body.style.overflow = 'auto';
 				otpForm.reset();
+			}
+
+			/**
+			 * Show the shared success modal and auto-redirect after a delay.
+			 * If `redirectToLogin` is true the login modal is opened after the delay.
+			 * Otherwise `redirectUrl` is used for window.location.href.
+			 */
+			function showSuccessAndRedirect(titleText, subtitleText, redirectUrl = null, redirectToLogin = false, delay = 2600) {
+				successTitle.innerText = titleText;
+				successSubtitle.innerText = subtitleText;
+				// hide the button for auto-redirect flows
+				successButton.style.display = 'none';
+				successModal.classList.add('active');
+				document.body.style.overflow = 'hidden';
+				setTimeout(function() {
+					successModal.classList.remove('active');
+					document.body.style.overflow = 'auto';
+					if (redirectToLogin) {
+						openLoginModal();
+					} else if (redirectUrl) {
+						window.location.href = redirectUrl;
+					}
+				}, delay);
 			}
 
 			function successModalToLogin() {
