@@ -594,7 +594,7 @@
 
 												<div class="stat-card stat-users">
 													<div class="stat-icon">
-														<i class="fas fa-users-circle"></i>
+														<i class="fas fa-users"></i>
 													</div>
 													<div class="stat-content">
 														<h4>Active Users</h4>
