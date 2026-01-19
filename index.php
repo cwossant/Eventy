@@ -1229,20 +1229,34 @@
 			.password-toggle {
 				position: absolute;
 				right: 12px;
-				background: none;
+				background: transparent;
 				border: none;
 				cursor: pointer;
-				color: #8A5CF0;
+				color: #6F42C7 !important;
 				font-size: 16px;
-				padding: 6px;
-				display: flex;
+				padding: 0;
+				margin: 0;
+				display: inline-flex;
 				align-items: center;
 				justify-content: center;
-				transition: color 0.2s ease;
+				outline: none;
+				box-shadow: none !important;
+				opacity: 0.95 !important;
+				transition: none !important;
+				width: 28px;
+				height: 28px;
+				line-height: 1;
 			}
 
-			.password-toggle:hover {
-				color: #6F42C7;
+			.password-toggle:hover,
+			.password-toggle:focus,
+			.password-toggle:active,
+			.password-toggle i {
+				/* Always keep the eye purple and slightly less opaque; disable hover color change */
+				color: #6F42C7 !important;
+				opacity: 0.95 !important;
+				box-shadow: none !important;
+				transition: none !important;
 			}
 
 			.password-toggle i {

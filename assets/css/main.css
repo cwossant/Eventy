@@ -1442,7 +1442,6 @@ input, select, textarea {
 		-webkit-appearance: none;
 		position: relative;
 		display: inline-block;
-		background-color: #4091bf;
 		border-radius: 8px;
 		box-shadow: inset 0px 0px 0px 1px rgba(0, 0, 0, 0.35), inset 0px 2px 1px 0px rgba(255, 255, 255, 0.35);
 		color: #fff !important;
@@ -1468,21 +1467,6 @@ input, select, textarea {
 			top: 0.05em;
 		}
 
-		input[type="button"]:hover,
-		input[type="submit"]:hover,
-		input[type="reset"]:hover,
-		button:hover,
-		.button:hover {
-			background-color: #50a1cf;
-		}
-
-		input[type="button"]:active,
-		input[type="submit"]:active,
-		input[type="reset"]:active,
-		button:active,
-		.button:active {
-			background-color: #3081af;
-		}
 
 		input[type="button"].medium,
 		input[type="submit"].medium,
