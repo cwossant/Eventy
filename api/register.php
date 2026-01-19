@@ -18,6 +18,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $email = trim($_POST['email'] ?? '');
     $contactno = trim($_POST['contactno'] ?? '');
     $password = trim($_POST['password'] ?? '');
+    // accept role (participant/host) from form, default to participant
+    $user_type = trim($_POST['role'] ?? 'participant');
+    $user_type = strtolower($user_type);
+    if (!in_array($user_type, ['participant', 'host'])) {
+        $user_type = 'participant';
+    }
 
     if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
         echo "invalid_email";
@@ -59,6 +65,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         "contactno" => $contactno,
         "password" => password_hash($password, PASSWORD_DEFAULT),
         "profile_picture" => "default_profile.jpg",
+        "user_type" => $user_type,
         "otp" => $otp,
         "expires" => time() + 300
     ];
