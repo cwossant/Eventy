@@ -12,6 +12,12 @@
     <link rel="stylesheet" href="css/vantage-style.css" />
     <link rel="stylesheet" href="assets/css/fontawesome-all.min.css" />
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         :root {
             --primary-color: #723FBD;
             --primary-dark: #693ABB;
@@ -29,28 +35,157 @@
             --shadow-strong: rgba(114, 63, 189, 0.3);
         }
 
-        .header {
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Poppins', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* ==================== NAVBAR ==================== */
+        .navbar {
             position: fixed;
             top: 0;
             left: 0;
             right: 0;
-            width: 100vw;
             background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(20px);
             border-bottom: 1px solid var(--border-color);
-            z-index: 1000;
+            z-index: 999;
+            transition: all 0.3s ease;
+            padding: 16px 0;
+        }
+
+        .navbar.scrolled {
+            background: rgba(255, 255, 255, 0.98);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .navbar-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .navbar-brand {
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #723FBD 0%, #683ABB 25%, #7743BF 50%, #683ABB 75%, #693ABB 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-decoration: none;
             transition: all 0.3s ease;
         }
 
-        .header.scrolled {
-            background: rgba(255, 255, 255, 0.98);
-            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.15);
+        .navbar-brand:hover {
+            opacity: 0.8;
         }
 
+        .navbar-links {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+            list-style: none;
+        }
+
+        .navbar-link {
+            text-decoration: none;
+            color: var(--text-secondary);
+            font-weight: 500;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .navbar-link:hover {
+            color: var(--primary-color);
+        }
+
+        .navbar-link::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--primary-color);
+            transition: width 0.3s ease;
+        }
+
+        .navbar-link:hover::after {
+            width: 100%;
+        }
+
+        /* ==================== BACK BUTTON CIRCLE ==================== */
+        .back-button-circle {
+            position: fixed;
+            right: 30px;
+            bottom: 30px;
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #723FBD 0%, #683ABB 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 500;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 25px rgba(114, 63, 189, 0.3);
+            text-decoration: none;
+            color: white;
+            font-size: 1.5rem;
+        }
+
+        .back-button-circle:hover {
+            transform: translateY(-5px) scale(1.1);
+            box-shadow: 0 12px 35px rgba(114, 63, 189, 0.4);
+        }
+
+        .back-button-circle:active {
+            transform: translateY(-2px) scale(1.05);
+        }
+
+        /* ==================== HERO SECTION ==================== */
         .team-hero {
             background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
-            padding: 120px 0 80px;
+            padding: 140px 0 80px;
             text-align: center;
+            margin-top: 70px;
+            animation: heroFadeIn 0.8s ease-out;
+        }
+
+        @keyframes heroFadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         .leadership-section {
@@ -76,18 +211,37 @@
             gap: 2rem;
         }
 
+        /* ==================== TEAM MEMBER CARDS ==================== */
         .team-member-card {
             background: white;
             border-radius: 20px;
             overflow: hidden;
             border: 1px solid var(--border-color);
-            transition: all 0.3s ease;
+            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
             position: relative;
+            animation: cardSlideUp 0.6s ease-out forwards;
+            opacity: 0;
+        }
+
+        .team-member-card:nth-child(1) { animation-delay: 0.1s; }
+        .team-member-card:nth-child(2) { animation-delay: 0.2s; }
+        .team-member-card:nth-child(3) { animation-delay: 0.3s; }
+        .team-member-card:nth-child(4) { animation-delay: 0.4s; }
+
+        @keyframes cardSlideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         .team-member-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 20px 40px var(--shadow-medium);
+            transform: translateY(-12px);
+            box-shadow: 0 25px 50px var(--shadow-medium);
             border-color: var(--primary-color);
         }
 
@@ -242,9 +396,168 @@
             transform: translateY(-2px);
         }
 
+        /* ==================== TEAM STATISTICS ==================== */
+        .team-stats {
+            padding: 80px 0;
+            background: white;
+            border-top: 1px solid var(--border-color);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+        }
+
+        .stat-card {
+            text-align: center;
+            padding: 2rem;
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            border-radius: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            background: linear-gradient(135deg, #e2e8f0 0%, #cbd5e0 100%);
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, #723FBD 0%, #683ABB 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            font-size: 1rem;
+            color: var(--text-secondary);
+            font-weight: 600;
+        }
+
+        /* ==================== FOOTER ==================== */
+        .footer-wrapper {
+            background: #1a202c;
+            color: white;
+            padding: 80px 0 20px;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 3rem;
+            margin-bottom: 3rem;
+            max-width: 1200px;
+            margin-left: auto;
+            margin-right: auto;
+            padding: 0 20px;
+        }
+
+        .footer-section h3 {
+            font-size: 1.3rem;
+            margin-bottom: 1.5rem;
+            color: white;
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 1rem;
+        }
+
+        .footer-links a {
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: var(--primary-color);
+            padding-left: 5px;
+        }
+
+        .footer-contact {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .footer-contact dt {
+            font-weight: 600;
+            color: white;
+            margin-top: 1rem;
+            margin-bottom: 0.3rem;
+        }
+
+        .footer-contact dd {
+            margin-left: 0;
+            margin-bottom: 1rem;
+        }
+
+        .footer-contact a {
+            color: var(--primary-color);
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .footer-contact a:hover {
+            text-decoration: underline;
+        }
+
+        .footer-social {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .social-icon {
+            width: 40px;
+            height: 40px;
+            background: rgba(114, 63, 189, 0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary-color);
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .social-icon:hover {
+            background: var(--primary-color);
+            color: white;
+            transform: translateY(-3px);
+        }
+
+        .footer-bottom {
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 2rem 20px;
+            text-align: center;
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .footer-bottom a {
+            color: var(--primary-color);
+            text-decoration: none;
+        }
+
+        /* Hide unwanted titleBar */
+        #titleBar {
+            display: none !important;
+        }
+
         @media (max-width: 768px) {
+            .navbar-links {
+                gap: 1rem;
+                font-size: 0.9rem;
+            }
+
             .team-hero {
-                padding: 100px 0 60px;
+                padding: 100px 20px 60px;
             }
 
             .leadership-grid {
@@ -269,10 +582,39 @@
                 width: 150px;
                 height: 150px;
             }
+
+            .back-button-circle {
+                right: 20px;
+                bottom: 20px;
+                width: 50px;
+                height: 50px;
+                font-size: 1.2rem;
+            }
+
+            .footer-content {
+                gap: 2rem;
+            }
         }
     </style>
 </head>
 <body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="navbar-content">
+            <a href="index.php" class="navbar-brand">Eventy</a>
+            <ul class="navbar-links">
+                <li><a href="index.php" class="navbar-link">Home</a></li>
+                <li><a href="index.php#main-wrapper" class="navbar-link">Features</a></li>
+                <li><a href="our_team.php" class="navbar-link">Our Team</a></li>
+                <li><a href="#footer-wrapper" class="navbar-link">Contact</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Back Button Circle -->
+    <a href="index.php" class="back-button-circle" title="Go back to Home">
+        <i class="fas fa-arrow-left"></i>
+    </a>
     <!-- Header -->
     <!-- Team Hero -->
     <section class="team-hero">
@@ -289,7 +631,7 @@
     <!-- Leadership Section -->
     <section class="leadership-section" id="leadership">
         <div class="container">
-            <div class="section-header" style="text-align: center; margin-bottom: 60px;">
+            <div class="section-header" style="text-align: center; margin-bottom: 60px; animation: fadeInDown 0.8s ease-out;">
                 <h2 style="font-size: 2.5rem; font-weight: 700; margin-bottom: 1rem; background: linear-gradient(135deg, #723FBD 0%, #683ABB 25%, #7743BF 50%, #683ABB 75%, #693ABB 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">Our Team</h2>
                 <p style="font-size: 1.2rem; color: var(--text-secondary);">Visionary leaders guiding our mission</p>
             </div>
@@ -384,6 +726,30 @@
         </div>
     </section>
 
+    <!-- Team Statistics Section -->
+    <section class="team-stats">
+        <div class="container">
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-number">4</div>
+                    <div class="stat-label">Team Members</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">100%</div>
+                    <div class="stat-label">Dedication</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">3+</div>
+                    <div class="stat-label">Years Experience</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">∞</div>
+                    <div class="stat-label">Potential</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
    
 
     <!-- Join Section -->
@@ -398,6 +764,53 @@
     </section>
 
 
+    <!-- Footer -->
+    <footer class="footer-wrapper" id="footer-wrapper">
+        <div class="footer-content">
+            <!-- Links Section -->
+            <div class="footer-section">
+                <h3>Quick Links</h3>
+                <ul class="footer-links">
+                    <li><a href="index.php">Home</a></li>
+                    <li><a href="index.php#main-wrapper">Features</a></li>
+                    <li><a href="our_team.php">Our Team</a></li>
+                    <li><a href="#footer-wrapper">Contact</a></li>
+                </ul>
+            </div>
+
+            <!-- About Section -->
+            <div class="footer-section">
+                <h3>About Eventy</h3>
+                <p>A modern event management platform designed to simplify event organization and enhance participant experience.</p>
+                <div class="footer-social">
+                    <a href="https://github.com" target="_blank" class="social-icon"><i class="fab fa-github"></i></a>
+                    <a href="https://linkedin.com" target="_blank" class="social-icon"><i class="fab fa-linkedin"></i></a>
+                    <a href="https://twitter.com" target="_blank" class="social-icon"><i class="fab fa-twitter"></i></a>
+                </div>
+            </div>
+
+            <!-- Contact Section -->
+            <div class="footer-section">
+                <h3>Get in Touch</h3>
+                <div class="footer-contact">
+                    <dt>Email</dt>
+                    <dd><a href="mailto:eventy.industries@gmail.com">eventy.industries@gmail.com</a></dd>
+                    
+                    <dt>Address</dt>
+                    <dd>551 M.F. Jhocson Street<br />Sampaloc, Manila<br />Metro Manila, Philippines</dd>
+                    
+                    <dt>Phone</dt>
+                    <dd><a href="tel:+63900000000">+63 (900) 000-0000</a></dd>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer Bottom -->
+        <div class="footer-bottom">
+            <p>&copy; 2026 Eventy. All rights reserved | <a href="our_team.php">Design by Eventy Team</a></p>
+        </div>
+    </footer>
+
     <script src="assets/js/jquery.min.js"></script>
     <script src="assets/js/jquery.dropotron.min.js"></script>
     <script src="assets/js/browser.min.js"></script>
@@ -406,62 +819,15 @@
     <script src="assets/js/main.js"></script>
 
     <script>
-        // Mobile Menu Functionality
-        function initMobileMenu() {
-            const mobileMenuToggle = document.getElementById('mobileMenuToggle');
-            const mobileMenu = document.getElementById('mobileMenu');
-            const mobileMenuOverlay = document.createElement('div');
-            mobileMenuOverlay.className = 'mobile-menu-overlay';
-            mobileMenuOverlay.id = 'mobileMenuOverlay';
-            document.body.appendChild(mobileMenuOverlay);
-
-            function toggleMobileMenu() {
-                const isActive = mobileMenu.classList.contains('active');
-                if (isActive) {
-                    closeMobileMenu();
-                } else {
-                    openMobileMenu();
-                }
+        // Navbar Scroll Effect
+        window.addEventListener('scroll', function() {
+            const navbar = document.querySelector('.navbar');
+            if (window.scrollY > 100) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
             }
-
-            function openMobileMenu() {
-                mobileMenu.classList.add('active');
-                mobileMenuToggle.classList.add('active');
-                mobileMenuOverlay.classList.add('active');
-                document.body.style.overflow = 'hidden';
-
-                mobileMenuOverlay.addEventListener('click', closeMobileMenu);
-                document.addEventListener('keydown', handleEscapeKey);
-            }
-
-            function closeMobileMenu() {
-                mobileMenu.classList.remove('active');
-                mobileMenuToggle.classList.remove('active');
-                mobileMenuOverlay.classList.remove('active');
-                document.body.style.overflow = '';
-
-                mobileMenuOverlay.removeEventListener('click', closeMobileMenu);
-                document.removeEventListener('keydown', handleEscapeKey);
-            }
-
-            function handleEscapeKey(e) {
-                if (e.key === 'Escape') {
-                    closeMobileMenu();
-                }
-            }
-
-            mobileMenuToggle.addEventListener('click', toggleMobileMenu);
-
-            const mobileNavLinks = document.querySelectorAll('.mobile-nav-link');
-            mobileNavLinks.forEach(link => {
-                link.addEventListener('click', closeMobileMenu);
-            });
-        }
-
-        function openMonitorWeb() {
-            const monitorUrl = '../Monitor/';
-            window.open(monitorUrl, '_blank', 'noopener,noreferrer');
-        }
+        });
 
         // Department Filter Functionality
         function initDepartmentFilter() {
@@ -508,7 +874,6 @@
 
         // Initialize on load
         document.addEventListener('DOMContentLoaded', function() {
-            initMobileMenu();
             initDepartmentFilter();
 
             // Add initial animation styles

@@ -1250,10 +1250,6 @@ input, select, textarea {
 				font-weight: 800;
 			}
 
-	footer {
-		margin: 2.5em 0 0 0;
-	}
-
 	header.major {
 		border-bottom: solid 1px #dbdbdb;
 		margin: 0 0 3em 0;

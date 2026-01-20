@@ -1069,6 +1069,137 @@
 							box-shadow: 0 4px 16px rgba(0,0,0,0.08) !important;
 							transform: translateY(-1px) !important;
 						}
+
+						/* ==================== FOOTER ==================== */
+						.footer-wrapper {
+							background: #1a202c;
+							color: white;
+							padding: 80px 0 20px;
+						}
+
+						.footer-content {
+							display: grid;
+							grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+							gap: 3rem;
+							margin-bottom: 3rem;
+							max-width: 1200px;
+							margin-left: auto;
+							margin-right: auto;
+							padding: 0 20px;
+						}
+
+						.footer-section h3 {
+							font-size: 1.3rem;
+							margin-bottom: 1.5rem;
+							color: white;
+						}
+
+						.footer-section p {
+							color: rgba(255, 255, 255, 0.7);
+							line-height: 1.6;
+						}
+
+						.footer-links {
+							list-style: none;
+						}
+
+						.footer-links li {
+							margin-bottom: 1rem;
+						}
+
+						.footer-links a {
+							color: rgba(255, 255, 255, 0.7);
+							text-decoration: none;
+							transition: all 0.3s ease;
+						}
+
+						.footer-links a:hover {
+							color: #723FBD;
+							padding-left: 5px;
+						}
+
+						.footer-contact {
+							color: rgba(255, 255, 255, 0.7);
+						}
+
+						.footer-contact dt {
+							font-weight: 600;
+							color: white;
+							margin-top: 1rem;
+							margin-bottom: 0.3rem;
+						}
+
+						.footer-contact dd {
+							margin-left: 0;
+							margin-bottom: 1rem;
+						}
+
+						.footer-contact a {
+							color: #723FBD;
+							text-decoration: none;
+							transition: all 0.3s ease;
+						}
+
+						.footer-contact a:hover {
+							text-decoration: underline;
+						}
+
+						.footer-social {
+							display: flex;
+							gap: 1rem;
+							margin-top: 1rem;
+						}
+
+						.social-icon {
+							width: 40px;
+							height: 40px;
+							background: rgba(114, 63, 189, 0.2);
+							border-radius: 50%;
+							display: flex;
+							align-items: center;
+							justify-content: center;
+							color: #723FBD;
+							text-decoration: none;
+							transition: all 0.3s ease;
+						}
+
+						.social-icon:hover {
+							background: #723FBD;
+							color: white;
+							transform: translateY(-3px);
+						}
+
+						.footer-bottom {
+							border-top: 1px solid rgba(255, 255, 255, 0.1);
+							padding: 2rem 20px;
+							text-align: center;
+							color: rgba(255, 255, 255, 0.6);
+						}
+
+						.footer-bottom a {
+							color: #723FBD;
+							text-decoration: none;
+						}
+
+						.footer-bottom a:hover {
+							text-decoration: underline;
+						}
+
+						@media (max-width: 768px) {
+							.footer-content {
+								gap: 2rem;
+							}
+
+							.footer-section h3 {
+								font-size: 1.1rem;
+							}
+
+							.social-icon {
+								width: 35px;
+								height: 35px;
+								font-size: 0.9rem;
+							}
+						}
 					</style>
 
 					<script>
@@ -1222,75 +1353,51 @@
 				</div>
 
 			<!-- Footer Wrapper -->
-				<div id="footer-wrapper">
-					<footer id="footer" class="container">
-						<div class="row">
-							<div class="col-3 col-6-medium col-12-small">
+			<footer class="footer-wrapper" id="footer-wrapper">
+				<div class="footer-content">
+					<!-- Links Section -->
+					<div class="footer-section">
+						<h3>Quick Links</h3>
+						<ul class="footer-links">
+							<li><a href="index.php">Home</a></li>
+							<li><a href="index.php#main-wrapper">Features</a></li>
+							<li><a href="our_team.php">Our Team</a></li>
+							<li><a href="#footer-wrapper">Contact</a></li>
+						</ul>
+					</div>
 
-								<!-- Links -->
-									<section>
-										<h2>Links</h2>
-										<ul class="divided">
-											<li><a href="#">About Us</a></li>
-											<li><a href="#main-wrapper">Features</a></li>
-											<li><a href="our_team.php">Our Team</a></li>
-											<li><a href="#">Contacts</a></li>
-										</ul>
-									</section>
-
-							</div>
-							<div class="col-3 col-6-medium col-12-small">
-
-								<!-- Links -->
-									<section>
-									</section>
-
-							</div>
-							<div class="col-6 col-12-medium imp-medium">
-
-
-								<!-- Contact -->
-									<section>
-										<h2>Get in touch</h2>
-										<div>
-											<div style="margin-top: -50px;" class="row">
-												<div class="col-6 col-12-small">
-													<dl class="contact">
-														<dt>Twitter</dt>
-														<dd><a href="#">Eventy</a></dd>
-														<dt>Facebook</dt>
-														<dd><a href="#">facebook.com/Eventy</a></dd>
-														<dt>WWW</dt>
-														<dd><a href="#">Eventy.com</a></dd>
-														<dt>Email</dt>
-														<dd><a href="#">eventy.industries@gmail.com</a></dd>
-													</dl>
-												</div>
-												<div class="col-6 col-12-small">
-													<dl class="contact">
-														<dt>Address</dt>
-														<dd>
-															551 M.F. Jhocson Street<br />
-															Sampaloc, Manila<br />
-															Metro Manila, Philippines
-														</dd>	
-													</dl>
-												</div>
-											</div>
-										</div>
-									</section>
-
-							</div>
-							<div style="margin-top: -150px;"   class="col-12">
-								<div id="copyright">
-									<ul class="menu">
-										<li>&copy; Eventy. All rights reserved</li><li><a href="our_team.php">Eventy Design Team</a></li>
-									</ul>
-								</div>
-							</div>
+					<!-- About Section -->
+					<div class="footer-section">
+						<h3>About Eventy</h3>
+						<p>A modern event management platform designed to simplify event organization and enhance participant experience.</p>
+						<div class="footer-social">
+							<a href="https://github.com" target="_blank" class="social-icon"><i class="fab fa-github"></i></a>
+							<a href="https://linkedin.com" target="_blank" class="social-icon"><i class="fab fa-linkedin"></i></a>
+							<a href="https://twitter.com" target="_blank" class="social-icon"><i class="fab fa-twitter"></i></a>
 						</div>
-					</footer>
+					</div>
+
+					<!-- Contact Section -->
+					<div class="footer-section">
+						<h3>Get in Touch</h3>
+						<div class="footer-contact">
+							<dt>Email</dt>
+							<dd><a href="mailto:eventy.industries@gmail.com">eventy.industries@gmail.com</a></dd>
+							
+							<dt>Address</dt>
+							<dd>551 M.F. Jhocson Street<br />Sampaloc, Manila<br />Metro Manila, Philippines</dd>
+							
+							<dt>Phone</dt>
+							<dd><a href="tel:+63900000000">+63 (900) 000-0000</a></dd>
+						</div>
+					</div>
 				</div>
+
+				<!-- Footer Bottom -->
+				<div class="footer-bottom">
+					<p>&copy; 2026 Eventy. All rights reserved | <a href="our_team.php">Design by Eventy Team</a></p>
+				</div>
+			</footer>
 
 		</div>
 
