@@ -1886,7 +1886,8 @@
 			}
 
 			.form-submit {
-				padding: 14px 20px;
+				padding: 16px 20px;
+				min-height: 50px;
 				background: linear-gradient(135deg, #6F42C7 0%, #8A5CF0 100%);
 				color: #ffffff;
 				border: none;
@@ -1904,8 +1905,10 @@
 				-webkit-font-smoothing: antialiased;
 				position: relative;
 				overflow: hidden;
+				display: inline-flex;
+				align-items: center;
+				justify-content: center;
 			}
-
 			.form-submit::before {
 				content: '';
 				position: absolute;
