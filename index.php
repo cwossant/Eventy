@@ -67,6 +67,13 @@
 								will-change: transform, opacity;
 							}
 
+							.hero-grid .right {
+								overflow: visible;
+								min-width: 0;
+								display: block !important;
+								flex: none !important;
+							}
+
 							@keyframes slideInLeft {
 								from {
 									opacity: 0;
@@ -201,81 +208,212 @@
 							}
 
 							.floating-card {
-								position: absolute;
-								background: #ffffff;
-								border-radius: 16px;
-								padding: 20px 24px;
-								box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
-								display: flex;
-								flex-direction: column;
-								align-items: center;
-								gap: 8px;
-								font-weight: 600;
-								color: #6F42C7;
-								z-index: 1;
-								transition: all 0.2s ease;
-								cursor: pointer;
-								will-change: transform;
+								position: absolute !important;
+								width: 120px !important;
+								height: 120px !important;
+								max-width: 120px !important;
+								max-height: 120px !important;
+								min-width: 120px !important;
+								min-height: 120px !important;
+								background: linear-gradient(135deg, #f8f9ff 0%, #f3f0ff 100%) !important;
+								border-radius: 20px !important;
+								padding: 0 !important;
+								margin: 0 !important;
+								box-shadow: 0 10px 30px rgba(111, 66, 193, 0.15), 0 4px 12px rgba(0, 0, 0, 0.08) !important;
+								display: flex !important;
+								flex-direction: column !important;
+								align-items: center !important;
+								justify-content: center !important;
+								gap: 8px !important;
+								font-weight: 600 !important;
+								color: #6F42C7 !important;
+								z-index: 1 !important;
+								transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
+								cursor: pointer !important;
+								will-change: transform, box-shadow !important;
+								border: 1px solid rgba(111, 66, 193, 0.2) !important;
+								overflow: hidden !important;
+								box-sizing: border-box !important;
+								font-size: inherit !important;
+								line-height: 1 !important;
 							}
 
 							.floating-card i {
-								font-size: 28px;
-								color: #8A5CF0;
+								font-size: 36px;
+								color: #6F42C7;
+								transition: all 0.3s ease;
+								flex-shrink: 0;
+								line-height: 1;
 							}
 
 							.floating-card p {
-								margin: 0;
-								font-size: 13px;
-								color: #1f2937;
+								margin: 0 !important;
+								font-size: 12px;
+								color: #6F42C7;
+								font-weight: 600;
+								transition: color 0.3s ease;
+								flex-shrink: 0;
+								width: 100%;
+								text-align: center !important;
+								white-space: nowrap;
+								overflow: hidden;
+								text-overflow: ellipsis;
 							}
 
 							.floating-card:hover {
-								transform: translateY(-6px);
-								box-shadow: 0 12px 28px rgba(139, 92, 246, 0.15);
+								transform: translateY(-12px) scale(1.08);
+								box-shadow: 0 20px 40px rgba(111, 66, 193, 0.25), 0 8px 16px rgba(0, 0, 0, 0.1);
+								border-color: rgba(111, 66, 193, 0.3);
+							}
+
+							.floating-card:hover i {
+								color: #8A5CF0;
+								transform: scale(1.15);
+							}
+
+							.floating-card:hover p {
+								color: #8A5CF0;
 							}
 
 							.card-1 {
-								top: 20%;
-								left: 5%;
+								top: 15%;
+								left: 8%;
 								animation: floatEasy 5s ease-in-out infinite;
 								animation-delay: 0s;
+								position: absolute !important;
+								width: 120px !important;
+								height: 120px !important;
+								max-width: 120px !important;
+								max-height: 120px !important;
+								min-width: 120px !important;
+								min-height: 120px !important;
+								background: linear-gradient(135deg, #f8f9ff 0%, #f3f0ff 100%) !important;
+								border-radius: 20px !important;
+								padding: 0 !important;
+								margin: 0 !important;
+								box-shadow: 0 10px 30px rgba(111, 66, 193, 0.15), 0 4px 12px rgba(0, 0, 0, 0.08) !important;
+								display: flex !important;
+								flex-direction: column !important;
+								align-items: center !important;
+								justify-content: center !important;
+								gap: 8px !important;
+								font-weight: 600 !important;
+								color: #6F42C7 !important;
+								z-index: 1 !important;
+								transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
+								cursor: pointer !important;
+								will-change: transform, box-shadow !important;
+								border: 1px solid rgba(111, 66, 193, 0.2) !important;
+								overflow: hidden !important;
+								box-sizing: border-box !important;
+								font-size: inherit !important;
+								line-height: 1 !important;
 							}
 
 							.card-2 {
-								top: 60%;
-								right: 10%;
+								top: 50%;
+								right: 12%;
 								animation: floatEasy 5s ease-in-out infinite;
 								animation-delay: 0.3s;
+								position: absolute !important;
+								width: 120px !important;
+								height: 120px !important;
+								max-width: 120px !important;
+								max-height: 120px !important;
+								min-width: 120px !important;
+								min-height: 120px !important;
+								background: linear-gradient(135deg, #f8f9ff 0%, #f3f0ff 100%) !important;
+								border-radius: 20px !important;
+								padding: 0 !important;
+								margin: 0 !important;
+								box-shadow: 0 10px 30px rgba(111, 66, 193, 0.15), 0 4px 12px rgba(0, 0, 0, 0.08) !important;
+								display: flex !important;
+								flex-direction: column !important;
+								align-items: center !important;
+								justify-content: center !important;
+								gap: 8px !important;
+								font-weight: 600 !important;
+								color: #6F42C7 !important;
+								z-index: 1 !important;
+								transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
+								cursor: pointer !important;
+								will-change: transform, box-shadow !important;
+								border: 1px solid rgba(111, 66, 193, 0.2) !important;
+								overflow: hidden !important;
+								box-sizing: border-box !important;
+								font-size: inherit !important;
+								line-height: 1 !important;
 							}
 
 							.card-3 {
-								bottom: 15%;
-								left: 20%;
+								bottom: 12%;
+								left: 18%;
 								animation: floatEasy 5s ease-in-out infinite;
 								animation-delay: 0.6s;
+								position: absolute !important;
+								width: 120px !important;
+								height: 120px !important;
+								max-width: 120px !important;
+								max-height: 120px !important;
+								min-width: 120px !important;
+								min-height: 120px !important;
+								background: linear-gradient(135deg, #f8f9ff 0%, #f3f0ff 100%) !important;
+								border-radius: 20px !important;
+								padding: 0 !important;
+								margin: 0 !important;
+								box-shadow: 0 10px 30px rgba(111, 66, 193, 0.15), 0 4px 12px rgba(0, 0, 0, 0.08) !important;
+								display: flex !important;
+								flex-direction: column !important;
+								align-items: center !important;
+								justify-content: center !important;
+								gap: 8px !important;
+								font-weight: 600 !important;
+								color: #6F42C7 !important;
+								z-index: 1 !important;
+								transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
+								cursor: pointer !important;
+								will-change: transform, box-shadow !important;
+								border: 1px solid rgba(111, 66, 193, 0.2) !important;
+								overflow: hidden !important;
+								box-sizing: border-box !important;
+								font-size: inherit !important;
+								line-height: 1 !important;
 							}
 
 							.card-4 {
-								top: 35%;
-								right: 5%;
+								top: 8%;
+								right: 10%;
 								animation: floatEasy 5s ease-in-out infinite;
 								animation-delay: 0.9s;
+								position: absolute !important;
+								width: 120px !important;
+								height: 120px !important;
+								max-width: 120px !important;
+								max-height: 120px !important;
+								min-width: 120px !important;
+								min-height: 120px !important;
+								background: linear-gradient(135deg, #f8f9ff 0%, #f3f0ff 100%) !important;
+								border-radius: 20px !important;
+								padding: 0 !important;
+								margin: 0 !important;
+								box-shadow: 0 10px 30px rgba(111, 66, 193, 0.15), 0 4px 12px rgba(0, 0, 0, 0.08) !important;
+								display: flex !important;
+								flex-direction: column !important;
+								align-items: center !important;
+								justify-content: center !important;
+								gap: 8px !important;
+								font-weight: 600 !important;
+								color: #6F42C7 !important;
+								z-index: 1 !important;
+								transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
+								cursor: pointer !important;
+								will-change: transform, box-shadow !important;
+								border: 1px solid rgba(111, 66, 193, 0.2) !important;
+								overflow: hidden !important;
+								box-sizing: border-box !important;
+								font-size: inherit !important;
+								line-height: 1 !important;
 							}
-
-							.card-5 {
-								bottom: 25%;
-								right: 15%;
-								animation: floatEasy 5s ease-in-out infinite;
-								animation-delay: 1.2s;
-							}
-
-							.card-6 {
-								top: 60%;
-								left: 10%;
-								animation: floatEasy 5s ease-in-out infinite;
-								animation-delay: 1.5s;
-							}
-
 							@keyframes floatEasy {
 								0%, 100% {
 									transform: translateY(0px);
