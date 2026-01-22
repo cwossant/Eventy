@@ -60,10 +60,14 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     );
 
     if ($query->execute()) {
-        header("Location: ../Mainboard.php?success=1");
+        header('Content-Type: application/json');
+        echo json_encode(['status' => 'success', 'message' => 'Event created successfully']);
         exit();
     } else {
-        echo "Error: " . $query->error;
+        header('Content-Type: application/json');
+        http_response_code(400);
+        echo json_encode(['status' => 'error', 'message' => 'Error: ' . $query->error]);
+        exit();
     }
 }
 ?>

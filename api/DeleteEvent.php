@@ -7,19 +7,40 @@ if (!isset($_SESSION['HostID'])) {
     exit();
 }
 
-if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
+if (!isset($_GET['id']) && !isset($_POST['id'])) {
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        http_response_code(400);
+        echo json_encode(['status' => 'error', 'message' => 'Invalid Event ID']);
+        exit();
+    }
     die("Invalid Event ID.");
 }
 
-$eventId = intval($_GET['id']);
+$eventId = intval($_GET['id'] ?? $_POST['id']);
 
-$stmt = $conn->prepare("DELETE FROM events WHERE id = ?");
-$stmt->bind_param("i", $eventId);
+$stmt = $conn->prepare("DELETE FROM events WHERE id = ? AND HostID = ?");
+$stmt->bind_param("ii", $eventId, $_SESSION['HostID']);
 
 if ($stmt->execute()) {
-    echo "<script>\nalert('Event deleted successfully.');\nwindow.location.href = '../Mainboard.php';\n</script>";
+    // For AJAX requests, return JSON
+    if (!empty($_POST['id'])) {
+        header('Content-Type: application/json');
+        echo json_encode(['status' => 'success', 'message' => 'Event deleted successfully']);
+    } else {
+        // For direct GET requests, show alert
+        echo "<script>
+            alert('Event deleted successfully.');
+            window.location.href = '../Mainboard.php';
+        </script>";
+    }
 } else {
-    echo "Error deleting event: " . $conn->error;
+    $response = ['status' => 'error', 'message' => 'Error deleting event: ' . $conn->error];
+    if (!empty($_POST['id'])) {
+        header('Content-Type: application/json');
+        echo json_encode($response);
+    } else {
+        echo $response['message'];
+    }
 }
 
 $stmt->close();

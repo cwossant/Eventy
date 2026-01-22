@@ -21,14 +21,17 @@ if (!$id) {
     exit();
 }
 
-$stmt = $conn->prepare("UPDATE events SET name=?, description=?, capacity=?, event_date=?, event_time=?, location=?, status=? WHERE id=?");
-$stmt->bind_param("ssissssi",
-    $name, $description, $capacity, $event_date, $event_time, $location, $status, $id);
+$stmt = $conn->prepare("UPDATE events SET name=?, description=?, capacity=?, event_date=?, event_time=?, location=?, status=? WHERE id=? AND HostID=?");
+$stmt->bind_param("ssissssii",
+    $name, $description, $capacity, $event_date, $event_time, $location, $status, $id, $_SESSION['HostID']);
 
 if ($stmt->execute()) {
-    echo "<script>\nalert('Event updated successfully!');\nwindow.location.href = '../Mainboard.php';\n</script>";
+    header('Content-Type: application/json');
+    echo json_encode(['status' => 'success', 'message' => 'Event updated successfully']);
 } else {
-    echo "Error updating event: " . $conn->error;
+    header('Content-Type: application/json');
+    http_response_code(400);
+    echo json_encode(['status' => 'error', 'message' => 'Error updating event: ' . $conn->error]);
 }
 
 $stmt->close();

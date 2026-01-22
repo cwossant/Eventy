@@ -407,40 +407,81 @@ $conn->close();
                             <?php
                                 $statusClass = $event['status'] == 1 ? 'upcoming' : 'finished';
                                 $statusText = $event['status'] == 1 ? 'Upcoming' : 'Finished';
+                                $attendancePercent = $event['capacity'] > 0 ? round((($event['attendees'] ?? 0) / $event['capacity']) * 100) : 0;
+                                $isSoldOut = $attendancePercent >= 100;
                             ?>
-                            <div class="event-card event-<?php echo $statusClass; ?>" data-status="<?php echo $event['status'] == 1 ? 'upcoming' : 'finished'; ?>" data-name="<?php echo strtolower(htmlspecialchars($event['name'])); ?>">
-                                <div class="event-status-badge <?php echo $statusClass; ?>"><?php echo $statusText; ?></div>
+                            <div class="event-card" data-event-id="<?php echo $event['id']; ?>" data-status="<?php echo $event['status'] == 1 ? 'upcoming' : 'finished'; ?>" data-name="<?php echo strtolower(htmlspecialchars($event['name'])); ?>">
                                 
-                                <div class="event-content">
-                                    <h3><?php echo htmlspecialchars($event['name']); ?></h3>
-                                    <p class="event-description"><?php 
-                                        $desc = htmlspecialchars($event['description']);
-                                        echo strlen($desc) > 80 ? substr($desc, 0, 80) . "..." : $desc;
-                                    ?></p>
-
-                                    <div class="event-meta">
-                                        <span><i class="fas fa-calendar"></i> <?php echo htmlspecialchars($event['event_date']); ?></span>
-                                        <span><i class="fas fa-clock"></i> <?php echo htmlspecialchars($event['event_time']); ?></span>
+                                <!-- Event Image Container with Overlay -->
+                                <div class="event-image-container" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                                    
+                                    <!-- Status Badges -->
+                                    <div class="event-badges">
+                                        <span class="badge badge-<?php echo $statusClass; ?>">
+                                            <i class="fas fa-<?php echo $statusClass === 'upcoming' ? 'hourglass-start' : 'check-circle'; ?>"></i>
+                                            <?php echo $statusText; ?>
+                                        </span>
+                                        <?php if (!$isSoldOut): ?>
+                                            <span class="badge badge-available">Available</span>
+                                        <?php else: ?>
+                                            <span class="badge badge-sold-out">Sold Out</span>
+                                        <?php endif; ?>
                                     </div>
 
-                                    <div class="event-stats">
-                                        <span><i class="fas fa-users"></i> <?php echo ($event['attendees'] ?? 0) . "/" . $event['capacity']; ?></span>
-                                        <span class="capacity-bar">
-                                            <div class="bar-fill" style="width: <?php echo $event['capacity'] > 0 ? round((($event['attendees'] ?? 0) / $event['capacity']) * 100) : 0; ?>%;"></div>
-                                        </span>
+                                    <!-- Action Buttons Overlay -->
+                                    <div class="event-overlay-actions">
+                                        <button class="btn-action edit-btn" title="Edit Event" onclick="openEditEventModal(<?php echo $event['id']; ?>)">
+                                            <i class="fas fa-edit"></i>
+                                        </button>
+                                        <button class="btn-action delete-btn" title="Delete Event" onclick="deleteEventConfirm(<?php echo $event['id']; ?>)">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
                                     </div>
                                 </div>
 
-                                <div class="event-actions">
-                                    <button class="btn-icon edit-btn" title="Edit" onclick="editEvent(<?php echo $event['id']; ?>)">
-                                        <i class="fas fa-edit"></i>
-                                    </button>
-                                    <button class="btn-icon delete-btn" title="Delete" onclick="deleteEvent(<?php echo $event['id']; ?>)">
-                                        <i class="fas fa-trash"></i>
-                                    </button>
-                                    <button class="btn-icon view-btn" title="View" onclick="viewEventDetails(<?php echo $event['id']; ?>)">
-                                        <i class="fas fa-eye"></i>
-                                    </button>
+                                <!-- Event Content -->
+                                <div class="event-content">
+                                    <h3><?php echo htmlspecialchars($event['name']); ?></h3>
+                                    
+                                    <p class="event-description">
+                                        <?php 
+                                            $desc = htmlspecialchars($event['description']);
+                                            echo strlen($desc) > 100 ? substr($desc, 0, 100) . "..." : $desc;
+                                        ?>
+                                    </p>
+
+                                    <!-- Event Meta Information -->
+                                    <div class="event-meta">
+                                        <div class="meta-item">
+                                            <i class="fas fa-calendar"></i>
+                                            <span><?php echo htmlspecialchars($event['event_date']); ?></span>
+                                        </div>
+                                        <div class="meta-item">
+                                            <i class="fas fa-clock"></i>
+                                            <span><?php echo htmlspecialchars($event['event_time']); ?></span>
+                                        </div>
+                                        <div class="meta-item">
+                                            <i class="fas fa-map-marker-alt"></i>
+                                            <span><?php echo htmlspecialchars($event['location']); ?></span>
+                                        </div>
+                                    </div>
+
+                                    <!-- Capacity Section -->
+                                    <div class="capacity-section">
+                                        <div class="capacity-info">
+                                            <span class="attendee-count"><i class="fas fa-users"></i> <?php echo ($event['attendees'] ?? 0) . "/" . $event['capacity']; ?></span>
+                                            <span class="capacity-percent"><?php echo $attendancePercent; ?>%</span>
+                                        </div>
+                                        <div class="capacity-bar">
+                                            <div class="bar-fill" style="width: <?php echo $attendancePercent; ?>%;"></div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Action Buttons -->
+                                    <div class="event-actions">
+                                        <button class="btn-primary btn-view-details" onclick="viewEventDetails(<?php echo $event['id']; ?>)">View Details</button>
+                                        <button class="btn-secondary btn-edit" onclick="openEditEventModal(<?php echo $event['id']; ?>)">Edit</button>
+                                    </div>
                                 </div>
                             </div>
                         <?php endforeach; ?>
@@ -875,8 +916,9 @@ $conn->close();
     <div class="modal" id="eventModal">
         <div class="modal-content">
             <button class="modal-close">&times;</button>
-            <h2>Create Event</h2>
+            <h2 id="eventModalTitle">Create Event</h2>
             <form id="eventForm">
+                <input type="hidden" name="id" id="eventId">
                 <div class="form-group">
                     <label>Event Name</label>
                     <input type="text" name="name" required>
@@ -903,11 +945,28 @@ $conn->close();
                     <label>Capacity</label>
                     <input type="number" name="capacity" min="1" required>
                 </div>
+                <div class="form-group">
+                    <label>Status</label>
+                    <select name="status" required>
+                        <option value="1">Upcoming</option>
+                        <option value="0">Finished</option>
+                    </select>
+                </div>
                 <div class="form-actions">
-                    <button type="submit" class="btn-primary">Create Event</button>
+                    <button type="submit" class="btn-primary" id="eventSubmitBtn">Create Event</button>
                     <button type="button" class="btn-secondary" onclick="closeModal('eventModal')">Cancel</button>
                 </div>
             </form>
+        </div>
+    </div>
+
+    <!-- Event Details Modal -->
+    <div class="modal" id="eventDetailsModal">
+        <div class="modal-content modal-lg">
+            <button class="modal-close">&times;</button>
+            <div id="eventDetailsContent">
+                <!-- Populated by JavaScript -->
+            </div>
         </div>
     </div>
 
