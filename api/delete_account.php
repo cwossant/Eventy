@@ -47,7 +47,7 @@ try {
     $deleteSettingsStmt->close();
 
     // Delete notification settings
-    $deleteNotifStmt = $conn->prepare("DELETE FROM notification_settings WHERE HostID = ?");
+    $deleteNotifStmt = $conn->prepare("DELETE FROM host_notification_settings WHERE HostID = ?");
     $deleteNotifStmt->bind_param("i", $HostID);
     if (!$deleteNotifStmt->execute()) {
         throw new Exception("Failed to delete notification settings");
