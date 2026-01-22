@@ -807,3 +807,182 @@ function saveNotificationSettings() {
 
 // Add smooth scrolling
 document.documentElement.style.scrollBehavior = 'smooth';
+
+// ============================================
+// THEME SWITCHING
+// ============================================
+
+function initializeThemeSwitching() {
+    const themeLight = document.getElementById('themeLight');
+    const themeDark = document.getElementById('themeDark');
+
+    if (themeLight) {
+        themeLight.addEventListener('change', function() {
+            if (this.checked) {
+                applyTheme('light');
+            }
+        });
+    }
+
+    if (themeDark) {
+        themeDark.addEventListener('change', function() {
+            if (this.checked) {
+                applyTheme('dark');
+            }
+        });
+    }
+
+    // Load saved theme preference on page load
+    loadThemePreference();
+}
+
+function applyTheme(theme) {
+    if (theme === 'dark') {
+        document.body.classList.add('dark-mode');
+        localStorage.setItem('theme', 'dark');
+    } else {
+        document.body.classList.remove('dark-mode');
+        localStorage.setItem('theme', 'light');
+    }
+}
+
+function loadThemePreference() {
+    const savedTheme = localStorage.getItem('theme') || 'light';
+    const themeRadio = document.getElementById(savedTheme === 'dark' ? 'themeDark' : 'themeLight');
+    
+    if (themeRadio) {
+        themeRadio.checked = true;
+    }
+
+    if (savedTheme === 'dark') {
+        document.body.classList.add('dark-mode');
+    } else {
+        document.body.classList.remove('dark-mode');
+    }
+}
+
+// Call theme initialization on page load
+document.addEventListener('DOMContentLoaded', function() {
+    initializeThemeSwitching();
+});
+
+// ============================================
+// PASSWORD VISIBILITY TOGGLE
+// ============================================
+
+function togglePasswordVisibilityField(fieldId, iconId) {
+    const passwordInput = document.getElementById(fieldId);
+    const toggleIcon = document.getElementById(iconId);
+    
+    if (!passwordInput || !toggleIcon) return;
+    
+    if (passwordInput.type === 'password') {
+        passwordInput.type = 'text';
+        toggleIcon.classList.remove('fa-eye');
+        toggleIcon.classList.add('fa-eye-slash');
+    } else {
+        passwordInput.type = 'password';
+        toggleIcon.classList.remove('fa-eye-slash');
+        toggleIcon.classList.add('fa-eye');
+    }
+}
+
+// ============================================
+// 2FA (TWO-FACTOR AUTHENTICATION)
+// ============================================
+
+function initializeEnable2FA() {
+    const enable2FABtn = document.getElementById('enable2FABtn');
+    
+    if (enable2FABtn) {
+        enable2FABtn.addEventListener('click', function() {
+            enable2FA();
+        });
+    }
+}
+
+function enable2FA() {
+    fetch('api/enable_2fa.php', {
+        method: 'POST'
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.status === 'success') {
+            showToast(data.message, 'success');
+            // Update button appearance
+            const enable2FABtn = document.getElementById('enable2FABtn');
+            if (enable2FABtn) {
+                enable2FABtn.innerHTML = '<i class="fas fa-check-circle"></i> 2FA Enabled';
+                enable2FABtn.classList.add('btn-2fa-enabled');
+                enable2FABtn.disabled = true;
+            }
+        } else {
+            showToast(data.message || 'Failed to enable 2FA', 'error');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        showToast('Error enabling 2FA', 'error');
+    });
+}
+
+// Call on DOMContentLoaded
+document.addEventListener('DOMContentLoaded', function() {
+    initializeEnable2FA();
+});
+
+// ============================================
+// DELETE ACCOUNT
+// ============================================
+
+function initializeDeleteAccount() {
+    const deleteAccountBtn = document.getElementById('deleteAccountBtn');
+    const deleteConfirmInput = document.getElementById('deleteConfirmInput');
+    const confirmDeleteBtn = document.getElementById('confirmDeleteBtn');
+    
+    if (deleteAccountBtn) {
+        deleteAccountBtn.addEventListener('click', function() {
+            openModal('deleteAccountModal');
+        });
+    }
+
+    if (deleteConfirmInput) {
+        deleteConfirmInput.addEventListener('input', function() {
+            if (confirmDeleteBtn) {
+                confirmDeleteBtn.disabled = this.value.toLowerCase() !== 'delete';
+            }
+        });
+    }
+
+    if (confirmDeleteBtn) {
+        confirmDeleteBtn.addEventListener('click', function() {
+            deleteAccount();
+        });
+    }
+}
+
+function deleteAccount() {
+    fetch('api/delete_account.php', {
+        method: 'POST'
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.status === 'success') {
+            showToast('Account deleted successfully. Redirecting...', 'success');
+            setTimeout(() => {
+                window.location.href = 'logout.php';
+            }, 2000);
+        } else {
+            showToast(data.message || 'Failed to delete account', 'error');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        showToast('Error deleting account', 'error');
+    });
+}
+
+// Call on DOMContentLoaded
+document.addEventListener('DOMContentLoaded', function() {
+    initializeDeleteAccount();
+});

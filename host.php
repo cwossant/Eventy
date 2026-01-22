@@ -76,6 +76,15 @@ while ($row = $categoriesResult->fetch_assoc()) {
 }
 $categoryQuery->close();
 
+// Fetch 2FA status
+$twoFAQuery = $conn->prepare("SELECT `2FA` FROM users WHERE HostID = ?");
+$twoFAQuery->bind_param("i", $HostID);
+$twoFAQuery->execute();
+$twoFAResult = $twoFAQuery->get_result();
+$twoFARow = $twoFAResult->fetch_assoc();
+$twoFAEnabled = $twoFARow ? $twoFARow['2FA'] : 0;
+$twoFAQuery->close();
+
 // Close connection (will reopen for specific queries if needed)
 $conn->close();
 ?>
@@ -658,7 +667,7 @@ $conn->close();
                 </div>
             </section>
 
-            <!-- SETTINGS TAB -->
+<!-- SETTINGS TAB -->
             <section id="settings-tab" class="tab-content">
                 <div class="page-header">
                     <h1>Account Settings</h1>
@@ -673,19 +682,44 @@ $conn->close();
                         </div>
 
                         <div class="settings-group">
-                            <h3>Change Password</h3>
+                            <h3>Delete Account</h3>
+                            <p class="description" style="color: #ef4444; margin-bottom: 15px;">Permanently delete your account and all associated data</p>
+                            <button type="button" class="btn-danger" id="deleteAccountBtn">
+                                <i class="fas fa-trash-alt"></i> Delete Account
+                            </button>
+                        </div>
+
+                        <hr style="margin: 20px 0; border: none; border-top: 1px solid #e5e7eb;">
+
+                        <div class="settings-group">
+                            <h3></h3>Change Password</h3>
                             <form id="changePasswordForm">
-                                <div class="form-group">
+                                <div class="form-group password-input-group">
                                     <label>Current Password</label>
-                                    <input type="password" name="current_password" required>
+                                    <div class="password-field-wrapper">
+                                        <input type="password" name="current_password" id="current_password" required>
+                                        <button type="button" class="password-toggle" onclick="togglePasswordVisibilityField('current_password','currentToggleIcon')" tabindex="-1">
+                                            <i class="fas fa-eye" id="currentToggleIcon"></i>
+                                        </button>
+                                    </div>
                                 </div>
-                                <div class="form-group">
+                                <div class="form-group password-input-group">
                                     <label>New Password</label>
-                                    <input type="password" name="new_password" required>
+                                    <div class="password-field-wrapper">
+                                        <input type="password" name="new_password" id="new_password" required>
+                                        <button type="button" class="password-toggle" onclick="togglePasswordVisibilityField('new_password','newToggleIcon')" tabindex="-1">
+                                            <i class="fas fa-eye" id="newToggleIcon"></i>
+                                        </button>
+                                    </div>
                                 </div>
-                                <div class="form-group">
+                                <div class="form-group password-input-group">
                                     <label>Confirm Password</label>
-                                    <input type="password" name="confirm_password" required>
+                                    <div class="password-field-wrapper">
+                                        <input type="password" name="confirm_password" id="confirm_password" required>
+                                        <button type="button" class="password-toggle" onclick="togglePasswordVisibilityField('confirm_password','confirmToggleIcon')" tabindex="-1">
+                                            <i class="fas fa-eye" id="confirmToggleIcon"></i>
+                                        </button>
+                                    </div>
                                 </div>
                                 <button type="button" class="btn-primary" id="savePasswordBtn">Update Password</button>
                                 <p id="passwordMessage" class="form-message"></p>
@@ -695,7 +729,13 @@ $conn->close();
                         <div class="settings-group">
                             <h3>Two-Factor Authentication</h3>
                             <p class="description">Add an extra layer of security to your account</p>
-                            <button class="btn-secondary">Enable 2FA</button>
+                            <?php if ($twoFAEnabled == 1): ?>
+                                <button class="btn-secondary btn-2fa-enabled" disabled>
+                                    <i class="fas fa-check-circle"></i> 2FA Enabled
+                                </button>
+                            <?php else: ?>
+                                <button class="btn-secondary" id="enable2FABtn">Enable 2FA</button>
+                            <?php endif; ?>
                         </div>
                     </div>
 
@@ -709,30 +749,28 @@ $conn->close();
                             <h3>Theme</h3>
                             <div class="theme-options">
                                 <label class="theme-option">
-                                    <input type="radio" name="theme" value="light" checked>
+                                    <input type="radio" name="theme" value="light" checked id="themeLight">
                                     <span class="theme-preview light"></span>
                                     <span>Light</span>
                                 </label>
                                 <label class="theme-option">
-                                    <input type="radio" name="theme" value="dark">
+                                    <input type="radio" name="theme" value="dark" id="themeDark">
                                     <span class="theme-preview dark"></span>
                                     <span>Dark</span>
-                                </label>
-                                <label class="theme-option">
-                                    <input type="radio" name="theme" value="auto">
-                                    <span class="theme-preview auto"></span>
-                                    <span>Auto</span>
                                 </label>
                             </div>
                         </div>
 
-                        <div class="settings-group">
+                        <div class="settings-group language-section">
                             <h3>Language</h3>
-                            <select id="languageSelect" class="form-select">
-                                <option value="english">English</option>
-                                <option value="tagalog">Tagalog (Filipino)</option>
-                                <option value="spanish">Spanish</option>
-                            </select>
+                            <div class="language-select-wrapper">
+                                <i class="fas fa-globe"></i>
+                                <select id="languageSelect" class="form-select language-select">
+                                    <option value="english">English</option>
+                                    <option value="tagalog">Tagalog (Filipino)</option>
+                                    <option value="spanish">Spanish</option>
+                                </select>
+                            </div>
                             <button type="button" class="btn-primary" id="saveLanguageBtn" style="margin-top: 10px;">Save Language</button>
                             <p id="languageMessage" class="form-message"></p>
                         </div>
@@ -781,17 +819,6 @@ $conn->close();
 
                             <div class="notification-item">
                                 <div class="notification-content">
-                                    <h3>Cancellations</h3>
-                                    <p>Alert when events are cancelled</p>
-                                </div>
-                                <div class="toggle-switch">
-                                    <input type="checkbox" name="email_cancellations" class="toggle-input notification-toggle" checked>
-                                    <label class="toggle-label"></label>
-                                </div>
-                            </div>
-
-                            <div class="notification-item">
-                                <div class="notification-content">
                                     <h3>Attendee Messages</h3>
                                     <p>Notify about messages from attendees</p>
                                 </div>
@@ -801,50 +828,8 @@ $conn->close();
                                 </div>
                             </div>
 
-                            <div class="notification-item">
-                                <div class="notification-content">
-                                    <h3>Weekly Digest</h3>
-                                    <p>Receive a weekly summary of your events</p>
-                                </div>
-                                <div class="toggle-switch">
-                                    <input type="checkbox" name="email_weekly_digest" class="toggle-input notification-toggle">
-                                    <label class="toggle-label"></label>
-                                </div>
-                            </div>
-
                             <button type="button" class="btn-primary" id="saveNotificationSettingsBtn" style="margin-top: 20px;">Save Notification Settings</button>
                             <p id="notificationMessage" class="form-message"></p>
-                        </div>
-                    </div>
-
-                    <!-- Privacy Settings -->
-                    <div class="settings-card">
-                        <div class="card-header">
-                            <h2><i class="fas fa-shield-alt"></i> Privacy</h2>
-                        </div>
-
-                        <div class="settings-group">
-                            <div class="privacy-item">
-                                <div class="privacy-content">
-                                    <h3>Show Profile to Others</h3>
-                                    <p>Allow people to view your public profile</p>
-                                </div>
-                                <div class="toggle-switch">
-                                    <input type="checkbox" id="publicProfile" class="toggle-input" checked>
-                                    <label for="publicProfile" class="toggle-label"></label>
-                                </div>
-                            </div>
-
-                            <div class="privacy-item">
-                                <div class="privacy-content">
-                                    <h3>Allow Messages</h3>
-                                    <p>Let people contact you through the platform</p>
-                                </div>
-                                <div class="toggle-switch">
-                                    <input type="checkbox" id="allowMessages" class="toggle-input" checked>
-                                    <label for="allowMessages" class="toggle-label"></label>
-                                </div>
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -1109,6 +1094,30 @@ $conn->close();
 
     <!-- Toast Notification -->
     <div id="toast" class="toast"></div>
+
+    <!-- Delete Account Modal -->
+    <div class="modal" id="deleteAccountModal">
+        <div class="modal-content">
+            <button class="modal-close">&times;</button>
+            <h2 style="color: #dc2626; margin-bottom: 10px;">
+                <i class="fas fa-exclamation-triangle"></i> Delete Account
+            </h2>
+            <p style="color: #666; margin-bottom: 20px;">This action cannot be undone. All your events, data, and profile information will be permanently deleted.</p>
+            
+            <div style="background: #fef2f2; border-left: 4px solid #dc2626; padding: 15px; border-radius: 4px; margin-bottom: 20px;">
+                <p style="margin: 0; color: #991b1b;"><strong>Warning:</strong> You will not be able to recover your account after deletion.</p>
+            </div>
+
+            <p style="margin-bottom: 15px; font-weight: 600;">Type <code style="background: #f3f4f6; padding: 2px 6px; border-radius: 3px;">delete</code> to confirm:</p>
+            
+            <input type="text" id="deleteConfirmInput" placeholder='Type "delete" to confirm' style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; margin-bottom: 20px; font-size: 14px;">
+            
+            <div class="form-actions" style="display: flex; gap: 10px; justify-content: flex-end;">
+                <button type="button" class="btn-secondary" onclick="closeModal('deleteAccountModal')">Cancel</button>
+                <button type="button" class="btn-danger" id="confirmDeleteBtn" disabled>Delete Account Permanently</button>
+            </div>
+        </div>
+    </div>
 
     <script src="assets/js/host-dashboard.js"></script>
 </body>

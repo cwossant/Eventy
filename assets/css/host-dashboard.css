@@ -2072,3 +2072,922 @@ body {
         font-size: 1.75rem;
     }
 }
+
+/* ============================================
+   DARK MODE THEME - PURPLE THEMED
+   ============================================ */
+
+body.dark-mode {
+    background: #0f0a1a;
+    color: #d8c9e6;
+}
+
+body.dark-mode .dashboard-container {
+    background: #0f0a1a;
+}
+
+body.dark-mode .sidebar {
+    background: #1a1026;
+    border-right: 1px solid #3d2d5f;
+}
+
+body.dark-mode .sidebar-header .logo {
+    color: #c4b5fd;
+}
+
+body.dark-mode .profile-section h2 {
+    color: #f5f3ff;
+}
+
+body.dark-mode .profile-section p {
+    color: #a89fc9;
+}
+
+body.dark-mode .nav-item {
+    color: #d8c9e6;
+    transition: all 0.3s ease;
+}
+
+body.dark-mode .nav-item:hover {
+    background: #2d1f47;
+    color: #c4b5fd;
+}
+
+body.dark-mode .nav-item.active {
+    background: #3d2d5f;
+    color: #c4b5fd;
+    border-left: 3px solid #c4b5fd;
+}
+
+body.dark-mode .logout-btn {
+    color: #d8c9e6;
+    border-color: #3d2d5f;
+}
+
+body.dark-mode .logout-btn:hover {
+    background: #2d1f47;
+    color: #f472b6;
+}
+
+body.dark-mode .main-content {
+    background: #0f0a1a;
+}
+
+body.dark-mode .page-header {
+    color: #f5f3ff;
+}
+
+body.dark-mode .page-header p {
+    color: #a89fc9;
+}
+
+body.dark-mode .settings-card,
+body.dark-mode .dashboard-card,
+body.dark-mode .analytics-card,
+body.dark-mode .profile-card,
+body.dark-mode .event-card {
+    background: #1a1026;
+    border: 1px solid #3d2d5f;
+    color: #d8c9e6;
+}
+
+body.dark-mode .settings-card:hover,
+body.dark-mode .dashboard-card:hover,
+body.dark-mode .analytics-card:hover,
+body.dark-mode .profile-card:hover,
+body.dark-mode .event-card:hover {
+    border-color: #c4b5fd;
+}
+
+body.dark-mode .card-header {
+    border-bottom: 1px solid #3d2d5f;
+}
+
+body.dark-mode .card-header h2 {
+    color: #f5f3ff;
+}
+
+body.dark-mode .card-header i {
+    color: #c4b5fd;
+}
+
+body.dark-mode .form-group label {
+    color: #f5f3ff;
+    font-weight: 500;
+}
+
+body.dark-mode h2,
+body.dark-mode h3 {
+    color: #f5f3ff;
+}
+
+body.dark-mode .description {
+    color: #a89fc9;
+}
+
+body.dark-mode input[type="text"],
+body.dark-mode input[type="email"],
+body.dark-mode input[type="password"],
+body.dark-mode input[type="date"],
+body.dark-mode input[type="time"],
+body.dark-mode input[type="number"],
+body.dark-mode textarea,
+body.dark-mode select {
+    background: #0f0a1a;
+    color: #d8c9e6;
+    border: 1px solid #3d2d5f;
+    transition: all 0.2s ease;
+}
+
+body.dark-mode input[type="text"]::placeholder,
+body.dark-mode input[type="email"]::placeholder,
+body.dark-mode input[type="password"]::placeholder,
+body.dark-mode textarea::placeholder {
+    color: #6b5b84;
+}
+
+body.dark-mode input[type="text"]:focus,
+body.dark-mode input[type="email"]:focus,
+body.dark-mode input[type="password"]:focus,
+body.dark-mode input[type="date"]:focus,
+body.dark-mode input[type="time"]:focus,
+body.dark-mode input[type="number"]:focus,
+body.dark-mode textarea:focus,
+body.dark-mode select:focus {
+    border-color: #c4b5fd;
+    box-shadow: 0 0 0 3px rgba(196, 181, 253, 0.15);
+    outline: none;
+}
+
+body.dark-mode .notification-item,
+body.dark-mode .visibility-item {
+    border-bottom: 1px solid #30363d;
+}
+
+body.dark-mode .notification-item:last-child,
+body.dark-mode .visibility-item:last-child {
+    border-bottom: none;
+}
+
+body.dark-mode .toggle-label {
+    background: #30363d;
+}
+
+body.dark-mode .toggle-input:checked + .toggle-label {
+    background: #238636;
+}
+
+body.dark-mode .modal-content {
+    background: #161b22;
+    border: 1px solid #30363d;
+}
+
+body.dark-mode .modal-content h2 {
+    color: #f0f6fc;
+}
+
+body.dark-mode .modal-content p {
+    color: #c9d1d9;
+}
+
+body.dark-mode .btn-primary {
+    background: linear-gradient(135deg, #58a6ff 0%, #1f6feb 100%);
+    color: #ffffff;
+}
+
+body.dark-mode .btn-primary:hover {
+    background: linear-gradient(135deg, #79c0ff 0%, #388bfd 100%);
+}
+
+body.dark-mode .btn-secondary {
+    background: #21262d;
+    color: #c9d1d9;
+    border: 1px solid #30363d;
+}
+
+body.dark-mode .btn-secondary:hover {
+    background: #30363d;
+    border-color: #58a6ff;
+    color: #58a6ff;
+}
+
+body.dark-mode .btn-danger {
+    background: linear-gradient(135deg, #ff7b72 0%, #da3633 100%);
+    color: #ffffff;
+}
+
+body.dark-mode .btn-danger:hover {
+    background: linear-gradient(135deg, #ffa198 0%, #fb8500 100%);
+}
+
+body.dark-mode .btn-2fa-enabled {
+    background: linear-gradient(135deg, #3fb950 0%, #238636 100%) !important;
+    color: #ffffff !important;
+}
+
+body.dark-mode .btn-2fa-enabled:hover {
+    background: linear-gradient(135deg, #56d364 0%, #2ea043 100%) !important;
+}
+
+body.dark-mode .stat-card {
+    background: #161b22;
+    border: 1px solid #30363d;
+}
+
+body.dark-mode .stat-card .stat-icon {
+    background: rgba(88, 166, 255, 0.1);
+    color: #58a6ff;
+}
+
+body.dark-mode .stat-card h3 {
+    color: #f0f6fc;
+}
+
+body.dark-mode .stat-card p {
+    color: #8b949e;
+}
+
+body.dark-mode .event-meta,
+body.dark-mode .capacity-section {
+    color: #8b949e;
+}
+
+body.dark-mode .badge {
+    background: #1f6feb;
+    color: #f0f6fc;
+}
+
+body.dark-mode .badge-success {
+    background: #238636;
+}
+
+body.dark-mode .badge-danger {
+    background: #da3633;
+}
+
+body.dark-mode .badge-warning {
+    background: #d29922;
+}
+
+body.dark-mode .preview-card {
+    background: #0d1117;
+    border: 1px solid #30363d;
+}
+
+body.dark-mode .preview-card h4 {
+    color: #f0f6fc;
+}
+
+body.dark-mode .preview-card p {
+    color: #8b949e;
+}
+
+/* ============================================
+   PASSWORD FIELD WITH EYE ICON - DARK MODE
+   ============================================ */
+
+/* Recent Events */
+body.dark-mode .recent-event-item {
+    background: #1a1026;
+    border: 1px solid #3d2d5f;
+    border-radius: 8px;
+    padding: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 0.75rem;
+}
+
+body.dark-mode .recent-event-item:hover {
+    background: #2d1f47;
+    border-color: #c4b5fd;
+}
+
+body.dark-mode .event-details h4 {
+    color: #f5f3ff;
+}
+
+body.dark-mode .event-details p {
+    color: #a89fc9;
+}
+
+body.dark-mode .attendee-count {
+    color: #c4b5fd;
+}
+
+/* Metrics */
+body.dark-mode .metrics-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+}
+
+body.dark-mode .metric-row {
+    background: #1a1026;
+    border: 1px solid #3d2d5f;
+    border-left: 4px solid #c4b5fd;
+    padding: 1rem;
+    border-radius: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+body.dark-mode .metric-row span:first-child {
+    color: #a89fc9;
+}
+
+body.dark-mode .metric-value {
+    color: #c4b5fd;
+    font-weight: 600;
+}
+
+/* Notification Items */
+body.dark-mode .notification-item,
+body.dark-mode .visibility-item {
+    background: #1a1026;
+    border: 1px solid #3d2d5f;
+    border-left: 4px solid #c4b5fd;
+    padding: 1.25rem;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+body.dark-mode .notification-item:hover,
+body.dark-mode .visibility-item:hover {
+    background: #2d1f47;
+    border-color: #c4b5fd;
+}
+
+body.dark-mode .notification-content h3,
+body.dark-mode .visibility-content h3 {
+    color: #f5f3ff;
+}
+
+body.dark-mode .notification-content p,
+body.dark-mode .visibility-content p {
+    color: #a89fc9;
+}
+
+body.dark-mode .notification-item:last-child,
+body.dark-mode .visibility-item:last-child {
+    border-bottom: 1px solid #3d2d5f;
+    margin-bottom: 0;
+}
+
+body.dark-mode .toggle-label {
+    background: #3d2d5f;
+}
+
+body.dark-mode .toggle-input:checked + .toggle-label {
+    background: #a78bfa;
+}
+
+/* Modal */
+body.dark-mode .modal-content {
+    background: #1a1026;
+    border: 1px solid #3d2d5f;
+}
+
+body.dark-mode .modal-content h2 {
+    color: #f5f3ff;
+}
+
+body.dark-mode .modal-content p {
+    color: #d8c9e6;
+}
+
+/* Buttons */
+body.dark-mode .btn-primary {
+    background: linear-gradient(135deg, #c4b5fd 0%, #a78bfa 100%);
+    color: #1a1026;
+    font-weight: 600;
+}
+
+body.dark-mode .btn-primary:hover {
+    background: linear-gradient(135deg, #ddd6fe 0%, #c4b5fd 100%);
+}
+
+body.dark-mode .btn-secondary {
+    background: #2d1f47;
+    color: #d8c9e6;
+    border: 1px solid #3d2d5f;
+}
+
+body.dark-mode .btn-secondary:hover {
+    background: #3d2d5f;
+    border-color: #c4b5fd;
+    color: #c4b5fd;
+}
+
+body.dark-mode .btn-danger {
+    background: linear-gradient(135deg, #f472b6 0%, #ec4899 100%);
+    color: #ffffff;
+}
+
+body.dark-mode .btn-danger:hover {
+    background: linear-gradient(135deg, #f9a8d4 0%, #f472b6 100%);
+}
+
+body.dark-mode .btn-2fa-enabled {
+    background: linear-gradient(135deg, #86efac 0%, #4ade80 100%) !important;
+    color: #1a1026 !important;
+    font-weight: 600;
+}
+
+body.dark-mode .btn-2fa-enabled:hover {
+    background: linear-gradient(135deg, #bbf7d0 0%, #86efac 100%) !important;
+}
+
+/* Stats */
+body.dark-mode .stat-card {
+    background: #1a1026;
+    border: 1px solid #3d2d5f;
+}
+
+body.dark-mode .stat-card .stat-icon {
+    background: rgba(196, 181, 253, 0.1);
+    color: #c4b5fd;
+}
+
+body.dark-mode .stat-card h3 {
+    color: #f5f3ff;
+}
+
+body.dark-mode .stat-card p {
+    color: #a89fc9;
+}
+
+body.dark-mode .stat-trend {
+    color: #c4b5fd;
+}
+
+/* Event meta */
+body.dark-mode .event-meta,
+body.dark-mode .capacity-section {
+    color: #a89fc9;
+}
+
+body.dark-mode .event-meta i {
+    color: #c4b5fd;
+}
+
+/* Badges */
+body.dark-mode .badge {
+    background: #5b21b6;
+    color: #f5f3ff;
+}
+
+body.dark-mode .badge-success {
+    background: #059669;
+}
+
+body.dark-mode .badge-danger {
+    background: #dc2626;
+}
+
+body.dark-mode .badge-warning {
+    background: #d97706;
+}
+
+body.dark-mode .badge-upcoming {
+    background: #7c3aed;
+    color: #f5f3ff;
+}
+
+body.dark-mode .badge-finished {
+    background: #059669;
+    color: #f5f3ff;
+}
+
+body.dark-mode .badge-available {
+    background: #a78bfa;
+    color: #1a1026;
+}
+
+body.dark-mode .badge-sold-out {
+    background: #f472b6;
+    color: #1a1026;
+}
+
+/* Preview Card */
+body.dark-mode .preview-card {
+    background: #0f0a1a;
+    border: 1px solid #3d2d5f;
+}
+
+body.dark-mode .preview-card h4 {
+    color: #f5f3ff;
+}
+
+body.dark-mode .preview-card p {
+    color: #a89fc9;
+}
+
+/* Export Section */
+body.dark-mode .export-card {
+    background: #1a1026;
+    border: 1px solid #3d2d5f;
+    color: #d8c9e6;
+}
+
+body.dark-mode .export-card:hover {
+    background: #2d1f47;
+    border-color: #c4b5fd;
+}
+
+body.dark-mode .export-icon {
+    color: #c4b5fd;
+}
+
+body.dark-mode .export-btn {
+    background: linear-gradient(135deg, #c4b5fd 0%, #a78bfa 100%);
+    color: #1a1026;
+    border: none;
+}
+
+body.dark-mode .export-btn:hover {
+    background: linear-gradient(135deg, #ddd6fe 0%, #c4b5fd 100%);
+}
+
+body.dark-mode .recent-exports {
+    background: #1a1026;
+    border: 1px solid #3d2d5f;
+    border-radius: 8px;
+    padding: 2rem;
+}
+
+body.dark-mode .export-item {
+    border-bottom: 1px solid #3d2d5f;
+    padding: 1rem 0;
+}
+
+body.dark-mode .export-name {
+    color: #f5f3ff;
+}
+
+body.dark-mode .export-date {
+    color: #a89fc9;
+}
+
+body.dark-mode .download-link {
+    color: #c4b5fd;
+}
+
+/* Analytics */
+body.dark-mode .capacity-bar,
+body.dark-mode .peak-bar,
+body.dark-mode .geo-bar {
+    background: #3d2d5f;
+}
+
+body.dark-mode .capacity-bar .bar-fill,
+body.dark-mode .peak-bar .bar-fill,
+body.dark-mode .geo-bar .bar-fill {
+    background: linear-gradient(90deg, #c4b5fd 0%, #a78bfa 100%);
+}
+
+body.dark-mode .attendance-chart {
+    background: #1a1026;
+    border-radius: 8px;
+    padding: 1rem;
+}
+
+body.dark-mode .chart-stats {
+    color: #a89fc9;
+}
+
+body.dark-mode .trend-bars .trend-bar {
+    background: #3d2d5f;
+}
+
+body.dark-mode .trend-bar span {
+    color: #c4b5fd;
+}
+
+body.dark-mode .analytics-card .trend-labels {
+    color: #a89fc9;
+}
+
+body.dark-mode .peak-item {
+    border-bottom: 1px solid #3d2d5f;
+    padding: 1rem 0;
+}
+
+body.dark-mode .peak-item span {
+    color: #d8c9e6;
+}
+
+body.dark-mode .peak-value {
+    color: #c4b5fd;
+    font-weight: 600;
+}
+
+body.dark-mode .geo-item {
+    border-bottom: 1px solid #3d2d5f;
+    padding: 1rem 0;
+}
+
+body.dark-mode .geo-value {
+    color: #c4b5fd;
+    font-weight: 600;
+}
+
+body.dark-mode .value-metrics {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+body.dark-mode .value-item {
+    background: #0f0a1a;
+    padding: 1rem;
+    border-radius: 8px;
+    border: 1px solid #3d2d5f;
+    display: flex;
+    justify-content: space-between;
+}
+
+body.dark-mode .value-item span:first-child {
+    color: #a89fc9;
+}
+
+body.dark-mode .value-number {
+    color: #c4b5fd;
+    font-weight: 600;
+}
+
+/* Visibility Section */
+body.dark-mode .visibility-section {
+    padding: 1rem 0;
+}
+
+body.dark-mode .visibility-preview {
+    background: #0f0a1a;
+    border: 1px solid #3d2d5f;
+    border-radius: 8px;
+    padding: 2rem;
+    text-align: center;
+    margin-top: 2rem;
+}
+
+body.dark-mode .visibility-preview h3 {
+    color: #f5f3ff;
+    margin-bottom: 1rem;
+}
+
+/* Other Elements */
+body.dark-mode hr {
+    border-color: #3d2d5f;
+}
+
+body.dark-mode code {
+    background: #0f0a1a;
+    color: #f472b6;
+    border: 1px solid #3d2d5f;
+}
+
+.password-input-group {
+    position: relative;
+}
+
+.password-field-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+
+.password-field-wrapper input {
+    flex: 1;
+    padding-right: 40px;
+}
+
+.password-toggle {
+    position: absolute;
+    right: 12px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #6b7280;
+    font-size: 16px;
+    padding: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: color 0.2s ease;
+    z-index: 10;
+}
+
+.password-toggle:hover {
+    color: #7c3aed;
+}
+
+.password-toggle:focus {
+    outline: none;
+}
+
+.password-toggle i {
+    font-size: 16px;
+}
+
+/* ============================================
+   LANGUAGE SECTION
+   ============================================ */
+
+.language-section {
+    padding: 20px;
+}
+
+.language-select-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.language-select-wrapper i {
+    position: absolute;
+    left: 12px;
+    color: #7c3aed;
+    font-size: 16px;
+    pointer-events: none;
+}
+
+.language-select {
+    padding-left: 40px !important;
+    appearance: none;
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    background-size: 20px;
+    padding-right: 40px;
+}
+
+/* ============================================
+   2FA BUTTON STATES
+   ============================================ */
+
+.btn-2fa-enabled {
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%) !important;
+    color: white !important;
+    cursor: not-allowed !important;
+    opacity: 0.9;
+}
+
+.btn-2fa-enabled:hover {
+    background: linear-gradient(135deg, #059669 0%, #047857 100%) !important;
+}
+
+.btn-2fa-enabled i {
+    margin-right: 6px;
+}
+
+/* ============================================
+   DELETE ACCOUNT BUTTON
+   ============================================ */
+
+.btn-danger {
+    background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+    color: white;
+    padding: 12px 24px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 14px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: var(--transition);
+}
+
+.btn-danger:hover {
+    background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 10px 15px rgba(239, 68, 68, 0.3);
+}
+
+.btn-danger:active {
+    transform: translateY(0);
+}
+
+.btn-danger:disabled {
+    background: #d1d5db;
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+/* ============================================
+   DELETE MODAL STYLES
+   ============================================ */
+
+#deleteAccountModal .modal-content {
+    max-width: 500px;
+}
+
+#deleteAccountModal code {
+    background: #f3f4f6;
+    padding: 2px 6px;
+    border-radius: 3px;
+    font-family: 'Courier New', monospace;
+    color: #ef4444;
+    font-weight: 600;
+}
+
+#deleteConfirmInput {
+    width: 100%;
+    padding: 10px 12px;
+    border: 2px solid #e5e7eb;
+    border-radius: 6px;
+    font-size: 14px;
+    font-family: 'Courier New', monospace;
+    transition: border-color 0.2s ease;
+}
+
+#deleteConfirmInput:focus {
+    outline: none;
+    border-color: #7c3aed;
+    box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.1);
+}
+
+#deleteConfirmInput::placeholder {
+    color: #9ca3af;
+}
+
+#confirmDeleteBtn {
+    min-width: 200px;
+}
+
+/* ============================================
+   DARK MODE SPECIFIC STYLES - COMPLETE
+   ============================================ */
+
+body.dark-mode #deleteConfirmInput {
+    background: #0f0a1a;
+    border-color: #3d2d5f;
+    color: #d8c9e6;
+}
+
+body.dark-mode #deleteConfirmInput:focus {
+    border-color: #c4b5fd;
+    box-shadow: 0 0 0 3px rgba(196, 181, 253, 0.15);
+}
+
+body.dark-mode #deleteConfirmInput::placeholder {
+    color: #6b5b84;
+}
+
+body.dark-mode .language-select-wrapper i {
+    color: #c4b5fd;
+}
+
+body.dark-mode .language-select {
+    background-color: #0f0a1a;
+    color: #d8c9e6;
+    border-color: #3d2d5f;
+}
+
+body.dark-mode .language-select:focus {
+    border-color: #c4b5fd;
+}
+
+body.dark-mode .password-toggle {
+    color: #6b5b84;
+}
+
+body.dark-mode .password-toggle:hover {
+    color: #c4b5fd;
+}
+
+body.dark-mode .password-field-wrapper input {
+    background: #0f0a1a;
+    color: #d8c9e6;
+    border-color: #3d2d5f;
+}
+
+body.dark-mode .password-field-wrapper input:focus {
+    border-color: #c4b5fd;
+}
+
+/* Toast notifications in dark mode */
+body.dark-mode .toast {
+    background: #1a1026;
+    color: #d8c9e6;
+    border: 1px solid #3d2d5f;
+}
+
+body.dark-mode .toast.success {
+    border-left: 4px solid #86efac;
+}
+
+body.dark-mode .toast.error {
+    border-left: 4px solid #f472b6;
+}
+
+body.dark-mode .toast.info {
+    border-left: 4px solid #c4b5fd;
+}
