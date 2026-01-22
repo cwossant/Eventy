@@ -90,7 +90,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     if ($event_time) {
         $parsedTime = strtotime($event_time);
         if ($parsedTime) {
-            $event_time = date('H:i:s', $parsedTime);
+            $event_time = date('H:i', $parsedTime);
         }
     }
 

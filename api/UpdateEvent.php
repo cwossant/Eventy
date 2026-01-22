@@ -87,22 +87,68 @@ if ($event_date) {
 if ($event_time) {
     $parsedTime = strtotime($event_time);
     if ($parsedTime) {
-        $event_time = date('H:i:s', $parsedTime);
+        $event_time = date('H:i', $parsedTime);
     }
 }
 
-// Build update query
-$updateFields = ["name = ?", "description = ?", "capacity = ?", "event_date = ?", "event_time = ?", "location = ?", "status = ?", "category_id = ?", "latitude = ?", "longitude = ?"];
-$params = [$name, $description, $capacity, $event_date, $event_time, $location, $status, $category_id, $latitude, $longitude];
-$types = "sissisisiddd";
+// Ensure capacity is an integer
+$capacity = intval($capacity);
+$status = intval($status);
 
+// Build update query with dynamic fields
+$updateFields = [];
+$params = [];
+$types = "";
+
+// Always include these fields
+$updateFields[] = "name = ?";
+$params[] = $name;
+$types .= "s";
+
+$updateFields[] = "description = ?";
+$params[] = $description;
+$types .= "s";
+
+$updateFields[] = "capacity = ?";
+$params[] = $capacity;
+$types .= "i";
+
+$updateFields[] = "event_date = ?";
+$params[] = $event_date;
+$types .= "s";
+
+$updateFields[] = "event_time = ?";
+$params[] = $event_time;
+$types .= "s";
+
+$updateFields[] = "location = ?";
+$params[] = $location;
+$types .= "s";
+
+$updateFields[] = "status = ?";
+$params[] = $status;
+$types .= "i";
+
+$updateFields[] = "category_id = ?";
+$params[] = $category_id;
+$types .= "i";
+
+$updateFields[] = "latitude = ?";
+$params[] = $latitude;
+$types .= "d";
+
+$updateFields[] = "longitude = ?";
+$params[] = $longitude;
+$types .= "d";
+
+// Only add image if one was uploaded
 if ($imageName) {
     $updateFields[] = "event_image = ?";
     $params[] = $imageName;
     $types .= "s";
 }
 
-// Add WHERE clause parameters
+// Add WHERE clause parameters at the end
 $params[] = $id;
 $params[] = $_SESSION['HostID'];
 $types .= "ii";
@@ -118,7 +164,8 @@ if (!$stmt) {
     exit;
 }
 
-$stmt->bind_param($types, ...$params);
+// Use call_user_func_array for proper reference binding
+call_user_func_array([$stmt, 'bind_param'], array_merge([$types], $params));
 
 if ($stmt->execute()) {
     header('Content-Type: application/json');

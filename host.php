@@ -471,7 +471,7 @@ $conn->close();
                                         </div>
                                         <div class="meta-item">
                                             <i class="fas fa-clock"></i>
-                                            <span><?php echo htmlspecialchars($event['event_time']); ?></span>
+                                            <span><?php echo date("h:i A", strtotime($event['event_time'])); ?></span>
                                         </div>
                                         <div class="meta-item">
                                             <i class="fas fa-map-marker-alt"></i>
@@ -962,13 +962,12 @@ $conn->close();
     </div>
 
     <!-- MODALS -->
-    <!-- Create/Edit Event Modal -->
-    <div class="modal" id="eventModal">
+    <!-- Create Event Modal -->
+    <div class="modal" id="createEventModal">
         <div class="modal-content">
             <button class="modal-close">&times;</button>
-            <h2 id="eventModalTitle">Create Event</h2>
-            <form id="eventForm" enctype="multipart/form-data">
-                <input type="hidden" name="id" id="eventId">
+            <h2>Create Event</h2>
+            <form id="createEventForm" enctype="multipart/form-data">
                 <div class="form-group">
                     <label>Event Name</label>
                     <input type="text" name="name" required>
@@ -980,7 +979,7 @@ $conn->close();
                 <div class="form-row">
                     <div class="form-group">
                         <label>Category</label>
-                        <select name="category" id="eventCategory" required>
+                        <select name="category" id="createEventCategory" required>
                             <option value="">Select a category...</option>
                             <?php foreach ($categories as $category): ?>
                                 <option value="<?php echo $category['id']; ?>"><?php echo htmlspecialchars($category['name']); ?></option>
@@ -989,11 +988,11 @@ $conn->close();
                     </div>
                     <div class="form-group">
                         <label>Event Image</label>
-                        <input type="file" name="image" id="eventImage" accept="image/*">
+                        <input type="file" name="image" id="createEventImage" accept="image/*">
                     </div>
                 </div>
-                <div id="imagePreview" style="display: none; margin: 10px 0;">
-                    <img id="previewImg" src="" alt="Preview" style="max-width: 200px; border-radius: 8px;">
+                <div id="createImagePreview" style="display: none; margin: 10px 0;">
+                    <img id="createPreviewImg" src="" alt="Preview" style="max-width: 200px; border-radius: 8px;">
                 </div>
                 <div class="form-row">
                     <div class="form-group">
@@ -1007,9 +1006,9 @@ $conn->close();
                 </div>
                 <div class="form-group">
                     <label>Location Address</label>
-                    <input type="text" name="location" id="eventLocation" placeholder="Enter address" required>
-                    <input type="hidden" name="latitude" id="eventLatitude">
-                    <input type="hidden" name="longitude" id="eventLongitude">
+                    <input type="text" name="location" id="createEventLocation" placeholder="Enter address" required>
+                    <input type="hidden" name="latitude" id="createEventLatitude">
+                    <input type="hidden" name="longitude" id="createEventLongitude">
                 </div>
                 <div class="form-group">
                     <label>Capacity</label>
@@ -1023,8 +1022,76 @@ $conn->close();
                     </select>
                 </div>
                 <div class="form-actions">
-                    <button type="submit" class="btn-primary" id="eventSubmitBtn">Create Event</button>
-                    <button type="button" class="btn-secondary" onclick="closeModal('eventModal')">Cancel</button>
+                    <button type="submit" class="btn-primary">Create Event</button>
+                    <button type="button" class="btn-secondary" onclick="closeModal('createEventModal')">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Edit Event Modal -->
+    <div class="modal" id="editEventModal">
+        <div class="modal-content">
+            <button class="modal-close">&times;</button>
+            <h2>Edit Event</h2>
+            <form id="editEventForm" enctype="multipart/form-data">
+                <input type="hidden" name="id" id="editEventId">
+                <div class="form-group">
+                    <label>Event Name</label>
+                    <input type="text" name="name" required>
+                </div>
+                <div class="form-group">
+                    <label>Description</label>
+                    <textarea name="description" rows="4" required></textarea>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Category</label>
+                        <select name="category" id="editEventCategory" required>
+                            <option value="">Select a category...</option>
+                            <?php foreach ($categories as $category): ?>
+                                <option value="<?php echo $category['id']; ?>"><?php echo htmlspecialchars($category['name']); ?></option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Event Image</label>
+                        <input type="file" name="image" id="editEventImage" accept="image/*">
+                    </div>
+                </div>
+                <div id="editImagePreview" style="display: none; margin: 10px 0;">
+                    <img id="editPreviewImg" src="" alt="Preview" style="max-width: 200px; border-radius: 8px;">
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Date</label>
+                        <input type="date" name="event_date" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Time</label>
+                        <input type="time" name="event_time" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Location Address</label>
+                    <input type="text" name="location" id="editEventLocation" placeholder="Enter address" required>
+                    <input type="hidden" name="latitude" id="editEventLatitude">
+                    <input type="hidden" name="longitude" id="editEventLongitude">
+                </div>
+                <div class="form-group">
+                    <label>Capacity</label>
+                    <input type="number" name="capacity" min="1" required>
+                </div>
+                <div class="form-group">
+                    <label>Status</label>
+                    <select name="status" required>
+                        <option value="1">Upcoming</option>
+                        <option value="0">Finished</option>
+                    </select>
+                </div>
+                <div class="form-actions">
+                    <button type="submit" class="btn-primary">Update Event</button>
+                    <button type="button" class="btn-secondary" onclick="closeModal('editEventModal')">Cancel</button>
                 </div>
             </form>
         </div>

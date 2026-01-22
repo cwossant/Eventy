@@ -3,6 +3,19 @@
    ============================================ */
 
 // ============================================
+// UTILITY FUNCTIONS
+// ============================================
+
+function formatTimeToAmPm(timeString) {
+    if (!timeString) return '';
+    const [hours, minutes] = timeString.split(':');
+    const hour = parseInt(hours);
+    const ampm = hour >= 12 ? 'PM' : 'AM';
+    const formattedHour = hour % 12 || 12;
+    return `${String(formattedHour).padStart(2, '0')}:${minutes} ${ampm}`;
+}
+
+// ============================================
 // INITIALIZATION
 // ============================================
 
@@ -135,10 +148,20 @@ function initializeFormHandlers() {
         saveLanguageBtn.addEventListener('click', saveLanguage);
     }
 
-    // Event form
-    const eventForm = document.getElementById('eventForm');
-    if (eventForm) {
-        eventForm.addEventListener('submit', createEvent);
+    // Create Event form
+    const createEventForm = document.getElementById('createEventForm');
+    if (createEventForm) {
+        createEventForm.addEventListener('submit', function(e) {
+            createOrUpdateEvent(e, 'create');
+        });
+    }
+
+    // Edit Event form
+    const editEventForm = document.getElementById('editEventForm');
+    if (editEventForm) {
+        editEventForm.addEventListener('submit', function(e) {
+            createOrUpdateEvent(e, 'edit');
+        });
     }
 
     // Create event buttons
@@ -147,12 +170,10 @@ function initializeFormHandlers() {
         if (btn) {
             btn.addEventListener('click', function(e) {
                 e.preventDefault();
-                // Reset form for creating new event
-                document.getElementById('eventForm').reset();
-                document.getElementById('eventId').value = '';
-                document.getElementById('eventModalTitle').textContent = 'Create Event';
-                document.getElementById('eventSubmitBtn').textContent = 'Create Event';
-                openModal('eventModal');
+                // Reset create form
+                document.getElementById('createEventForm').reset();
+                document.getElementById('createImagePreview').style.display = 'none';
+                openModal('createEventModal');
             });
         }
     });
@@ -235,29 +256,38 @@ function saveLanguage() {
     });
 }
 
-function createEvent(e) {
+function createOrUpdateEvent(e, operation) {
     e.preventDefault();
     
-    const form = document.getElementById('eventForm');
-    const eventId = document.getElementById('eventId').value;
+    const formId = operation === 'edit' ? 'editEventForm' : 'createEventForm';
+    const modalId = operation === 'edit' ? 'editEventModal' : 'createEventModal';
+    const form = document.getElementById(formId);
     const formData = new FormData(form);
     
-    const isEditing = eventId && eventId.trim() !== '';
-    const endpoint = isEditing ? 'api/UpdateEvent.php' : 'api/create_event.php';
-    const successMessage = isEditing ? 'Event updated successfully!' : 'Event created successfully!';
+    const endpoint = operation === 'edit' ? 'api/UpdateEvent.php' : 'api/create_event.php';
+    const successMessage = operation === 'edit' ? 'Event updated successfully!' : 'Event created successfully!';
+
+    console.log('========== EVENT FORM SUBMISSION ==========');
+    console.log('Operation:', operation);
+    console.log('Submitting to:', endpoint);
+    console.log('Form data entries:');
+    for (let [key, value] of formData.entries()) {
+        console.log(`  ${key}: ${value}`);
+    }
 
     fetch(endpoint, {
         method: 'POST',
         body: formData
     })
     .then(response => {
-        // Handle both JSON and text responses
+        console.log('Response status:', response.status);
+        console.log('Response headers:', Object.fromEntries(response.headers.entries()));
         const contentType = response.headers.get('content-type');
         if (contentType && contentType.includes('application/json')) {
             return response.json();
         } else {
             return response.text().then(text => {
-                // Try to parse as JSON, if fails return as success
+                console.log('Raw response text:', text);
                 try {
                     return JSON.parse(text);
                 } catch (e) {
@@ -267,21 +297,24 @@ function createEvent(e) {
         }
     })
     .then(data => {
+        console.log('Response data:', data);
+        console.log('========== END SUBMISSION ==========');
+        
         if (data.status === 'success' || (typeof data === 'string' && data.includes('success'))) {
             showToast(successMessage, 'success');
-            closeModal('eventModal');
+            closeModal(modalId);
             form.reset();
-            document.getElementById('eventId').value = '';
             setTimeout(() => {
                 location.reload();
             }, 1500);
         } else {
-            showToast(data.message || 'Failed to save event', 'error');
+            console.error('Error response:', data);
+            showToast((data.message || 'Failed to save event') + ' - Check console (F12) for details', 'error');
         }
     })
     .catch(error => {
-        console.error('Error:', error);
-        showToast('Error saving event', 'error');
+        console.error('Fetch error:', error);
+        showToast('Error saving event - Check console (F12) for details', 'error');
     });
 }
 
@@ -415,28 +448,28 @@ function openEditEventModal(eventId) {
                 return;
             }
 
-            // Populate form with event data
-            document.getElementById('eventId').value = data.id;
-            document.getElementById('eventModalTitle').textContent = 'Edit Event';
-            document.getElementById('eventSubmitBtn').textContent = 'Update Event';
-            document.querySelector('#eventForm input[name="name"]').value = data.name;
-            document.querySelector('#eventForm textarea[name="description"]').value = data.description;
-            document.querySelector('#eventForm input[name="capacity"]').value = data.capacity;
-            document.querySelector('#eventForm input[name="event_date"]').value = data.event_date;
-            document.querySelector('#eventForm input[name="event_time"]').value = data.event_time;
-            document.querySelector('#eventForm input[name="location"]').value = data.location;
-            document.querySelector('#eventForm select[name="status"]').value = data.status;
-            document.querySelector('#eventForm select[name="category"]').value = data.category_id || '';
-            document.querySelector('#eventForm input[name="latitude"]').value = data.latitude || '';
-            document.querySelector('#eventForm input[name="longitude"]').value = data.longitude || '';
+            // Populate edit form with event data
+            document.getElementById('editEventId').value = data.id;
+            document.querySelector('#editEventForm input[name="name"]').value = data.name;
+            document.querySelector('#editEventForm textarea[name="description"]').value = data.description;
+            document.querySelector('#editEventForm input[name="capacity"]').value = data.capacity;
+            document.querySelector('#editEventForm input[name="event_date"]').value = data.event_date;
+            // Strip seconds from time format (HH:MM:SS -> HH:MM)
+            const timeValue = data.event_time ? data.event_time.substring(0, 5) : '';
+            document.querySelector('#editEventForm input[name="event_time"]').value = timeValue;
+            document.querySelector('#editEventForm input[name="location"]').value = data.location;
+            document.querySelector('#editEventForm select[name="status"]').value = data.status;
+            document.querySelector('#editEventForm select[name="category"]').value = data.category_id || '';
+            document.querySelector('#editEventForm input[name="latitude"]').value = data.latitude || '';
+            document.querySelector('#editEventForm input[name="longitude"]').value = data.longitude || '';
 
             // Hide image preview when editing
-            const imagePreview = document.getElementById('imagePreview');
+            const imagePreview = document.getElementById('editImagePreview');
             if (imagePreview) {
                 imagePreview.style.display = 'none';
             }
 
-            openModal('eventModal');
+            openModal('editEventModal');
         })
         .catch(error => {
             console.error('Error:', error);
@@ -490,6 +523,8 @@ function viewEventDetails(eventId) {
             const statusColor = data.status == 1 ? '#3b82f6' : '#10b981';
             const imageHtml = data.event_image ? `<img src="uploads/events/${data.event_image}" alt="Event Image" class="detail-event-image">` : '';
 
+            const formattedTime = formatTimeToAmPm(data.event_time);
+
             let detailsHtml = `
                 <div class="event-details-view">
                     ${imageHtml}
@@ -505,7 +540,7 @@ function viewEventDetails(eventId) {
                         </div>
                         <div class="detail-item">
                             <strong>Time</strong>
-                            <p>${data.event_time}</p>
+                            <p>${formattedTime}</p>
                         </div>
                         <div class="detail-item">
                             <strong>Location</strong>
@@ -673,21 +708,8 @@ document.addEventListener('DOMContentLoaded', loadDarkModePreference);
 // ============================================
 
 function loadEventCategories() {
-    fetch('api/get_categories.php')
-        .then(response => response.json())
-        .then(categories => {
-            const select = document.getElementById('eventCategory');
-            if (select) {
-                categories.forEach(cat => {
-                    const option = document.createElement('option');
-                    option.value = cat.id;
-                    option.textContent = cat.name;
-                    option.dataset.color = cat.color_code;
-                    select.appendChild(option);
-                });
-            }
-        })
-        .catch(error => console.error('Error loading categories:', error));
+    // Categories are already populated in the HTML via PHP, so we don't need to load them dynamically
+    // This prevents duplicate category options
 }
 
 // ============================================
@@ -695,15 +717,33 @@ function loadEventCategories() {
 // ============================================
 
 function initializeImagePreview() {
-    const imageInput = document.getElementById('eventImage');
-    if (imageInput) {
-        imageInput.addEventListener('change', function(e) {
+    // Create Event Image Preview
+    const createImageInput = document.getElementById('createEventImage');
+    if (createImageInput) {
+        createImageInput.addEventListener('change', function(e) {
             const file = e.target.files[0];
             if (file) {
                 const reader = new FileReader();
                 reader.onload = function(event) {
-                    const preview = document.getElementById('imagePreview');
-                    document.getElementById('previewImg').src = event.target.result;
+                    const preview = document.getElementById('createImagePreview');
+                    document.getElementById('createPreviewImg').src = event.target.result;
+                    preview.style.display = 'block';
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+    }
+
+    // Edit Event Image Preview
+    const editImageInput = document.getElementById('editEventImage');
+    if (editImageInput) {
+        editImageInput.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    const preview = document.getElementById('editImagePreview');
+                    document.getElementById('editPreviewImg').src = event.target.result;
                     preview.style.display = 'block';
                 };
                 reader.readAsDataURL(file);
