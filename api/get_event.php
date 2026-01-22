@@ -17,7 +17,7 @@ if (!isset($_GET['id'])) {
 
 $id = intval($_GET['id']);
 
-$stmt = $conn->prepare("SELECT * FROM events WHERE id = ? AND HostID = ?");
+$stmt = $conn->prepare("SELECT e.*, c.name as category_name FROM events e LEFT JOIN event_categories c ON e.category_id = c.id WHERE e.id = ? AND e.HostID = ?");
 $stmt->bind_param("ii", $id, $HostID);
 $stmt->execute();
 $result = $stmt->get_result();

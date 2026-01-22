@@ -12,6 +12,9 @@ document.addEventListener('DOMContentLoaded', function() {
     initializeFormHandlers();
     initializeToggleSwitches();
     initializeSearchAndFilter();
+    loadEventCategories();
+    initializeImagePreview();
+    loadNotificationSettings();
 });
 
 // ============================================
@@ -423,6 +426,15 @@ function openEditEventModal(eventId) {
             document.querySelector('#eventForm input[name="event_time"]').value = data.event_time;
             document.querySelector('#eventForm input[name="location"]').value = data.location;
             document.querySelector('#eventForm select[name="status"]').value = data.status;
+            document.querySelector('#eventForm select[name="category"]').value = data.category_id || '';
+            document.querySelector('#eventForm input[name="latitude"]').value = data.latitude || '';
+            document.querySelector('#eventForm input[name="longitude"]').value = data.longitude || '';
+
+            // Hide image preview when editing
+            const imagePreview = document.getElementById('imagePreview');
+            if (imagePreview) {
+                imagePreview.style.display = 'none';
+            }
 
             openModal('eventModal');
         })
@@ -476,9 +488,11 @@ function viewEventDetails(eventId) {
             const attendancePercent = data.capacity > 0 ? Math.round((data.attendees / data.capacity) * 100) : 0;
             const statusText = data.status == 1 ? 'Upcoming' : 'Finished';
             const statusColor = data.status == 1 ? '#3b82f6' : '#10b981';
+            const imageHtml = data.event_image ? `<img src="uploads/events/${data.event_image}" alt="Event Image" class="detail-event-image">` : '';
 
-            const detailsHtml = `
+            let detailsHtml = `
                 <div class="event-details-view">
+                    ${imageHtml}
                     <h2>${data.name}</h2>
                     <div class="details-grid">
                         <div class="detail-item">
@@ -497,6 +511,18 @@ function viewEventDetails(eventId) {
                             <strong>Location</strong>
                             <p>${data.location}</p>
                         </div>
+            `;
+
+            if (data.category_id) {
+                detailsHtml += `
+                        <div class="detail-item">
+                            <strong>Category</strong>
+                            <p>${data.category_name || 'Event'}</p>
+                        </div>
+                `;
+            }
+
+            detailsHtml += `
                     </div>
                     <div class="detail-section">
                         <strong>Description</strong>
@@ -641,6 +667,103 @@ function loadDarkModePreference() {
 
 // Initialize dark mode on page load
 document.addEventListener('DOMContentLoaded', loadDarkModePreference);
+
+// ============================================
+// EVENT CATEGORIES
+// ============================================
+
+function loadEventCategories() {
+    fetch('api/get_categories.php')
+        .then(response => response.json())
+        .then(categories => {
+            const select = document.getElementById('eventCategory');
+            if (select) {
+                categories.forEach(cat => {
+                    const option = document.createElement('option');
+                    option.value = cat.id;
+                    option.textContent = cat.name;
+                    option.dataset.color = cat.color_code;
+                    select.appendChild(option);
+                });
+            }
+        })
+        .catch(error => console.error('Error loading categories:', error));
+}
+
+// ============================================
+// IMAGE PREVIEW
+// ============================================
+
+function initializeImagePreview() {
+    const imageInput = document.getElementById('eventImage');
+    if (imageInput) {
+        imageInput.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    const preview = document.getElementById('imagePreview');
+                    document.getElementById('previewImg').src = event.target.result;
+                    preview.style.display = 'block';
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+    }
+}
+
+// ============================================
+// NOTIFICATION SETTINGS
+// ============================================
+
+function loadNotificationSettings() {
+    fetch('api/get_notification_settings.php')
+        .then(response => response.json())
+        .then(settings => {
+            if (settings && !settings.error) {
+                document.querySelector('input[name="email_new_registration"]').checked = settings.email_new_registration == 1;
+                document.querySelector('input[name="email_event_reminders"]').checked = settings.email_event_reminders == 1;
+                document.querySelector('input[name="email_event_updates"]').checked = settings.email_event_updates == 1;
+                document.querySelector('input[name="email_cancellations"]').checked = settings.email_cancellations == 1;
+                document.querySelector('input[name="email_attendee_messages"]').checked = settings.email_attendee_messages == 1;
+                document.querySelector('input[name="email_weekly_digest"]').checked = settings.email_weekly_digest == 1;
+            }
+        })
+        .catch(error => console.error('Error loading notification settings:', error));
+
+    // Save notification settings
+    const saveBtn = document.getElementById('saveNotificationSettingsBtn');
+    if (saveBtn) {
+        saveBtn.addEventListener('click', saveNotificationSettings);
+    }
+}
+
+function saveNotificationSettings() {
+    const formData = new FormData();
+    formData.append('email_new_registration', document.querySelector('input[name="email_new_registration"]').checked ? 1 : 0);
+    formData.append('email_event_reminders', document.querySelector('input[name="email_event_reminders"]').checked ? 1 : 0);
+    formData.append('email_event_updates', document.querySelector('input[name="email_event_updates"]').checked ? 1 : 0);
+    formData.append('email_cancellations', document.querySelector('input[name="email_cancellations"]').checked ? 1 : 0);
+    formData.append('email_attendee_messages', document.querySelector('input[name="email_attendee_messages"]').checked ? 1 : 0);
+    formData.append('email_weekly_digest', document.querySelector('input[name="email_weekly_digest"]').checked ? 1 : 0);
+
+    fetch('api/update_notification_settings.php', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.status === 'success') {
+            showToast('Notification settings saved successfully!', 'success');
+        } else {
+            showToast('Error saving settings: ' + (data.error || 'Unknown error'), 'error');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        showToast('Error saving settings', 'error');
+    });
+}
 
 // Add smooth scrolling
 document.documentElement.style.scrollBehavior = 'smooth';

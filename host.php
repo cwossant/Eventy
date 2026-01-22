@@ -414,6 +414,9 @@ $conn->close();
                                 
                                 <!-- Event Image Container with Overlay -->
                                 <div class="event-image-container" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                                    <?php if (!empty($event['event_image'])): ?>
+                                        <img src="uploads/events/<?php echo htmlspecialchars($event['event_image']); ?>" alt="Event" style="width: 100%; height: 100%; object-fit: cover;">
+                                    <?php endif; ?>
                                     
                                     <!-- Status Badges -->
                                     <div class="event-badges">
@@ -732,38 +735,75 @@ $conn->close();
                         </div>
 
                         <div class="settings-group">
+                            <h3>Email Notifications</h3>
                             <div class="notification-item">
                                 <div class="notification-content">
-                                    <h3>Email Notifications</h3>
-                                    <p>Receive updates about your events</p>
+                                    <h3>New Participant Registrations</h3>
+                                    <p>Notify when someone registers for your events</p>
                                 </div>
                                 <div class="toggle-switch">
-                                    <input type="checkbox" id="emailNotifications" class="toggle-input" checked>
-                                    <label for="emailNotifications" class="toggle-label"></label>
+                                    <input type="checkbox" name="email_new_registration" class="toggle-input notification-toggle" checked>
+                                    <label class="toggle-label"></label>
                                 </div>
                             </div>
 
                             <div class="notification-item">
                                 <div class="notification-content">
                                     <h3>Event Reminders</h3>
-                                    <p>Get reminders before your events start</p>
+                                    <p>Get reminders 1 day before your events</p>
                                 </div>
                                 <div class="toggle-switch">
-                                    <input type="checkbox" id="eventReminders" class="toggle-input" checked>
-                                    <label for="eventReminders" class="toggle-label"></label>
+                                    <input type="checkbox" name="email_event_reminders" class="toggle-input notification-toggle" checked>
+                                    <label class="toggle-label"></label>
                                 </div>
                             </div>
 
                             <div class="notification-item">
                                 <div class="notification-content">
-                                    <h3>New Registrations</h3>
-                                    <p>Notify me when new attendees register</p>
+                                    <h3>Event Updates</h3>
+                                    <p>Notify when event details are changed</p>
                                 </div>
                                 <div class="toggle-switch">
-                                    <input type="checkbox" id="newRegistrations" class="toggle-input" checked>
-                                    <label for="newRegistrations" class="toggle-label"></label>
+                                    <input type="checkbox" name="email_event_updates" class="toggle-input notification-toggle" checked>
+                                    <label class="toggle-label"></label>
                                 </div>
                             </div>
+
+                            <div class="notification-item">
+                                <div class="notification-content">
+                                    <h3>Cancellations</h3>
+                                    <p>Alert when events are cancelled</p>
+                                </div>
+                                <div class="toggle-switch">
+                                    <input type="checkbox" name="email_cancellations" class="toggle-input notification-toggle" checked>
+                                    <label class="toggle-label"></label>
+                                </div>
+                            </div>
+
+                            <div class="notification-item">
+                                <div class="notification-content">
+                                    <h3>Attendee Messages</h3>
+                                    <p>Notify about messages from attendees</p>
+                                </div>
+                                <div class="toggle-switch">
+                                    <input type="checkbox" name="email_attendee_messages" class="toggle-input notification-toggle" checked>
+                                    <label class="toggle-label"></label>
+                                </div>
+                            </div>
+
+                            <div class="notification-item">
+                                <div class="notification-content">
+                                    <h3>Weekly Digest</h3>
+                                    <p>Receive a weekly summary of your events</p>
+                                </div>
+                                <div class="toggle-switch">
+                                    <input type="checkbox" name="email_weekly_digest" class="toggle-input notification-toggle">
+                                    <label class="toggle-label"></label>
+                                </div>
+                            </div>
+
+                            <button type="button" class="btn-primary" id="saveNotificationSettingsBtn" style="margin-top: 20px;">Save Notification Settings</button>
+                            <p id="notificationMessage" class="form-message"></p>
                         </div>
                     </div>
 
@@ -917,7 +957,7 @@ $conn->close();
         <div class="modal-content">
             <button class="modal-close">&times;</button>
             <h2 id="eventModalTitle">Create Event</h2>
-            <form id="eventForm">
+            <form id="eventForm" enctype="multipart/form-data">
                 <input type="hidden" name="id" id="eventId">
                 <div class="form-group">
                     <label>Event Name</label>
@@ -926,6 +966,21 @@ $conn->close();
                 <div class="form-group">
                     <label>Description</label>
                     <textarea name="description" rows="4" required></textarea>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Category</label>
+                        <select name="category" id="eventCategory" required>
+                            <option value="">Select a category...</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Event Image</label>
+                        <input type="file" name="image" id="eventImage" accept="image/*">
+                    </div>
+                </div>
+                <div id="imagePreview" style="display: none; margin: 10px 0;">
+                    <img id="previewImg" src="" alt="Preview" style="max-width: 200px; border-radius: 8px;">
                 </div>
                 <div class="form-row">
                     <div class="form-group">
@@ -938,8 +993,10 @@ $conn->close();
                     </div>
                 </div>
                 <div class="form-group">
-                    <label>Location</label>
-                    <input type="text" name="location" required>
+                    <label>Location Address</label>
+                    <input type="text" name="location" id="eventLocation" placeholder="Enter address" required>
+                    <input type="hidden" name="latitude" id="eventLatitude">
+                    <input type="hidden" name="longitude" id="eventLongitude">
                 </div>
                 <div class="form-group">
                     <label>Capacity</label>
