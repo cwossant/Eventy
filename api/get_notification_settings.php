@@ -10,14 +10,25 @@ if (!$hostId) {
 }
 
 try {
-    $stmt = $pdo->prepare("SELECT * FROM host_notification_settings WHERE HostID = ?");
-    $stmt->execute([$hostId]);
-    $settings = $stmt->fetch(PDO::FETCH_ASSOC);
+    $stmt = $conn->prepare("SELECT * FROM host_notification_settings WHERE HostID = ?");
+    if (!$stmt) {
+        throw new Exception($conn->error);
+    }
+    $stmt->bind_param("i", $hostId);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $settings = $result->fetch_assoc();
     
     if (!$settings) {
         // Create default settings if they don't exist
-        $stmt = $pdo->prepare("INSERT INTO host_notification_settings (HostID) VALUES (?)");
-        $stmt->execute([$hostId]);
+        $insertStmt = $conn->prepare("INSERT INTO host_notification_settings (HostID) VALUES (?)");
+        if (!$insertStmt) {
+            throw new Exception($conn->error);
+        }
+        $insertStmt->bind_param("i", $hostId);
+        $insertStmt->execute();
+        $insertStmt->close();
+        
         $settings = [
             'HostID' => $hostId,
             'email_new_registration' => 1,
@@ -30,6 +41,7 @@ try {
     }
     
     echo json_encode($settings);
+    $stmt->close();
 } catch (Exception $e) {
     http_response_code(500);
     echo json_encode(['error' => $e->getMessage()]);

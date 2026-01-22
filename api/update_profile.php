@@ -4,29 +4,49 @@ require_once __DIR__ . '/../includes/db.php';
 header("Content-Type: application/json");
 
 if (!isset($_SESSION['HostID'])) {
-    echo json_encode(["status" => "error"]);
+    echo json_encode(["status" => "error", "message" => "User not authenticated"]);
     exit();
 }
 
 $HostID = $_SESSION['HostID'];
 
 if (isset($_POST['firstname'])) {
-    $firstname = trim($_POST['firstname']);
-    $lastname  = trim($_POST['lastname']);
-    $city      = trim($_POST['city']);
-    $bio       = trim($_POST['bio']);
+    $firstname = isset($_POST['firstname']) ? trim($_POST['firstname']) : '';
+    $lastname  = isset($_POST['lastname']) ? trim($_POST['lastname']) : '';
+    $city      = isset($_POST['city']) ? trim($_POST['city']) : '';
+    $bio       = isset($_POST['bio']) ? trim($_POST['bio']) : '';
+
+    // Validate inputs
+    if (empty($firstname) || empty($lastname)) {
+        echo json_encode(["status" => "error", "message" => "First name and last name are required"]);
+        exit();
+    }
 
     $stmt = $conn->prepare("UPDATE users SET firstname=?, lastname=?, city=?, bio=? WHERE HostID=?");
+    if (!$stmt) {
+        echo json_encode(["status" => "error", "message" => "Database error: " . $conn->error]);
+        exit();
+    }
+
     $stmt->bind_param("ssssi", $firstname, $lastname, $city, $bio, $HostID);
 
     if ($stmt->execute()) {
+        $stmt->close();
+        
         $stmt2 = $conn->prepare("SELECT firstname, lastname, email, city, bio FROM users WHERE HostID=?");
+        if (!$stmt2) {
+            echo json_encode(["status" => "error", "message" => "Database error: " . $conn->error]);
+            exit();
+        }
+
         $stmt2->bind_param("i", $HostID);
         $stmt2->execute();
         $result = $stmt2->get_result()->fetch_assoc();
+        $stmt2->close();
 
         echo json_encode([
             "status"    => "success",
+            "message"   => "Profile updated successfully",
             "firstname" => $result["firstname"],
             "lastname"  => $result["lastname"],
             "email"     => $result["email"],
@@ -34,7 +54,7 @@ if (isset($_POST['firstname'])) {
             "bio"       => $result["bio"]
         ]);
     } else {
-        echo json_encode(["status" => "error"]);
+        echo json_encode(["status" => "error", "message" => "Failed to update profile: " . $stmt->error]);
     }
 
     exit();

@@ -79,13 +79,28 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         }
     }
 
+    // Ensure date format is valid (YYYY-MM-DD)
+    if ($event_date) {
+        $parsedDate = strtotime($event_date);
+        if ($parsedDate) {
+            $event_date = date('Y-m-d', $parsedDate);
+        }
+    }
+
+    if ($event_time) {
+        $parsedTime = strtotime($event_time);
+        if ($parsedTime) {
+            $event_time = date('H:i:s', $parsedTime);
+        }
+    }
+
     $query = $conn->prepare(
         "INSERT INTO events (HostID, name, description, capacity, event_date, event_time, location, status, category_id, event_image, latitude, longitude)
          VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
     );
 
     $query->bind_param(
-        "issiisssissd",
+        "issisissisdd",
         $HostID,
         $name,
         $description,

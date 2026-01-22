@@ -76,10 +76,25 @@ if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
     }
 }
 
+// Ensure date format is valid (YYYY-MM-DD)
+if ($event_date) {
+    $parsedDate = strtotime($event_date);
+    if ($parsedDate) {
+        $event_date = date('Y-m-d', $parsedDate);
+    }
+}
+
+if ($event_time) {
+    $parsedTime = strtotime($event_time);
+    if ($parsedTime) {
+        $event_time = date('H:i:s', $parsedTime);
+    }
+}
+
 // Build update query
 $updateFields = ["name = ?", "description = ?", "capacity = ?", "event_date = ?", "event_time = ?", "location = ?", "status = ?", "category_id = ?", "latitude = ?", "longitude = ?"];
 $params = [$name, $description, $capacity, $event_date, $event_time, $location, $status, $category_id, $latitude, $longitude];
-$types = "ssissssiddi";
+$types = "sissisisiddd";
 
 if ($imageName) {
     $updateFields[] = "event_image = ?";
@@ -87,13 +102,13 @@ if ($imageName) {
     $types .= "s";
 }
 
-$updateFields[] = "id = ?";
-$updateFields[] = "HostID = ?";
+// Add WHERE clause parameters
 $params[] = $id;
 $params[] = $_SESSION['HostID'];
 $types .= "ii";
 
-$updateQuery = "UPDATE events SET " . implode(", ", array_slice($updateFields, 0, -2)) . " WHERE " . implode(" AND ", array_slice($updateFields, -2));
+// Build the complete query
+$updateQuery = "UPDATE events SET " . implode(", ", $updateFields) . " WHERE id = ? AND HostID = ?";
 
 $stmt = $conn->prepare($updateQuery);
 if (!$stmt) {
@@ -111,7 +126,7 @@ if ($stmt->execute()) {
 } else {
     header('Content-Type: application/json');
     http_response_code(400);
-    echo json_encode(['status' => 'error', 'message' => 'Error updating event: ' . $conn->error]);
+    echo json_encode(['status' => 'error', 'message' => 'Error updating event: ' . $stmt->error]);
 }
 
 $stmt->close();

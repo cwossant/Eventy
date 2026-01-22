@@ -791,6 +791,10 @@ body {
     gap: 1rem;
 }
 
+.form-group input[type="file"] {
+    width: 100%;
+}
+
 /* ============================================
    VISIBILITY SETTINGS
    ============================================ */
@@ -1716,6 +1720,15 @@ body {
     padding: 0;
 }
 
+.detail-event-image {
+    width: 100%;
+    max-width: 400px;
+    height: 250px;
+    object-fit: cover;
+    border-radius: 8px;
+    margin-bottom: 1.5rem;
+}
+
 .event-details-view h2 {
     font-size: 1.75rem;
     font-weight: 700;
@@ -1767,6 +1780,9 @@ body {
 .detail-section p {
     color: var(--gray-700);
     line-height: 1.6;
+    word-wrap: break-word;
+    white-space: normal;
+    overflow-wrap: break-word;
 }
 
 .status-badge {
@@ -1787,6 +1803,46 @@ body {
 
 .details-actions button {
     flex: 1;
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: 6px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.details-actions .btn-primary {
+    background: var(--primary);
+    color: white;
+}
+
+.details-actions .btn-primary:hover {
+    background: var(--primary-dark);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+}
+
+.details-actions .btn-danger {
+    background: var(--danger);
+    color: white;
+}
+
+.details-actions .btn-danger:hover {
+    background: #dc2626;
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+}
+
+.details-actions .btn-secondary {
+    background: var(--gray-200);
+    color: var(--gray-800);
+}
+
+.details-actions .btn-secondary:hover {
+    background: var(--gray-300);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
 }
 
 /* ============================================

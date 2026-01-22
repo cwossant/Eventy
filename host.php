@@ -66,6 +66,16 @@ foreach ($events as $event) {
 
 $attendanceRate = $totalCapacity > 0 ? round(($totalAttendees / $totalCapacity) * 100) : 0;
 
+// Fetch event categories
+$categoryQuery = $conn->prepare("SELECT id, name FROM event_categories ORDER BY id ASC");
+$categoryQuery->execute();
+$categoriesResult = $categoryQuery->get_result();
+$categories = [];
+while ($row = $categoriesResult->fetch_assoc()) {
+    $categories[] = $row;
+}
+$categoryQuery->close();
+
 // Close connection (will reopen for specific queries if needed)
 $conn->close();
 ?>
@@ -972,6 +982,9 @@ $conn->close();
                         <label>Category</label>
                         <select name="category" id="eventCategory" required>
                             <option value="">Select a category...</option>
+                            <?php foreach ($categories as $category): ?>
+                                <option value="<?php echo $category['id']; ?>"><?php echo htmlspecialchars($category['name']); ?></option>
+                            <?php endforeach; ?>
                         </select>
                     </div>
                     <div class="form-group">
