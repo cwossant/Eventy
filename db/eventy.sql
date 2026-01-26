@@ -304,6 +304,25 @@ ALTER TABLE `host_notification_settings`
 --
 ALTER TABLE `user_settings`
   ADD CONSTRAINT `fk_user_settings_host` FOREIGN KEY (`HostID`) REFERENCES `users` (`HostID`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Table structure for table `participant_favorites`
+--
+
+DROP TABLE IF EXISTS `participant_favorites`;
+CREATE TABLE IF NOT EXISTS `participant_favorites` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `user_id` int NOT NULL,
+  `event_id` int NOT NULL,
+  `added_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `unique_favorite` (`user_id`, `event_id`),
+  KEY `idx_user` (`user_id`),
+  KEY `idx_event` (`event_id`),
+  CONSTRAINT `fk_favorite_user` FOREIGN KEY (`user_id`) REFERENCES `users` (`HostID`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `fk_favorite_event` FOREIGN KEY (`event_id`) REFERENCES `events` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

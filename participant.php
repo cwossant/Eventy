@@ -8,18 +8,48 @@ if (!isset($_SESSION['HostID']) || $_SESSION['user_type'] !== 'participant') {
 
 $ParticipantID = $_SESSION['HostID'];
 
-// ===== MOCK DATA FOR DESIGN MOCKUP =====
-// User data mock
-$firstname = "mark";
-$lastname = "dwayne";
-$email = "markdwayne68@gmail.com";
-$city = "Manila";
-$bio = "Event enthusiast and tech lover. Love attending tech conferences and networking events.";
-$profilePicture = "uploads/profile_pics/default_profile.jpg";
-$memberSince = "January 2024";
-$customProfileUrl = "markdwayne.eventy.com";
+// Database connection
+$conn = new mysqli("localhost", "root", "", "eventy");
 
-// Verification badges mock
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
+
+// Create participant_favorites table if it doesn't exist
+$createTableSQL = "CREATE TABLE IF NOT EXISTS `participant_favorites` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `user_id` int NOT NULL,
+  `event_id` int NOT NULL,
+  `added_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `unique_favorite` (`user_id`, `event_id`),
+  KEY `idx_user` (`user_id`),
+  KEY `idx_event` (`event_id`),
+  CONSTRAINT `fk_favorite_user` FOREIGN KEY (`user_id`) REFERENCES `users` (`HostID`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `fk_favorite_event` FOREIGN KEY (`event_id`) REFERENCES `events` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci";
+
+$conn->query($createTableSQL);
+
+// Fetch user data
+$stmt = $conn->prepare("SELECT firstname, lastname, email, city, bio, profile_picture, created_at FROM users WHERE HostID = ?");
+$stmt->bind_param("i", $ParticipantID);
+$stmt->execute();
+$stmt->bind_result($firstname, $lastname, $email, $city, $bio, $profilePicture, $created_at);
+$stmt->fetch();
+$stmt->close();
+
+// Set defaults for NULL fields
+$firstname = $firstname ?? "";
+$lastname = $lastname ?? "";
+$email = $email ?? "";
+$city = $city ?? "";
+$bio = $bio ?? "";
+$profilePicture = !empty($profilePicture) ? "uploads/profile_pics/" . $profilePicture : "uploads/profile_pics/default_profile.jpg";
+$memberSince = date("F Y", strtotime($created_at));
+$customProfileUrl = strtolower($firstname . $lastname) . ".eventy.com";
+
+// Verification badges mock (keeping as mock since no verification table)
 $verifications = [
     'email_verified' => true,
     'phone_verified' => true,
@@ -83,114 +113,52 @@ $settings = [
     'profile_visibility' => 'public'
 ];
 
-// Stats mock
-$eventsAttended = 5;
-$favoritesCount = 8;
+// Fetch all events from database
+$eventQuery = $conn->prepare("SELECT e.*, ec.name as category_name, u.firstname as host_firstname, u.lastname as host_lastname
+                            FROM events e 
+                            LEFT JOIN event_categories ec ON e.category_id = ec.id 
+                            LEFT JOIN users u ON e.HostID = u.HostID 
+                            WHERE e.status = 1 
+                            ORDER BY e.event_date DESC");
+$eventQuery->execute();
+$eventsResult = $eventQuery->get_result();
+$allEvents = [];
+while ($row = $eventsResult->fetch_assoc()) {
+    $allEvents[] = $row;
+}
+$eventQuery->close();
 
-// Mock events data
-$allEvents = [
-    [
-        'id' => 1,
-        'name' => 'Tech Conference 2026',
-        'description' => 'Join industry leaders for a day-long conference covering the latest in web development, AI, and cloud technologies. Learn from expert speakers and network with peers.',
-        'event_date' => '2026-02-15',
-        'event_time' => '09:00',
-        'location' => 'Manila Convention Center',
-        'category' => 'Technology',
-        'capacity' => 500,
-        'attendees' => 380,
-        'color' => '#FF6B6B'
-    ],
-    [
-        'id' => 2,
-        'name' => 'Basketball Tournament',
-        'description' => 'Annual inter-office basketball tournament featuring teams from local companies. Compete, cheer, and have fun with colleagues.',
-        'event_date' => '2026-02-20',
-        'event_time' => '14:00',
-        'location' => 'Makati Sports Complex',
-        'category' => 'Sports',
-        'capacity' => 200,
-        'attendees' => 156,
-        'color' => '#4ECDC4'
-    ],
-    [
-        'id' => 3,
-        'name' => 'Jazz Night Live',
-        'description' => 'Experience smooth jazz performances from renowned local and international artists. An evening of great music and ambiance.',
-        'event_date' => '2026-02-25',
-        'event_time' => '19:00',
-        'location' => 'Hard Rock Cafe Manila',
-        'category' => 'Music',
-        'capacity' => 300,
-        'attendees' => 245,
-        'color' => '#FFD93D'
-    ],
-    [
-        'id' => 4,
-        'name' => 'Networking Mixer',
-        'description' => 'Meet and connect with professionals from various industries. Share ideas, make new connections, and expand your network.',
-        'event_date' => '2026-03-01',
-        'event_time' => '18:00',
-        'location' => 'BGC Taguig',
-        'category' => 'Social',
-        'capacity' => 150,
-        'attendees' => 98,
-        'color' => '#95E1D3'
-    ],
-    [
-        'id' => 5,
-        'name' => 'Web Development Workshop',
-        'description' => 'Hands-on workshop on modern web development frameworks. Learn React, Vue, and Angular from industry experts.',
-        'event_date' => '2026-03-05',
-        'event_time' => '10:00',
-        'location' => 'Tech Hub Manila',
-        'category' => 'Education',
-        'capacity' => 100,
-        'attendees' => 87,
-        'color' => '#6C63FF'
-    ],
-    [
-        'id' => 6,
-        'name' => 'Art Exhibition Opening',
-        'description' => 'Contemporary art showcase featuring works from emerging Filipino artists. Wine and cheese reception included.',
-        'event_date' => '2026-03-10',
-        'event_time' => '17:00',
-        'location' => 'Art Gallery District',
-        'category' => 'Art & Culture',
-        'capacity' => 250,
-        'attendees' => 189,
-        'color' => '#FF9ECD'
-    ],
-    [
-        'id' => 7,
-        'name' => 'Startup Pitch Competition',
-        'description' => 'Watch innovative startups pitch their ideas to investors. Be part of the entrepreneurship ecosystem.',
-        'event_date' => '2026-03-15',
-        'event_time' => '13:00',
-        'location' => 'Innovation Hub',
-        'category' => 'Business',
-        'capacity' => 180,
-        'attendees' => 145,
-        'color' => '#A8E6CF'
-    ],
-    [
-        'id' => 8,
-        'name' => 'Yoga and Wellness Retreat',
-        'description' => 'Find inner peace with yoga sessions, meditation, and wellness talks. Refresh your mind and body.',
-        'event_date' => '2026-03-20',
-        'event_time' => '08:00',
-        'location' => 'Wellness Center',
-        'category' => 'Health & Fitness',
-        'capacity' => 75,
-        'attendees' => 62,
-        'color' => '#FF8787'
-    ]
-];
+// Count registered events
+$registeredQuery = $conn->prepare("SELECT COUNT(*) as count FROM event_attendees WHERE user_id = ?");
+$registeredQuery->bind_param("i", $ParticipantID);
+$registeredQuery->execute();
+$registeredResult = $registeredQuery->get_result();
+$registeredCount = $registeredResult->fetch_assoc()['count'];
+$registeredQuery->close();
 
-// Mock favorited event IDs
-$favoriteEventIds = [1, 3, 5, 7];
+// Count favorite events
+$favoriteQuery = $conn->prepare("SELECT COUNT(*) as count FROM participant_favorites WHERE user_id = ?");
+$favoriteQuery->bind_param("i", $ParticipantID);
+$favoriteQuery->execute();
+$favoriteResult = $favoriteQuery->get_result();
+$favoritesCount = $favoriteResult->fetch_assoc()['count'];
+$favoriteQuery->close();
 
-// ===== END OF MOCK DATA =====
+// Stats from database
+$eventsAttended = $registeredCount;
+
+// Fetch favorited event IDs
+$favoriteEventIds = [];
+$favIdQuery = $conn->prepare("SELECT event_id FROM participant_favorites WHERE user_id = ?");
+$favIdQuery->bind_param("i", $ParticipantID);
+$favIdQuery->execute();
+$favIdResult = $favIdQuery->get_result();
+while ($row = $favIdResult->fetch_assoc()) {
+    $favoriteEventIds[] = $row['event_id'];
+}
+$favIdQuery->close();
+
+$conn->close();
 ?>
 
 <!DOCTYPE html>
@@ -414,94 +382,8 @@ $favoriteEventIds = [1, 3, 5, 7];
 
                 <!-- Events Grid with Infinite Scroll -->
                 <div class="events-feed" id="eventsFeed">
-                    <?php foreach ($allEvents as $event): ?>
-                        <?php
-                            $isFavorited = in_array($event['id'], $favoriteEventIds);
-                            $attendancePercent = $event['capacity'] > 0 ? round((($event['attendees'] ?? 0) / $event['capacity']) * 100) : 0;
-                            $isSoldOut = $attendancePercent >= 100;
-                            $isHappening = true;
-                            $eventColor = $event['color'] ?? '#6C63FF';
-                        ?>
-                        <div class="event-card" data-event-id="<?php echo $event['id']; ?>" data-category="<?php echo strtolower($event['category']); ?>" data-name="<?php echo strtolower(htmlspecialchars($event['name'])); ?>">
-                            
-                            <!-- Event Image with Overlay -->
-                            <div class="event-image-container" style="background-color: <?php echo htmlspecialchars($eventColor); ?>;">
-                                
-                                <!-- Status Badges -->
-                                <div class="event-badges">
-                                    <?php if ($isHappening): ?>
-                                        <span class="badge badge-happening"><i class="fas fa-circle"></i> Happening Now</span>
-                                    <?php endif; ?>
-                                    <?php if ($isSoldOut): ?>
-                                        <span class="badge badge-sold-out">Sold Out</span>
-                                    <?php else: ?>
-                                        <span class="badge badge-free">Free</span>
-                                    <?php endif; ?>
-                                </div>
-
-                                <!-- Favorite Button -->
-                                <button class="favorite-btn <?php echo $isFavorited ? 'favorited' : ''; ?>" title="Add to favorites">
-                                    <i class="fas fa-heart"></i>
-                                </button>
-
-                                <!-- Share Button -->
-                                <button class="share-btn" title="Share event">
-                                    <i class="fas fa-share-alt"></i>
-                                </button>
-
-                                <!-- Category Icon -->
-                                <div class="category-badge">
-                                    <i class="fas fa-tag"></i>
-                                    <?php echo htmlspecialchars($event['category']); ?>
-                                </div>
-                            </div>
-
-                            <!-- Event Content -->
-                            <div class="event-content">
-                                <h3><?php echo htmlspecialchars($event['name']); ?></h3>
-                                
-                                <p class="event-description">
-                                    <?php 
-                                        $desc = htmlspecialchars($event['description']);
-                                        echo strlen($desc) > 100 ? substr($desc, 0, 100) . "..." : $desc;
-                                    ?>
-                                </p>
-
-                                <!-- Event Meta Information -->
-                                <div class="event-meta">
-                                    <div class="meta-item">
-                                        <i class="fas fa-calendar"></i>
-                                        <span><?php echo htmlspecialchars($event['event_date']); ?></span>
-                                    </div>
-                                    <div class="meta-item">
-                                        <i class="fas fa-clock"></i>
-                                        <span><?php echo htmlspecialchars($event['event_time']); ?></span>
-                                    </div>
-                                    <div class="meta-item">
-                                        <i class="fas fa-map-marker-alt"></i>
-                                        <span><?php echo htmlspecialchars($event['location']); ?></span>
-                                    </div>
-                                </div>
-
-                                <!-- Capacity Bar -->
-                                <div class="capacity-section">
-                                    <div class="capacity-info">
-                                        <span class="attendee-count"><i class="fas fa-users"></i> <?php echo ($event['attendees'] ?? 0) . "/" . $event['capacity']; ?></span>
-                                        <span class="capacity-percent"><?php echo $attendancePercent; ?>%</span>
-                                    </div>
-                                    <div class="capacity-bar">
-                                        <div class="bar-fill" style="width: <?php echo $attendancePercent; ?>%;"></div>
-                                    </div>
-                                </div>
-
-                                <!-- Action Buttons -->
-                                <div class="event-actions">
-                                    <button class="btn-primary btn-register">Register Now</button>
-                                    <button class="btn-secondary btn-details">View Details</button>
-                                </div>
-                            </div>
-                        </div>
-                    <?php endforeach; ?>
+                    <!-- Events will be loaded here by JavaScript -->
+                    <p style="text-align:center; padding:40px;">Loading events...</p>
                 </div>
 
                 <!-- Load More Button -->
@@ -813,52 +695,9 @@ $favoriteEventIds = [1, 3, 5, 7];
                 </div>
 
                 <div class="favorites-grid" id="favoritesFeed">
-                    <?php foreach ($allEvents as $event): ?>
-                        <?php if (in_array($event['id'], $favoriteEventIds)): ?>
-                            <?php
-                                $attendancePercent = $event['capacity'] > 0 ? round((($event['attendees'] ?? 0) / $event['capacity']) * 100) : 0;
-                                $isSoldOut = $attendancePercent >= 100;
-                                $eventImage = !empty($event['image']) ? "uploads/events/" . $event['image'] : "assets/images/default-event.jpg";
-                            ?>
-                        
-                            <div class="event-card" data-event-id="<?php echo $event['id']; ?>">
-                                <div class="event-image-container" style="background-color: <?php echo htmlspecialchars($eventColor); ?>;
-                                        <i class="fas fa-heart"></i>
-                                    </button>
-                                    <div class="category-badge">
-                                        <i class="fas fa-tag"></i>
-                                        <?php echo htmlspecialchars($event['category']); ?>
-                                    </div>
-                                </div>
-
-                                <div class="event-content">
-                                    <h3><?php echo htmlspecialchars($event['name']); ?></h3>
-                                    <div class="event-meta">
-                                        <div class="meta-item">
-                                            <i class="fas fa-calendar"></i>
-                                            <span><?php echo htmlspecialchars($event['event_date']); ?></span>
-                                        </div>
-                                        <div class="meta-item">
-                                            <i class="fas fa-map-marker-alt"></i>
-                                            <span><?php echo htmlspecialchars($event['location']); ?></span>
-                                        </div>
-                                    </div>
-                                    <div class="event-actions">
-                                        <button class="btn-primary btn-register">Register Now</button>
-                                    </div>
-                                </div>
-                            </div>
-                        <?php endif; ?>
-                    <?php endforeach; ?>
+                    <!-- Favorite events will be loaded here by JavaScript -->
+                    <p style="text-align:center; padding:40px;">Loading favorite events...</p>
                 </div>
-
-                <?php if (empty($favoriteEventIds)): ?>
-                    <div class="empty-state-container">
-                        <i class="fas fa-heart"></i>
-                        <p>No favorite events yet</p>
-                        <p class="empty-state-subtitle">Start adding events to your favorites!</p>
-                    </div>
-                <?php endif; ?>
             </section>
 
             <!-- SETTINGS TAB -->
@@ -1078,6 +917,257 @@ $favoriteEventIds = [1, 3, 5, 7];
     </div>
 
     <script>
+        let allEventsData = [];
+        let registeredEventsData = [];
+        let favoriteEventsData = [];
+        let currentTab = 'all'; // 'all', 'registered', 'favorites'
+
+        // Load events from database
+        async function loadEvents(type = 'all') {
+            try {
+                const response = await fetch(`api/participant_get_events.php?type=${type}`);
+                const data = await response.json();
+                
+                if (data.success) {
+                    return data.events;
+                } else {
+                    console.error('Error:', data.message);
+                    return [];
+                }
+            } catch (error) {
+                console.error('Error loading events:', error);
+                return [];
+            }
+        }
+
+        // Initialize events on page load
+        async function initializeEvents() {
+            allEventsData = await loadEvents('all');
+            registeredEventsData = await loadEvents('registered');
+            favoriteEventsData = await loadEvents('favorites');
+            
+            console.log('All events loaded:', allEventsData.length);
+            console.log('Registered events:', registeredEventsData.length);
+            console.log('Favorite events:', favoriteEventsData.length);
+            
+            displayEvents('all');
+        }
+
+        // Display events based on type
+        function displayEvents(type) {
+            currentTab = type;
+            let eventsToDisplay = [];
+            let containerId = 'eventsFeed';
+            
+            if (type === 'all') {
+                eventsToDisplay = allEventsData;
+                containerId = 'eventsFeed';
+            } else if (type === 'registered') {
+                eventsToDisplay = registeredEventsData;
+                containerId = 'eventsFeed';
+            } else if (type === 'favorites') {
+                eventsToDisplay = favoriteEventsData;
+                containerId = 'favoritesFeed';
+                if (eventsToDisplay.length === 0) {
+                    document.getElementById(containerId).innerHTML = '<p style="text-align:center;padding:40px;">No favorite events yet</p>';
+                    return;
+                }
+            }
+            
+            const container = document.getElementById(containerId);
+            
+            if (eventsToDisplay.length === 0) {
+                container.innerHTML = '<p style="text-align:center;padding:40px;">No events available</p>';
+                return;
+            }
+            
+            container.innerHTML = eventsToDisplay.map(event => `
+                <div class="event-card" data-event-id="${event.id}" data-category="${event.category_name || ''}">
+                    ${event.event_image ? `<div class="event-image" style="background-image: url('${event.event_image}');"></div>` : '<div class="event-image" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);"></div>'}
+                    <button class="favorite-btn ${event.is_favorited ? 'favorited' : ''}" data-event-id="${event.id}">
+                        <i class="fas fa-heart"></i>
+                    </button>
+                    <div class="event-info">
+                        <div class="event-date">
+                            <span class="date-day">${new Date(event.event_date).getDate()}</span>
+                            <span class="date-month">${new Date(event.event_date).toLocaleDateString('en-US', { month: 'short' })}</span>
+                        </div>
+                        <div class="event-details">
+                            <h3>${event.name}</h3>
+                            <p class="event-description">${event.description?.substring(0, 100)}...</p>
+                            <div class="event-meta">
+                                <span class="event-category">${event.category_name || 'Other'}</span>
+                                <span class="event-location"><i class="fas fa-map-marker-alt"></i> ${event.location}</span>
+                            </div>
+                            <div class="event-stats">
+                                <span class="attendees"><i class="fas fa-users"></i> ${event.attendees}/${event.capacity}</span>
+                            </div>
+                        </div>
+                        <div class="event-actions">
+                            ${event.is_registered ? 
+                                '<button class="btn-registered" disabled><i class="fas fa-check"></i> Registered</button>' :
+                                `<button class="btn-register" data-event-id="${event.id}"><i class="fas fa-plus"></i> Register</button>`
+                            }
+                            <button class="btn-details" data-event-id="${event.id}"><i class="fas fa-info-circle"></i> Details</button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+
+            attachEventListeners();
+        }
+
+        // Attach event listeners to buttons
+        function attachEventListeners() {
+            // Favorite button
+            document.querySelectorAll('.favorite-btn').forEach(btn => {
+                btn.addEventListener('click', async function(e) {
+                    e.stopPropagation();
+                    const eventId = this.getAttribute('data-event-id');
+                    
+                    try {
+                        const response = await fetch('api/participant_manage_favorites.php', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ event_id: eventId, action: 'toggle' })
+                        });
+                        
+                        const data = await response.json();
+                        if (data.success) {
+                            this.classList.toggle('favorited');
+                            this.style.animation = 'heartBeat 0.6s ease-in-out';
+                            setTimeout(() => this.style.animation = '', 600);
+                            
+                            // Reload favorites
+                            favoriteEventsData = await loadEvents('favorites');
+                        }
+                    } catch (error) {
+                        console.error('Error toggling favorite:', error);
+                    }
+                });
+            });
+
+            // Register button
+            document.querySelectorAll('.btn-register').forEach(btn => {
+                btn.addEventListener('click', async function() {
+                    const eventId = this.getAttribute('data-event-id');
+                    
+                    try {
+                        const response = await fetch('api/participant_join_event.php', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ event_id: eventId })
+                        });
+                        
+                        const data = await response.json();
+                        if (data.success) {
+                            showToast('Successfully registered for event!');
+                            this.disabled = true;
+                            this.textContent = 'Registered';
+                            this.className = 'btn-registered';
+                            
+                            // Reload data
+                            allEventsData = await loadEvents('all');
+                            registeredEventsData = await loadEvents('registered');
+                            displayEvents(currentTab);
+                        } else {
+                            showToast(data.message, 'error');
+                        }
+                    } catch (error) {
+                        console.error('Error registering:', error);
+                        showToast('Error registering for event', 'error');
+                    }
+                });
+            });
+
+            // Details button
+            document.querySelectorAll('.btn-details').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const eventId = this.getAttribute('data-event-id');
+                    const event = allEventsData.find(e => e.id == eventId) || 
+                                 registeredEventsData.find(e => e.id == eventId) || 
+                                 favoriteEventsData.find(e => e.id == eventId);
+                    
+                    if (event) {
+                        showEventDetails(event);
+                    }
+                });
+            });
+        }
+
+        // Show event details in modal
+        function showEventDetails(event) {
+            const modal = document.getElementById('eventDetailsModal');
+            const content = document.getElementById('modalEventDetails');
+            
+            content.innerHTML = `
+                <div class="event-details-header">
+                    <h2>${event.name}</h2>
+                    <button class="modal-close">&times;</button>
+                </div>
+                <div class="event-details-body">
+                    ${event.event_image ? `<img src="${event.event_image}" alt="${event.name}" style="width:100%;max-height:300px;object-fit:cover;border-radius:8px;margin-bottom:20px;">` : ''}
+                    
+                    <h3>Description</h3>
+                    <p>${event.description}</p>
+                    
+                    <div class="details-grid">
+                        <div>
+                            <strong>Date & Time:</strong>
+                            <p>${new Date(event.event_date).toLocaleDateString()} at ${event.event_time}</p>
+                        </div>
+                        <div>
+                            <strong>Location:</strong>
+                            <p>${event.location}</p>
+                        </div>
+                        <div>
+                            <strong>Category:</strong>
+                            <p>${event.category_name || 'Other'}</p>
+                        </div>
+                        <div>
+                            <strong>Attendees:</strong>
+                            <p>${event.attendees}/${event.capacity}</p>
+                        </div>
+                        <div>
+                            <strong>Host:</strong>
+                            <p>${event.host_firstname} ${event.host_lastname}</p>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            modal.style.display = 'flex';
+            
+            // Attach close listener
+            const closeBtn = content.querySelector('.modal-close');
+            if (closeBtn) {
+                closeBtn.addEventListener('click', () => {
+                    modal.style.display = 'none';
+                });
+            }
+        }
+
+        // Show toast notification
+        function showToast(message, type = 'success') {
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            toast.textContent = message;
+            toast.style.cssText = `
+                position: fixed;
+                bottom: 20px;
+                right: 20px;
+                background: ${type === 'success' ? '#4CAF50' : '#f44336'};
+                color: white;
+                padding: 15px 20px;
+                border-radius: 4px;
+                z-index: 1000;
+                animation: slideIn 0.3s ease-in-out;
+            `;
+            
+            document.body.appendChild(toast);
+            setTimeout(() => toast.remove(), 3000);
+        }
+
         // Tab Switching
         document.querySelectorAll('.nav-item').forEach(item => {
             item.addEventListener('click', function() {
@@ -1090,82 +1180,60 @@ $favoriteEventIds = [1, 3, 5, 7];
                 // Add active class to clicked item and corresponding tab
                 this.classList.add('active');
                 document.getElementById(tabName + '-tab').classList.add('active');
+                
+                // Load events if events tab
+                if (tabName === 'events') {
+                    displayEvents('all');
+                } else if (tabName === 'favorites') {
+                    displayEvents('favorites');
+                }
             });
         });
 
         // Search functionality
-        document.getElementById('eventSearchInput').addEventListener('input', function() {
-            const searchValue = this.value.toLowerCase();
-            document.querySelectorAll('.event-card').forEach(card => {
-                const title = card.querySelector('h3').textContent.toLowerCase();
-                const description = card.querySelector('.event-description')?.textContent.toLowerCase() || '';
-                if (title.includes(searchValue) || description.includes(searchValue)) {
-                    card.style.display = '';
-                    card.style.animation = 'fadeIn 0.3s ease-in';
-                } else {
-                    card.style.display = 'none';
-                }
+        const searchInput = document.getElementById('eventSearchInput');
+        if (searchInput) {
+            searchInput.addEventListener('input', function() {
+                const searchValue = this.value.toLowerCase();
+                document.querySelectorAll('.event-card').forEach(card => {
+                    const title = card.querySelector('h3').textContent.toLowerCase();
+                    const description = card.querySelector('.event-description')?.textContent.toLowerCase() || '';
+                    if (title.includes(searchValue) || description.includes(searchValue)) {
+                        card.style.display = '';
+                        card.style.animation = 'fadeIn 0.3s ease-in';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
             });
-        });
+        }
 
         // Category filter
-        document.getElementById('categoryFilter').addEventListener('change', function() {
-            const selectedCategory = this.value.toLowerCase();
-            document.querySelectorAll('.event-card').forEach(card => {
-                const category = card.getAttribute('data-category');
-                if (selectedCategory === '' || category === selectedCategory) {
-                    card.style.display = '';
-                } else {
-                    card.style.display = 'none';
-                }
+        const categoryFilter = document.getElementById('categoryFilter');
+        if (categoryFilter) {
+            categoryFilter.addEventListener('change', function() {
+                const selectedCategory = this.value.toLowerCase();
+                document.querySelectorAll('.event-card').forEach(card => {
+                    const category = card.getAttribute('data-category');
+                    if (selectedCategory === '' || category === selectedCategory) {
+                        card.style.display = '';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
             });
-        });
+        }
 
         // Toggle advanced filters
-        document.getElementById('toggleAdvanced').addEventListener('click', function() {
-            const filters = document.getElementById('advancedFilters');
-            filters.style.display = filters.style.display === 'none' ? 'grid' : 'none';
-        });
-
-        // Favorite button functionality
-        document.querySelectorAll('.favorite-btn').forEach(btn => {
-            btn.addEventListener('click', function(e) {
-                e.stopPropagation();
-                this.classList.toggle('favorited');
-                const card = this.closest('.event-card');
-                const eventId = card.getAttribute('data-event-id');
-                
-                // Animate the heart
-                this.style.animation = 'heartBeat 0.6s ease-in-out';
-                setTimeout(() => this.style.animation = '', 600);
-                
-                // Send to backend (you'll need to create this endpoint)
-                // fetch('api/toggle_favorite.php', {
-                //     method: 'POST',
-                //     body: JSON.stringify({event_id: eventId})
-                // });
+        const toggleAdvanced = document.getElementById('toggleAdvanced');
+        if (toggleAdvanced) {
+            toggleAdvanced.addEventListener('click', function() {
+                const filters = document.getElementById('advancedFilters');
+                if (filters) {
+                    filters.style.display = filters.style.display === 'none' ? 'grid' : 'none';
+                }
             });
-        });
-
-        // Register button
-        document.querySelectorAll('.btn-register').forEach(btn => {
-            btn.addEventListener('click', function() {
-                const card = this.closest('.event-card');
-                const eventId = card.getAttribute('data-event-id');
-                // Handle registration
-                alert('Registered for event: ' + eventId);
-            });
-        });
-
-        // View details button
-        document.querySelectorAll('.btn-details').forEach(btn => {
-            btn.addEventListener('click', function() {
-                const card = this.closest('.event-card');
-                const eventId = card.getAttribute('data-event-id');
-                // Load and show event details in modal
-                document.getElementById('eventDetailsModal').style.display = 'flex';
-            });
-        });
+        }
 
         // Modal close functionality
         document.querySelectorAll('.modal-close').forEach(btn => {
@@ -1175,45 +1243,54 @@ $favoriteEventIds = [1, 3, 5, 7];
         });
 
         // Profile form save
-        document.getElementById('saveProfileBtn').addEventListener('click', function() {
-            const form = document.getElementById('profileForm');
-            // Send data to backend
-            alert('Profile saved successfully!');
-        });
+        const saveProfileBtn = document.getElementById('saveProfileBtn');
+        if (saveProfileBtn) {
+            saveProfileBtn.addEventListener('click', function() {
+                showToast('Profile saved successfully!');
+            });
+        }
 
         // Notification bell
-        document.getElementById('notificationBell').addEventListener('click', function() {
-            const dropdown = document.getElementById('notificationDropdown');
-            dropdown.style.display = dropdown.style.display === 'none' ? 'block' : 'none';
-        });
+        const notificationBell = document.getElementById('notificationBell');
+        if (notificationBell) {
+            notificationBell.addEventListener('click', function() {
+                const dropdown = document.getElementById('notificationDropdown');
+                if (dropdown) {
+                    dropdown.style.display = dropdown.style.display === 'none' ? 'block' : 'none';
+                }
+            });
+        }
 
         // Settings save
-        document.getElementById('saveSettingsBtn').addEventListener('click', function() {
-            // Collect all settings values
-            const settings = {
-                enableNotifications: document.getElementById('enableNotifications').checked,
-                eventEmailAlerts: document.getElementById('eventEmailAlerts').checked,
-                emailFrequency: document.getElementById('emailFrequency').value,
-                profileVisibility: document.getElementById('profileVisibility').value,
-                darkMode: document.getElementById('darkModeToggle').checked
-            };
-            console.log('Settings saved:', settings);
-            alert('Settings saved successfully!');
-        });
+        const saveSettingsBtn = document.getElementById('saveSettingsBtn');
+        if (saveSettingsBtn) {
+            saveSettingsBtn.addEventListener('click', function() {
+                showToast('Settings saved successfully!');
+            });
+        }
 
         // Dark mode toggle
-        document.getElementById('darkModeToggle').addEventListener('change', function() {
-            if (this.checked) {
-                document.body.classList.add('dark-mode');
-            } else {
-                document.body.classList.remove('dark-mode');
-            }
-        });
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        if (darkModeToggle) {
+            darkModeToggle.addEventListener('change', function() {
+                if (this.checked) {
+                    document.body.classList.add('dark-mode');
+                } else {
+                    document.body.classList.remove('dark-mode');
+                }
+            });
+        }
 
         // Change password modal
-        document.getElementById('changePasswordBtn').addEventListener('click', function() {
-            document.getElementById('changePasswordModal').style.display = 'flex';
-        });
+        const changePasswordBtn = document.getElementById('changePasswordBtn');
+        if (changePasswordBtn) {
+            changePasswordBtn.addEventListener('click', function() {
+                const modal = document.getElementById('changePasswordModal');
+                if (modal) {
+                    modal.style.display = 'flex';
+                }
+            });
+        }
 
         // Add animation keyframes
         const style = document.createElement('style');
@@ -1227,6 +1304,16 @@ $favoriteEventIds = [1, 3, 5, 7];
                 25% { transform: scale(1.3); }
                 50% { transform: scale(1.15); }
                 75% { transform: scale(1.2); }
+            }
+            @keyframes slideIn {
+                from {
+                    transform: translateX(400px);
+                    opacity: 0;
+                }
+                to {
+                    transform: translateX(0);
+                    opacity: 1;
+                }
             }
             
             /* Profile Enhancement Styles */
@@ -1607,7 +1694,17 @@ $favoriteEventIds = [1, 3, 5, 7];
                 }
             });
         });
+
+        // Initialize events when page loads or immediately if DOM is ready
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initializeEvents);
+        } else {
+            initializeEvents();
+        }
     </script>
+</body>
+
+</html>
 </body>
 
 </html>
