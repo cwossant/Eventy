@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Jan 22, 2026 at 05:25 PM
+-- Generation Time: Jan 26, 2026 at 03:39 PM
 -- Server version: 8.4.7
 -- PHP Version: 8.3.28
 
@@ -83,14 +83,14 @@ CREATE TABLE IF NOT EXISTS `events` (
   PRIMARY KEY (`id`),
   KEY `fk_events_host` (`HostID`),
   KEY `fk_events_category` (`category_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `events`
 --
 
 INSERT INTO `events` (`id`, `name`, `description`, `capacity`, `event_date`, `event_time`, `location`, `category_id`, `event_image`, `latitude`, `longitude`, `attendees`, `is_featured`, `status`, `HostID`, `created_at`) VALUES
-(1, 'Sample Event', 'This is a sample event', 100, '2026-05-10', '09:00:00', 'Main Hall', NULL, NULL, NULL, NULL, 0, 0, 1, 1, '2026-01-05 15:50:20');
+(13, 'dwadwa', 'dwadwawwwww', 12, '2026-01-07', '00:00:00', 'Nu Manila', 1, '1769437574_1769105150_image_2026-01-23_020536372.png', NULL, NULL, 1, 0, 1, 10, '2026-01-26 14:26:14');
 
 -- --------------------------------------------------------
 
@@ -113,7 +113,14 @@ CREATE TABLE IF NOT EXISTS `event_attendees` (
   UNIQUE KEY `unique_attendee` (`event_id`,`email`),
   KEY `idx_event` (`event_id`),
   KEY `idx_user` (`user_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `event_attendees`
+--
+
+INSERT INTO `event_attendees` (`id`, `event_id`, `user_id`, `email`, `name`, `phone`, `registration_date`, `check_in_date`, `status`) VALUES
+(2, 13, 10, 'dwayynnee@gmail.com', 'Mark Doe', NULL, '2026-01-26 14:37:18', NULL, 'registered');
 
 -- --------------------------------------------------------
 
@@ -214,7 +221,26 @@ CREATE TABLE IF NOT EXISTS `host_notification_settings` (
 
 INSERT INTO `host_notification_settings` (`HostID`, `email_new_registration`, `email_event_reminders`, `email_event_updates`, `email_cancellations`, `email_attendee_messages`, `email_weekly_digest`, `notification_frequency`, `updated_at`) VALUES
 (1, 1, 1, 1, 1, 1, 0, 'immediate', '2026-01-22 17:04:01'),
-(8, 1, 1, 1, 1, 1, 0, 'immediate', '2026-01-22 17:04:01');
+(9, 1, 1, 1, 1, 1, 0, 'immediate', '2026-01-26 14:12:06'),
+(10, 1, 1, 1, 1, 1, 0, 'immediate', '2026-01-26 14:20:10');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `participant_favorites`
+--
+
+DROP TABLE IF EXISTS `participant_favorites`;
+CREATE TABLE IF NOT EXISTS `participant_favorites` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `user_id` int NOT NULL,
+  `event_id` int NOT NULL,
+  `added_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `unique_favorite` (`user_id`,`event_id`),
+  KEY `idx_user` (`user_id`),
+  KEY `idx_event` (`event_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -234,18 +260,20 @@ CREATE TABLE IF NOT EXISTS `users` (
   `email` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
   `contactno` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL,
   `password` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `2FA` int NOT NULL DEFAULT '0',
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`HostID`),
   UNIQUE KEY `email` (`email`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`HostID`, `user_type`, `firstname`, `lastname`, `city`, `bio`, `profile_picture`, `email`, `contactno`, `password`, `created_at`) VALUES
-(1, '', 'Admin', 'User', NULL, NULL, NULL, 'admin@example.com', '0123456789', '$2y$10$examplehashedpassword', '2026-01-05 15:50:20'),
-(8, 'host', 'mark', 'dwayne', NULL, NULL, 'default_profile.jpg', 'markdwayne68@gmail.com', '09111111111', '$2y$10$VGiqUuRZKJMBsArUST2mjeYozZWZBnHJwvy6gZ8OoiJJmgLeXmOam', '2026-01-19 15:28:08');
+INSERT INTO `users` (`HostID`, `user_type`, `firstname`, `lastname`, `city`, `bio`, `profile_picture`, `email`, `contactno`, `password`, `2FA`, `created_at`) VALUES
+(1, '', 'Admin', 'User', NULL, NULL, NULL, 'admin@example.com', '0123456789', '$2y$10$examplehashedpassword', 0, '2026-01-05 15:50:20'),
+(9, 'host', 'mark', 'dwayne', NULL, NULL, 'default_profile.jpg', 'markdwayne68@gmail.com', '09111111111', '$2y$10$ipR60DPNLeHs8tHHwH3e1ebXz8gceWv8.ylpVUKomGHYSTJMZRUo2', 0, '2026-01-22 19:48:51'),
+(10, 'participant', 'Mark', 'Doe', NULL, NULL, 'default_profile.jpg', 'dwayynnee@gmail.com', '09111111111', '$2y$10$N4ScBvr9IrrNVs7aQF9/Ce9raA.Y4cZzG4AzRCtROgvjCmYv.K1LG', 0, '2026-01-26 14:18:39');
 
 -- --------------------------------------------------------
 
@@ -300,29 +328,17 @@ ALTER TABLE `host_notification_settings`
   ADD CONSTRAINT `fk_notification_settings_host` FOREIGN KEY (`HostID`) REFERENCES `users` (`HostID`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
+-- Constraints for table `participant_favorites`
+--
+ALTER TABLE `participant_favorites`
+  ADD CONSTRAINT `fk_favorite_event` FOREIGN KEY (`event_id`) REFERENCES `events` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `fk_favorite_user` FOREIGN KEY (`user_id`) REFERENCES `users` (`HostID`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
 -- Constraints for table `user_settings`
 --
 ALTER TABLE `user_settings`
   ADD CONSTRAINT `fk_user_settings_host` FOREIGN KEY (`HostID`) REFERENCES `users` (`HostID`) ON DELETE CASCADE ON UPDATE CASCADE;
-
---
--- Table structure for table `participant_favorites`
---
-
-DROP TABLE IF EXISTS `participant_favorites`;
-CREATE TABLE IF NOT EXISTS `participant_favorites` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `user_id` int NOT NULL,
-  `event_id` int NOT NULL,
-  `added_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `unique_favorite` (`user_id`, `event_id`),
-  KEY `idx_user` (`user_id`),
-  KEY `idx_event` (`event_id`),
-  CONSTRAINT `fk_favorite_user` FOREIGN KEY (`user_id`) REFERENCES `users` (`HostID`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `fk_favorite_event` FOREIGN KEY (`event_id`) REFERENCES `events` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
