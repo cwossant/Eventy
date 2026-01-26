@@ -262,7 +262,7 @@
 
 							.floating-card:hover {
 								transform: translateY(-12px) scale(1.08);
-								box-shadow: 0 20px 40px rgba(111, 66, 193, 0.25), 0 8px 16px rgba(0, 0, 0, 0.1);
+								box-shadow: 0 12px 28px rgba(111, 66, 193, 0.2);
 								border-color: rgba(111, 66, 193, 0.3);
 							}
 
@@ -641,7 +641,7 @@
 						}
 
 						.feature-card:hover {
-							box-shadow: 0 12px 32px rgba(0, 0, 0, 0.1);
+							box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
 							transform: translateY(-8px);
 						}
 
@@ -784,7 +784,7 @@
 						}
 
 						.event-card:hover {
-							box-shadow: 0 20px 48px rgba(139, 92, 246, 0.15);
+							box-shadow: 0 12px 28px rgba(139, 92, 246, 0.12);
 							transform: translateX(8px) translateY(-4px);
 							border-color: rgba(139, 92, 246, 0.2);
 						}
@@ -941,7 +941,7 @@
 						.stat-card:hover {
 							background: #f3f4f6;
 							transform: translateX(6px) translateY(-2px);
-							box-shadow: 0 12px 28px rgba(0, 0, 0, 0.12);
+							box-shadow: 0 8px 16px rgba(0, 0, 0, 0.08);
 						}
 
 						.stat-card.stat-events {
@@ -1444,7 +1444,7 @@
 			}
 
 			.get-started-btn:hover {
-				box-shadow: 0 12px 36px rgba(139, 92, 246, 0.25) !important;
+				box-shadow: 0 8px 20px rgba(139, 92, 246, 0.15) !important;
 				transform: translateY(-3px) translateZ(0) !important;
 				background: linear-gradient(135deg, #ffffff 0%, #ffffff 100%) !important;
 			}
@@ -1690,7 +1690,7 @@
 				padding: 36px 32px;
 				max-width: 500px;
 				width: 90%;
-				box-shadow: 0 16px 48px rgba(0, 0, 0, 0.2);
+				box-shadow: 0 12px 36px rgba(0, 0, 0, 0.15);
 				max-height: 90vh;
 				overflow: hidden;
 				display: flex;
