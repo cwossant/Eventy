@@ -1140,7 +1140,7 @@ $conn->close();
                         </div>
                         <div class="detail-item">
                             <strong>Host</strong>
-                            <p>${event.host_firstname} ${event.host_lastname}</p>
+                            <p>${event.firstname || event.host_firstname} ${event.lastname || event.host_lastname}</p>
                         </div>
                     </div>
                     <div class="detail-section">
@@ -1362,6 +1362,88 @@ $conn->close();
                     transform: translateX(0);
                     opacity: 1;
                 }
+            }
+            @keyframes slideInUp {
+                from {
+                    transform: translateY(20px);
+                    opacity: 0;
+                }
+                to {
+                    transform: translateY(0);
+                    opacity: 1;
+                }
+            }
+            
+            /* Modal Styling - Matching Host Dashboard */
+            .modal {
+                display: none;
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0, 0, 0, 0.6);
+                z-index: 9999;
+                align-items: center;
+                justify-content: center;
+                animation: fadeIn 0.3s ease-out;
+            }
+            
+            .modal.active {
+                display: flex;
+            }
+            
+            .modal-content {
+                background: white;
+                padding: 2.5rem;
+                border-radius: 12px;
+                max-width: 700px;
+                width: 90%;
+                max-height: 90vh;
+                overflow-y: auto;
+                overflow-x: hidden;
+                position: relative;
+                animation: slideInUp 0.3s ease-out;
+                scrollbar-gutter: stable;
+            }
+            
+            /* Custom scrollbar styling */
+            .modal-content::-webkit-scrollbar {
+                width: 5px;
+            }
+            
+            .modal-content::-webkit-scrollbar-track {
+                background: transparent;
+                margin: 10px 0;
+            }
+            
+            .modal-content::-webkit-scrollbar-thumb {
+                background: #d1d5db;
+                border-radius: 4px;
+                margin: 10px 0;
+            }
+            
+            .modal-content::-webkit-scrollbar-thumb:hover {
+                background: #9ca3af;
+            }
+            
+            .modal-close {
+                position: absolute;
+                top: 1rem;
+                right: 1rem;
+                width: 32px;
+                height: 32px;
+                border: none;
+                background: #e5e7eb;
+                border-radius: 50%;
+                font-size: 1.5rem;
+                cursor: pointer;
+                transition: all 0.3s ease;
+                color: #666;
+            }
+            
+            .modal-close:hover {
+                background: #d1d5db;
             }
             
             /* Event Image Container - Matching Host Dashboard */
