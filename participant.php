@@ -983,10 +983,12 @@ $conn->close();
             
             container.innerHTML = eventsToDisplay.map(event => `
                 <div class="event-card" data-event-id="${event.id}" data-category="${event.category_name || ''}">
-                    ${event.event_image ? `<div class="event-image" style="background-image: url('${event.event_image}');"></div>` : '<div class="event-image" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);"></div>'}
-                    <button class="favorite-btn ${event.is_favorited ? 'favorited' : ''}" data-event-id="${event.id}">
-                        <i class="fas fa-heart"></i>
-                    </button>
+                    <div class="event-image-container" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                        ${event.event_image ? `<img src="${event.event_image}" alt="${event.name}" style="width: 100%; height: 100%; object-fit: cover;">` : ''}
+                        <button class="favorite-btn ${event.is_favorited ? 'favorited' : ''}" data-event-id="${event.id}">
+                            <i class="fas fa-heart"></i>
+                        </button>
+                    </div>
                     <div class="event-info">
                         <div class="event-date">
                             <span class="date-day">${new Date(event.event_date).getDate()}</span>
@@ -1100,49 +1102,95 @@ $conn->close();
             const modal = document.getElementById('eventDetailsModal');
             const content = document.getElementById('modalEventDetails');
             
-            content.innerHTML = `
-                <div class="event-details-header">
+            // Format time to AM/PM
+            const eventDate = new Date(event.event_date);
+            const formattedDate = eventDate.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+            
+            // Calculate attendance percentage
+            const attendancePercent = event.capacity > 0 ? Math.round((event.attendees / event.capacity) * 100) : 0;
+            const imageHtml = event.event_image ? `<img src="${event.event_image}" alt="${event.name}" class="detail-event-image">` : '';
+            
+            const statusText = 'Upcoming';
+            const statusColor = '#3b82f6';
+            
+            let detailsHtml = `
+                <div class="event-details-view">
+                    ${imageHtml}
                     <h2>${event.name}</h2>
-                    <button class="modal-close">&times;</button>
-                </div>
-                <div class="event-details-body">
-                    ${event.event_image ? `<img src="${event.event_image}" alt="${event.name}" style="width:100%;max-height:300px;object-fit:cover;border-radius:8px;margin-bottom:20px;">` : ''}
-                    
-                    <h3>Description</h3>
-                    <p>${event.description}</p>
-                    
                     <div class="details-grid">
-                        <div>
-                            <strong>Date & Time:</strong>
-                            <p>${new Date(event.event_date).toLocaleDateString()} at ${event.event_time}</p>
+                        <div class="detail-item">
+                            <strong>Status</strong>
+                            <p><span class="status-badge" style="background-color: ${statusColor};">${statusText}</span></p>
                         </div>
-                        <div>
-                            <strong>Location:</strong>
+                        <div class="detail-item">
+                            <strong>Date</strong>
+                            <p>${formattedDate}</p>
+                        </div>
+                        <div class="detail-item">
+                            <strong>Time</strong>
+                            <p>${event.event_time}</p>
+                        </div>
+                        <div class="detail-item">
+                            <strong>Location</strong>
                             <p>${event.location}</p>
                         </div>
-                        <div>
-                            <strong>Category:</strong>
-                            <p>${event.category_name || 'Other'}</p>
+                        <div class="detail-item">
+                            <strong>Category</strong>
+                            <p>${event.category_name || 'Event'}</p>
                         </div>
-                        <div>
-                            <strong>Attendees:</strong>
-                            <p>${event.attendees}/${event.capacity}</p>
-                        </div>
-                        <div>
-                            <strong>Host:</strong>
+                        <div class="detail-item">
+                            <strong>Host</strong>
                             <p>${event.host_firstname} ${event.host_lastname}</p>
                         </div>
+                    </div>
+                    <div class="detail-section">
+                        <strong>Description</strong>
+                        <p>${event.description}</p>
+                    </div>
+                    <div class="detail-section">
+                        <strong>Attendance</strong>
+                        <p>${event.attendees} / ${event.capacity} attendees (${attendancePercent}%)</p>
+                        <div class="capacity-bar">
+                            <div class="bar-fill" style="width: ${attendancePercent}%;"></div>
+                        </div>
+                    </div>
+                    <div class="details-actions">
+                        <button class="btn-primary btn-register-modal" data-event-id="${event.id}" ${event.is_registered ? 'style="display:none;"' : ''}>Register for Event</button>
+                        <button class="btn-secondary" onclick="document.getElementById('eventDetailsModal').style.display='none'">Close</button>
                     </div>
                 </div>
             `;
             
+            content.innerHTML = detailsHtml;
             modal.style.display = 'flex';
             
-            // Attach close listener
-            const closeBtn = content.querySelector('.modal-close');
-            if (closeBtn) {
-                closeBtn.addEventListener('click', () => {
-                    modal.style.display = 'none';
+            // Attach register button listener
+            const registerBtn = content.querySelector('.btn-register-modal');
+            if (registerBtn && !event.is_registered) {
+                registerBtn.addEventListener('click', async function() {
+                    const eventId = this.getAttribute('data-event-id');
+                    try {
+                        const response = await fetch('api/participant_join_event.php', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ event_id: eventId })
+                        });
+                        
+                        const data = await response.json();
+                        if (data.success) {
+                            showToast('Successfully registered for event!', 'success');
+                            registeredEventsData = await loadEvents('registered');
+                            displayEvents(currentTab);
+                            setTimeout(() => {
+                                modal.style.display = 'none';
+                            }, 500);
+                        } else {
+                            showToast(data.message || 'Error registering for event', 'error');
+                        }
+                    } catch (error) {
+                        console.error('Error registering:', error);
+                        showToast('Error registering for event', 'error');
+                    }
                 });
             }
         }
@@ -1314,6 +1362,369 @@ $conn->close();
                     transform: translateX(0);
                     opacity: 1;
                 }
+            }
+            
+            /* Event Image Container - Matching Host Dashboard */
+            .event-image-container {
+                position: relative;
+                height: 200px;
+                display: flex;
+                align-items: flex-end;
+                padding: 1rem;
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                overflow: hidden;
+            }
+            
+            .event-image-container::after {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background: rgba(0, 0, 0, 0);
+                transition: background 0.3s ease;
+                z-index: 0;
+            }
+            
+            .event-card:hover .event-image-container::after {
+                background: rgba(0, 0, 0, 0.3);
+            }
+            
+            .event-card:hover .event-image-container img {
+                transform: scale(1.05);
+            }
+            
+            .event-image-container img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+                transition: transform 0.3s ease;
+                position: relative;
+                z-index: 1;
+            }
+            
+            .favorite-btn {
+                position: absolute;
+                top: 1rem;
+                right: 1rem;
+                z-index: 10;
+                width: 40px;
+                height: 40px;
+                border-radius: 50%;
+                background: rgba(255, 255, 255, 0.95);
+                border: none;
+                cursor: pointer;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                color: #e91e63;
+                transition: all 0.3s ease;
+                font-size: 18px;
+                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+            }
+            
+            .favorite-btn:hover {
+                background: white;
+                transform: scale(1.1);
+            }
+            
+            .favorite-btn.favorited i {
+                color: #e91e63;
+                animation: heartBeat 0.3s ease-out;
+            }
+            
+            /* Event Card Details Styling */
+            .event-info {
+                padding: 1rem;
+                display: flex;
+                flex-direction: column;
+            }
+            
+            .event-date {
+                display: flex;
+                gap: 0.5rem;
+                margin-bottom: 1rem;
+                padding-bottom: 0.75rem;
+                border-bottom: 1px solid #e5e7eb;
+            }
+            
+            .date-day {
+                font-size: 1.5rem;
+                font-weight: 700;
+                color: #6C63FF;
+            }
+            
+            .date-month {
+                display: flex;
+                align-items: center;
+                font-size: 0.875rem;
+                color: #666;
+                font-weight: 600;
+            }
+            
+            .event-details {
+                flex: 1;
+            }
+            
+            .event-details h3 {
+                margin: 0 0 0.5rem 0;
+                font-size: 1.125rem;
+                font-weight: 700;
+                color: #333;
+                line-height: 1.4;
+            }
+            
+            .event-description {
+                margin: 0 0 0.75rem 0;
+                font-size: 0.875rem;
+                color: #666;
+                line-height: 1.5;
+            }
+            
+            .event-meta {
+                display: flex;
+                gap: 1rem;
+                margin-bottom: 0.75rem;
+                flex-wrap: wrap;
+            }
+            
+            .event-category {
+                display: inline-block;
+                padding: 0.35rem 0.75rem;
+                background: #f0f4ff;
+                color: #6C63FF;
+                border-radius: 20px;
+                font-size: 0.75rem;
+                font-weight: 600;
+            }
+            
+            .event-location {
+                display: inline-flex;
+                align-items: center;
+                gap: 0.35rem;
+                font-size: 0.875rem;
+                color: #666;
+            }
+            
+            .event-location i {
+                color: #e91e63;
+                font-size: 0.75rem;
+            }
+            
+            .event-stats {
+                display: flex;
+                gap: 1rem;
+                margin-bottom: 1rem;
+                padding: 0.75rem 0;
+                border-top: 1px solid #e5e7eb;
+                border-bottom: 1px solid #e5e7eb;
+            }
+            
+            .attendees {
+                display: inline-flex;
+                align-items: center;
+                gap: 0.35rem;
+                font-size: 0.875rem;
+                color: #333;
+                font-weight: 600;
+            }
+            
+            .attendees i {
+                color: #667eea;
+                font-size: 0.875rem;
+            }
+            
+            .event-actions {
+                display: flex;
+                gap: 0.75rem;
+            }
+            
+            .btn-register {
+                flex: 1;
+                padding: 0.75rem;
+                background: #6C63FF;
+                color: white;
+                border: none;
+                border-radius: 6px;
+                font-size: 0.875rem;
+                font-weight: 600;
+                cursor: pointer;
+                transition: all 0.3s ease;
+            }
+            
+            .btn-register:hover {
+                background: #5651d0;
+                transform: translateY(-2px);
+                box-shadow: 0 4px 12px rgba(108, 99, 255, 0.3);
+            }
+            
+            .btn-registered {
+                flex: 1;
+                padding: 0.75rem;
+                background: #e5f0ff;
+                color: #3b82f6;
+                border: 2px solid #3b82f6;
+                border-radius: 6px;
+                font-size: 0.875rem;
+                font-weight: 600;
+                cursor: default;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                gap: 0.5rem;
+            }
+            
+            .btn-details {
+                flex: 1;
+                padding: 0.75rem;
+                background: #f3f4f6;
+                color: #333;
+                border: none;
+                border-radius: 6px;
+                font-size: 0.875rem;
+                font-weight: 600;
+                cursor: pointer;
+                transition: all 0.3s ease;
+            }
+            
+            .btn-details:hover {
+                background: #e5e7eb;
+                transform: translateY(-2px);
+            }
+            
+            /* Event Details Modal - Matching Host Dashboard */
+            .event-details-view {
+                padding: 0;
+            }
+            
+            .detail-event-image {
+                width: 100%;
+                max-width: 400px;
+                height: 250px;
+                object-fit: cover;
+                border-radius: 8px;
+                margin: 0 auto 1.5rem;
+                display: block;
+            }
+            
+            .event-details-view h2 {
+                font-size: 1.75rem;
+                font-weight: 700;
+                margin-bottom: 1.5rem;
+                color: #333;
+            }
+            
+            .details-grid {
+                display: grid;
+                grid-template-columns: repeat(2, 1fr);
+                gap: 1rem;
+                margin-bottom: 1.5rem;
+            }
+            
+            .detail-item {
+                padding: 1rem;
+                background: #f9fafb;
+                border-radius: 8px;
+            }
+            
+            .detail-item strong {
+                display: block;
+                font-size: 0.75rem;
+                text-transform: uppercase;
+                letter-spacing: 0.5px;
+                color: #666;
+                margin-bottom: 0.5rem;
+            }
+            
+            .detail-item p {
+                font-size: 1rem;
+                color: #333;
+                font-weight: 600;
+            }
+            
+            .detail-section {
+                margin-bottom: 1.5rem;
+            }
+            
+            .detail-section strong {
+                display: block;
+                font-size: 0.75rem;
+                text-transform: uppercase;
+                letter-spacing: 0.5px;
+                color: #666;
+                margin-bottom: 0.75rem;
+            }
+            
+            .detail-section p {
+                color: #555;
+                line-height: 1.6;
+                word-wrap: break-word;
+                white-space: normal;
+                overflow-wrap: break-word;
+            }
+            
+            .capacity-bar {
+                width: 100%;
+                height: 12px;
+                background: #e5e7eb;
+                border-radius: 10px;
+                overflow: hidden;
+                margin-top: 0.75rem;
+            }
+            
+            .capacity-bar .bar-fill {
+                height: 100%;
+                background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+                transition: width 0.3s ease;
+            }
+            
+            .status-badge {
+                display: inline-block;
+                padding: 0.5rem 1rem;
+                border-radius: 20px;
+                font-size: 0.875rem;
+                font-weight: 600;
+                color: white;
+            }
+            
+            .details-actions {
+                display: flex;
+                gap: 0.75rem;
+                padding-top: 1.5rem;
+                border-top: 1px solid #e5e7eb;
+            }
+            
+            .details-actions button {
+                flex: 1;
+                padding: 0.75rem 1.5rem;
+                border: none;
+                border-radius: 6px;
+                font-size: 1rem;
+                font-weight: 600;
+                cursor: pointer;
+                transition: all 0.3s ease;
+            }
+            
+            .details-actions .btn-primary {
+                background: #6C63FF;
+                color: white;
+            }
+            
+            .details-actions .btn-primary:hover {
+                background: #5651d0;
+                transform: translateY(-2px);
+                box-shadow: 0 8px 16px rgba(108, 99, 255, 0.3);
+            }
+            
+            .details-actions .btn-secondary {
+                background: #e5e7eb;
+                color: #333;
+            }
+            
+            .details-actions .btn-secondary:hover {
+                background: #d1d5db;
+                transform: translateY(-2px);
             }
             
             /* Profile Enhancement Styles */
