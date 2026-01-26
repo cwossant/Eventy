@@ -1,53 +1,94 @@
 # 🌟 Eventy: An Event Management Platform
 
-Eventy is a comprehensive web application designed to simplify the publication, management, and tracking of various events. This project demonstrates proficiency in data management and application development, serving as the **Final Project Requirement** for the **Information Management** subject at **National University**.
+Eventy is a PHP-based web application for publishing and managing events. This README was updated automatically by scanning the repository to reflect current progress and available components.
 
 ---
 
-## 🚀 Core Features (CRUD Operations)
+## Current Status (2026-01-26)
 
-The application is built around the fundamental principles of **C.R.U.D.** (Create, Read, Update, Delete), providing users with complete control over event data.
-
-| Operation | Feature | Description |
-| :--- | :--- | :--- |
-| **CREATE** | **Publishing Event** | Users can submit detailed information (title, date, description, location) to create new event listings. |
-| **READ** | **Event Timeline/List** | Displays all upcoming and active events in an organized, easy-to-browse format. |
-| **UPDATE** | **Updating Events** | Allows administrators or authorized users to modify any existing event details seamlessly. |
-| **DELETE** | **Deleting Events** | Provides the functionality to permanently remove outdated or canceled event listings. |
+- **Language / Platform:** PHP-based web app (uses `composer` and `PHPMailer`).
+- **Database:** MySQL database dumps are provided in `db/eventy.sql` and `db/import.sql`.
+- **Web server / env:** Intended for WAMP/XAMPP (local Apache + PHP) environments.
+- **Progress:** Core API endpoints and frontend assets are present. Basic CRUD for events (create, read, update, delete) and participant flows (join, manage favorites) are implemented as API endpoints.
 
 ---
 
-## 🛠️ Technology Stack
+## Key Implemented Features (detected)
 
-| Category | Technology/Tool |
-| :--- | :--- |
-| **Frontend** | [HTML, CSS, JavaScript] |
-| **Backend** | [PHP / Python (Flask/Django) / Node.js (Express)] |
-| **Database** | [] |
-| **Web Server** | [Apache / Live Server] |
-| **Environment** | [XAMPP / WAMP / Local Host Environment] |
-
-**Note:** *Please fill in the specific technologies your team used.*
+- **Event CRUD endpoints (API):** `create_event.php`, `fetch_event.php`, `UpdateEvent.php`, `DeleteEvent.php` ([api/](api/)).
+- **Authentication / Accounts:** `register.php`, `login.php`, `delete_account.php` ([api/]).
+- **Participant features:** `participant_get_events.php`, `participant_join_event.php`, `participant_manage_favorites.php` ([api/]).
+- **Security / 2FA / OTP flows:** `enable_2fa.php`, `send_otp.php`, `verify_otp.php`, `request_password_otp.php`, `verify_password_otp.php` ([api/]).
+- **Settings & Notifications:** `get_settings.php`, `update_settings.php`, `get_notification_settings.php`, `update_notification_settings.php` ([api/]).
+- **Profile management & upload:** `update_profile.php`, `upload_profile_picture.php` ([api/]); profile pics stored under `uploads/profile_pics`.
+- **Email / mailer support:** `config/mail.php` + `vendor/phpmailer` present.
 
 ---
-## 👥 The Development Team
 
-Eventy was a collaborative effort by four students from the **National University** for the Information Management final project.
+## Repository Inventory (high level)
 
-| Name | Role / Key Contribution |
-| :--- | :--- |
-| **[Bruce Cuevas]** | [Frontend Development] |
-| **[Joseph Gabriel Lontoc]** | [Database Developer] |
-| **[Mark Dwayne P. Dela Cruz]** | [Frontend Development, UI UX Design] |
-| **[Yhvhan Suba]** | [Project Lead] |
+- Root PHP pages: `index.php`, `host.php`, `participant.php`, `profile.php`, `our_team.php`, `logout.php`.
+- API folder: [api/](api/) — multiple endpoints for events, auth, profile, OTP, settings.
+- Frontend assets: `assets/css/` and `assets/js/` (styles and scripts), plus `styles.css` in root.
+- Database: `db/eventy.sql`, `db/import.sql`.
+- Config: `config/database.php`, `config/mail.php`.
+- Includes: `includes/db.php` for DB connection logic.
+- Uploads: `uploads/events/`, `uploads/profile_pics/`.
+- Dependencies: `composer.json` and `vendor/` (autoload + PHPMailer).
+
 ---
 
-## 💻 Installation and Setup
+## Suggested README updates applied
 
-Follow these steps to set up the Eventy application on your local development environment:
+- Set concrete Technology Stack based on detected files.
+- Added explicit list of implemented features and key files to help testers and maintainers.
+- Added notes for installation and DB import below.
 
-### 1. Clone the Repository
+---
+
+## Technology Stack (detected)
+
+- **Frontend:** HTML, CSS, JavaScript (plain JS + jQuery).
+- **Backend:** PHP (repository uses `composer` and PHPMailer).
+- **Database:** MySQL (SQL dumps in `db/`).
+- **Web server:** Apache (WAMP/XAMPP recommended for local development).
+
+---
+
+## Quick Local Setup
+
+1. Copy the repository into your WAMP/XAMPP `www` or `htdocs` folder.
+2. Import the database using `db/eventy.sql` (or `db/import.sql`) into MySQL.
 
 ```bash
-git clone [github.com/cwossant/Eventy]
-cd Eventy
+mysql -u root -p your_database_name < db/eventy.sql
+```
+
+3. Update database credentials in `config/database.php`.
+4. Ensure `uploads/` is writable by the webserver.
+
+---
+
+## Notable files
+
+- API endpoints: [api/](api/)
+- Database dump: [db/eventy.sql](db/eventy.sql)
+- DB config: [config/database.php](config/database.php)
+- Mail config: [config/mail.php](config/mail.php)
+- Main README: [README.md](README.md)
+
+---
+
+## Team
+
+Keep original team section and update roles as needed.
+
+---
+
+If you'd like, I can now:
+
+1. Expand the README with more detailed installation steps for Windows/WAMP.
+2. Add a short API reference listing each endpoint and parameters.
+3. Commit the updated README and create a changelog entry.
+
+Tell me which of the above you'd like me to do next.
