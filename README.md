@@ -79,16 +79,3 @@ mysql -u root -p your_database_name < db/eventy.sql
 
 ---
 
-## Team
-
-Keep original team section and update roles as needed.
-
----
-
-If you'd like, I can now:
-
-1. Expand the README with more detailed installation steps for Windows/WAMP.
-2. Add a short API reference listing each endpoint and parameters.
-3. Commit the updated README and create a changelog entry.
-
-Tell me which of the above you'd like me to do next.
