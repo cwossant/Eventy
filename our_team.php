@@ -664,7 +664,7 @@
                     <div class="member-info">
                         <h3 class="member-name">Mark Dwayne P. Dela Cruz</h3>
                         <div class="member-role">User Interface & User Experience</div>
-                        <p class="member-bio">- Designs and develops mobile web interface for customers</p>
+                        <p class="member-bio">- Designs and develops web interface for customers</p>
                         <p class="member-bio">- Focuses on intuitive, responsive layouts</p>
 
                     </div>
